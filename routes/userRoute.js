@@ -16,5 +16,6 @@ userRoute.post('/signup',userController.sendOtp);
 userRoute.post('/otpEnter',userController.verifyOtp);
 
 userRoute.post('/login', userController.verifyLogin);
-
+userRoute.get('/login/catDetails/:id', userController.categoryDetail);
+userRoute.get('/login/prodDetails/:id', userController.prodDetails);
 module.exports = userRoute;

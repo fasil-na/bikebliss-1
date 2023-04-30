@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const Category = require("../models/categoryModel");
 const Product = require("../models/productModel");
+const { ObjectId } = require("mongodb");
 
 const loginload = async (req, res) => {
     try {
@@ -54,10 +55,12 @@ const prodlistload = async (req, res) => {
         const categoryData = await Category.find({});
         if (productData && categoryData) {
             const productWithCatName = productData.map((product) => {
-                const { category, description, brand } = product
+                let prevObj = {}
+                prevObj = product;
                 const categories = categoryData.find((c) => c._id.toString() === product.category.toString());
                 const categoryName = categories ? categories.category : null;
-                return { categoryName, description, brand };
+                prevObj.categoryName = categoryName
+                return prevObj;
             });
             console.log('productWithCatName>>>', productWithCatName)
             await res.render("adminProdList", { data: productWithCatName });
@@ -205,6 +208,27 @@ const deleteCategory = async (req, res) => {
     }
 };
 
+const updateCategory = async (req, res) => {
+
+    if (req.body.id && req.body.card_title) {
+        var myId = req.body.id.replace(/\s+$/, '');
+        const objectId = new ObjectId(myId);
+        const categoryName = req.body.card_title;
+        const image = req.file;
+        try {
+            await Category.findByIdAndUpdate(
+                { _id: objectId },
+                { $set: { category: categoryName, imageUrl: image.filename } }
+            ).then((response) => {
+                res.redirect("/admin/categorylist");
+            });
+        } catch (error) {
+            console.log(error.message);
+        }
+
+    }
+}
+
 
 
 module.exports = {
@@ -223,5 +247,5 @@ module.exports = {
     addNewCategory,
     addNewProduct,
     deleteCategory,
-
+    updateCategory,
 };

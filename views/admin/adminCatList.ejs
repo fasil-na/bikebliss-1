@@ -40,19 +40,17 @@
                 </div>
                 <br>
 
-                 <!-- popup element -->
-                 <div id="editPopup" style="display:none;">
-                    <form method="POST" action="/update">
-                        <label for="name">Name:</label>
-                        <input class="w-75 mx-auto my-2 form-control" type="text" id="name" name="name"><br>
-                        <label for="email">Email:</label>
-                        <input class="w-75 mx-auto my-2 form-control" type="text" id="email" name="email"><br>
-                        <label for="number">Number:</label>
-                        <input class="w-75 mx-auto my-2 form-control" type="text" id="number" name="number"><br>
-                        <div style="display: none;">
-                            <label for="number">Number:</label>
-                            <input class="w-75 mx-auto my-2 form-control" type="text" id="id" name="id"><br>
-                        </div>
+                <!-- popup element -->
+
+                <div id="editPopup" style="display:none;">
+                    <form action="/admin/updateCategory" method="post" enctype="multipart/form-data">
+                        <label for="name">Category Name:</label>
+                        <input class="w-75 mx-auto my-2 form-control" type="text" id="card_title" name="card_title"><br>
+                        <label for="name">Category Image:</label>
+                        <input class="w-50 mx-auto my-3 form-control" type="file" id="card_image" name="image"><br>
+                        <input type="hidden" name="id" id="cat_id">
+                        <button class="w-75 mx-auto my-2 form-control " type="button"
+                            onclick="onFormClose()">Close</button>
                         <button class="w-75 mx-auto my-2 form-control " type="submit">Submit</button>
                     </form>
                 </div>
@@ -61,21 +59,22 @@
                 <div class="card-container col-sm-3 col-md-6 col-lg-12">
                     <% data.forEach(function(x,i) { %>
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="/images/uploads/<%= x.imageUrl %>" alt="Card image cap">
+                            <img id="image_container<%= i %>" class="card-img-top"
+                                src="/images/uploads/<%= x.imageUrl %>" alt="Card image cap">
                             <div class="card-body">
-                                <p class="card-text">
-                                    <%= x.category %>
+                                <p class="card-text"><span id="card_title<%= i %>">
+                                        <%= x.category %>
+                                    </span>
                                 </p>
-                                <button class="buttons" id="editButton-<%= i %>" onclick="editCategory('<%= i %>')">EDIT</button>
-
-
+                                <input type="hidden" name="id" value="<%= x._id %> " id="cat_id<%= i %>">
+                                <button class="buttons" id="editButton" onclick="editCategory('<%= i %>')">EDIT</button>
                                 <button class="buttons"><a href="/admin/categoryDelete">DELETE</a></button>
                             </div>
                         </div>
                         <% }); %>
                 </div>
 
-               
+
 
 
             </div>
@@ -85,22 +84,24 @@
 
     <script>
         const button = document.getElementById('editButton');
-        function editRow(card) {
+        function editCategory(card) {
             // Get the current values from the table
-            var title = document.querySelector(`#column1_${card}`).innerText;
-            var column2 = document.querySelector(`#column2_${card}`).innerText;
-            var column3 = document.querySelector(`#column3_${card}`).innerText;
-            var column4 = document.querySelector(`#column4_${card}`).innerText;
-
+            var title = document.querySelector(`#card_title${card}`).innerText;
+            const image = document.querySelector(`#image_container${card}`).getAttribute('src');
+            var id = document.querySelector(`#cat_id${card}`).value;
+            console.log('idVal123', id);
             // Set the values in the popup
-            document.querySelector("#name").value = column1;
-            document.querySelector("#email").value = column2;
-            document.querySelector("#number").value = column3;
-            document.querySelector("#id").value = column4;
-            // Set the row index as a hidden input value
-
+            console.log('image')
+            document.querySelector("#card_title").value = title;
+            document.querySelector("#card_image").fileName = image;
+            document.querySelector("#cat_id").value = id;
             // Open the popup
             document.querySelector("#editPopup").style.display = "block";
+        }
+
+        // close the popup
+        function onFormClose() {
+            document.querySelector("#editPopup").style.display = "none";
         }
     </script>
 

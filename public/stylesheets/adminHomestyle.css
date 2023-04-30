@@ -86,7 +86,7 @@ table {
   
   #editPopup {
     display: none;
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -95,6 +95,7 @@ table {
     background-color: white;
     background-color:rgb(255, 183, 50);
     padding: 10px;
+    z-index: 1;
   }
   .card-container {
     display: flex;

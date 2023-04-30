@@ -40,7 +40,7 @@
 
                 <% data.forEach(function(x,i) { %>
                     <div class="card w-50 my-3 " >
-                        <img src="/images/prod1.png" class="card-img-top w-25" alt="Product Image">
+                        <img src="/images/uploads/<%= x.imageUrl %>" class="card-img-top w-25" alt="Product Image">
                         <div class="card-body">
                           <h5 class="card-title"><%= x.productName %></h5>
                           <p class="card-text"><%= x.description %></p>
