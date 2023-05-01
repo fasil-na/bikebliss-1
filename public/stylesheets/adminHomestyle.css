@@ -105,3 +105,15 @@ table {
 .card {
     margin: 10px;
 }
+
+.dashDetails{
+  display: flex;
+}
+
+.userDetails{
+  width: 20%;
+  height: 100px;
+  background: rgb(255, 183, 50);
+  border-radius: 10px;
+  margin-left: 5%;
+}

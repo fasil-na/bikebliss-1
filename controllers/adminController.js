@@ -168,7 +168,9 @@ const catlistload = async (req, res) => {
 };
 
 const addNewProduct = async (req, res) => {
-    const image = req.file;
+    const images = req.files.map((file) => {
+        return file.filename;
+    });
     if (
         req.body.name != "" &&
         req.body.price != "" &&
@@ -183,7 +185,7 @@ const addNewProduct = async (req, res) => {
             price: req.body.price,
             description: req.body.description,
             category: req.body.category,
-            imageUrl: image.filename,
+            imageUrl: images,
             brand: req.body.brand,
             size: req.body.size,
             material: req.body.material,
@@ -231,6 +233,8 @@ const updateCategory = async (req, res) => {
 
 
 
+
+
 module.exports = {
     loginload,
     homeload,
@@ -247,5 +251,5 @@ module.exports = {
     addNewCategory,
     addNewProduct,
     deleteCategory,
-    updateCategory,
+    updateCategory
 };

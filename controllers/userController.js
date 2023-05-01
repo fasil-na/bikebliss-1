@@ -7,8 +7,8 @@ const { ObjectId } = require("mongodb");
 
 const homeload = async (req, res) => {
   try {
-    const productList = await Product.find({});
-    res.render("home", { data: productList });
+    const CategoryList = await Category.find({});
+        res.render("home", { data: CategoryList });
   } catch (error) {
     console.log(error.message);
   }

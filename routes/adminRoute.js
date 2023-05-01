@@ -19,7 +19,7 @@ adminRoute.post("/blockUnblockUser", auth.adminLogin, adminController.userBlockU
 // ================ product management ================//
 adminRoute.get('/productlist', auth.adminLogin, adminController.prodlistload);
 adminRoute.get('/prodCreate', auth.adminLogin, adminController.createProduct);
-adminRoute.post('/addProduct', auth.adminLogin, store.single('image'), adminController.addNewProduct);
+adminRoute.post('/addProduct', auth.adminLogin, store.array('image', 3), adminController.addNewProduct);
 //======================================================//
 //============== category management ==================//
 adminRoute.post('/addCategory', auth.adminLogin, store.single('image'), adminController.addNewCategory);
