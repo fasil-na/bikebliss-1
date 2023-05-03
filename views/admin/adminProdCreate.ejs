@@ -30,8 +30,8 @@
                 <button class="menubutton my-2"><a href="/admin/dashboard">Dashboard</a></button>
                 <button class="menubutton my-2"><a href="/admin/userlist">Users</a></button>
                 <button class="menubutton my-2"><a href="/admin/categorylist">Category</a></button>
-                <button class="menubutton my-2"><a href="/admin/productlist">Product</a></button>
-                <button class="menubutton my-2"><a href="/adminLogout">Logout</a></button>
+                <button class="selectedbutton my-2"><a href="/admin/productlist">Product</a></button>
+                <button class="menubutton my-2"><a href="/admin/adminLogout">Logout</a></button>
             </div>
             <div class="col-sm-10 right">
                 <div class="fline">
@@ -55,19 +55,15 @@
                         multiple />
                     <!-- image upload handle end -->
                     <select class="w-50 mx-auto my-3 form-control" name="brand">
-                        <option value="brand1">brand 1</option>
-                        <option value="brand2">brand 2</option>
-                        <option value="brand3">brand 3</option>
+                        <option value="Scott">Scott</option>
+                        <option value="Giant">Giant</option>
+                        <option value="Btwin">Btwin</option>
                     </select>
                     <input class="w-50 mx-auto my-3 form-control" type="number" placeholder="Price" name="price">
                     <select class="w-50 mx-auto my-3 form-control" name="size">
                         <option value="S">S</option>
                         <option value="M">M</option>
                         <option value="L">L</option>
-                    </select>
-                    <select class="w-50 mx-auto my-3 form-control" name="material">
-                        <option value="Aluminium">Aluminium</option>
-                        <option value="Carbon">Carbon</option>
                     </select>
                     <input class="w-50 mx-auto my-3 form-control" type="text" placeholder="Color" name="color">
                     <button class="w-50 login mx-auto my-3 form-control" type="submit">ADD</button>
@@ -81,6 +77,7 @@
         </div>
 
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"

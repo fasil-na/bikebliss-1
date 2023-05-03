@@ -42,27 +42,28 @@
             <form action="/signup" method="post">
 
               <div class="form-group first">
-                <label for="username">Username</label>
-                <input type="text" class="form-control" id="name" name="name" oninput="validateName()">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Username" oninput="validateName()">
                 <span id="nameError" style="color: red;"></span>
               </div>
 
               <div class="form-group first">
-                <label for="email">Email Id</label>
-                <input type="email" class="form-control" id="email" name="email" oninput="validateEmail()">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email Id" oninput="validateEmail()">
                 <span id="emailError" style="color: red;"></span>
               </div>
 
               <div class="form-group first">
-                <label for="number">Mobile Number</label>
-                <input type="number" class="form-control" id="number" name="number" oninput="validateMobile()">
+                <input type="number" class="form-control" id="number" name="number" placeholder="Mobile Number" oninput="validateMobile()">
                 <span id="numberError" style="color: red;"></span>
               </div>
 
               <div class="form-group last mb-3">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" name="password" oninput="validatePassword()">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password" oninput="validatePassword()">
                 <span id="passwordError" style="color: red;"></span>
+              </div>
+
+              <div class="form-group last mb-3">
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password" oninput="validateConfirmPassword()">
+                <span id="confirm_passwordError" style="color: red;"></span>
               </div>
 
               <div class="d-flex mb-5 align-items-center">
@@ -70,7 +71,7 @@
 
               <input type="submit" Id="submitButton"  name="submitButton" disabled value="signup" class="btn btn-block btn-primary">
 
-              <p class="text-center my-4">Already have an account?<a href="/login">Back to Login</a></p>
+              <p class="text-center my-4">Already have an account?  <a href="/login">Back to Login</a></p>
 
               <p class=" text-center my-4"><%= footer %></p>
 

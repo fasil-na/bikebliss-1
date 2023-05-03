@@ -29,52 +29,187 @@
                 <button class="menubutton my-2"><a href="/admin/dashboard">Dashboard</a></button>
                 <button class="menubutton my-2"><a href="/admin/userlist">Users</a></button>
                 <button class="menubutton my-2"><a href="/admin/categorylist">Category</a></button>
-                <button class="menubutton my-2"><a href="/admin/productlist">Product</a></button>
-                <button class="menubutton my-2"><a href="/adminLogout">Logout</a></button>
+                <button class="selectedbutton my-2"><a href="/admin/productlist">Product</a></button>
+                <button class="menubutton"><a href="/admin/prodCreate">Create Product</a></button>
+                <button class="menubutton my-2"><a href="/admin/adminLogout">Logout</a></button>
             </div>
             <div class="col-sm-10 right">
-                <div class="fline">
-
-
-                    <h2>Product List</h2>
-                    <button class="buttons"><a href="/admin/prodCreate">CREATE</a></button>
+                <br>
+                <div class=" d-flex justify-content-end">
+                    <input class="col-6 form-control me-2  w-25" id="search" type="search" placeholder="Search Products"
+                        aria-label="Search">
                 </div>
-                <div class="card-container col-sm-3 col-md-6 col-lg-12 ">
-                    <% data.forEach(function(x,i) { %>
-                        <div class="card w-50 my-3 ">
-                            <img src="/images/uploads/<%= x.imageUrl[0] %>" class="card-img-top w-25"
-                                alt="Product Image">
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    <%= x.productName %>
-                                </h5>
-                                <p class="card-text">
+                <br>
+
+                <!-- popup element -->
+
+                <div id="editPopupLarge" style="display:none;">
+                    <form action="/admin/updateProduct" method="post" enctype="multipart/form-data">
+                        <label for="name">Product Name:</label>
+                        <input class="w-75 mx-auto my-2 form-control" type="text" id="card_title" name="card_title"><br>
+                        <label for="name">Product Image:</label>
+                        <input class="w-50 mx-auto my-3 form-control" type="file" id="card_image" name="image"><br>
+                        <label for="name">Product Description:</label>
+                        <input class="w-75 mx-auto my-2 form-control" type="text" id="card_Description"
+                            name="card_Description"><br>
+                        <label for="name">Product Price:</label>
+                        <input class="w-75 mx-auto my-2 form-control" type="text" id="card_Price" name="card_Price"><br>
+                        <label for="name">Product Color:</label>
+                        <input class="w-75 mx-auto my-2 form-control" type="text" id="card_Color" name="card_Color"><br>
+                        <!-- <label for="name">Product Size:</label>
+                            <input class="w-75 mx-auto my-2 form-control" type="text" id="card_Size" name="card_Size"><br>
+                            <label for="name">Product category:</label>
+                            <input class="w-75 mx-auto my-2 form-control" type="text" id="card_Category" name="card_Category"><br>
+                            <label for="name">Product Brand:</label>
+                            <input class="w-75 mx-auto my-2 form-control" type="text" id="card_Brand" name="card_Brand"><br>
+                           -->
+
+
+                        <input type="hidden" name="id" id="cat_id">
+                        <button class="w-75 mx-auto my-2 form-control " type="button"
+                            onclick="onFormClose()">Close</button>
+                        <button class="w-75 mx-auto my-2 form-control " type="submit">Submit</button>
+                    </form>
+                </div>
+                <!---->
+                <table id='myTable'>
+                    <thead>
+                        <tr>
+                            <th>SL.NO</th>
+                            <th>ID</th>
+                            <th>NAME</th>
+                            <th>IMAGE</th>
+                            <th>DESCRIPTION</th>
+                            <th>PRICE</th>
+                            <th>COLOR</th>
+                            <th>SIZE</th>
+                            <th>CATEGORY</th>
+                            <th>BRAND</th>
+                            <th>ACTION</th>
+            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% data.forEach(function(x,i) { %>
+                            <tr>
+                                <td style="width: 10px;">
+                                    <%= i+1 %>
+                                </td>
+                                <td>
+                                    <%= x._id %>
+                                </td>
+                                <td id="name<%= i %>">
+                                    <%= x.productName %>     
+                                </td>
+                                <td>
+                                    <img src="/images/uploads/<%= x.imageUrl[0] %>" class="card-img-top w-100" id="image<%= i %>"
+                                        alt="Product Image">
+                                    
+                                </td>
+                                <td id="description<%= i %>">
                                     <%= x.description %>
-                                </p>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Price: $<%= x.price %>
-                                    </li>
-                                    <li class="list-group-item">Color: <%= x.color %>
-                                    </li>
-                                    <li class="list-group-item">Size: <%= x.size %>
-                                    </li>
-                                    <li class="list-group-item">Category: <%= x.categoryName %>
-                                    </li>
-                                    <li class="list-group-item">Brand: <%= x.brand %>
-                                    </li>
-                                    <li class="list-group-item">Material: <%= x.material %>
-                                    </li>
-                                </ul>
-                                <button class="buttons">EDIT</button>
+                                </td>
+                                <td id="price<%= i %>">
+                                    <%= x.price %>
+                                </td>
+            
+                                <td id="color<%= i %>">
+                                    <%= x.color %>
+                                </td>
+                                <td id="size<%= i %>">
+                                    <%= x.size %>
+                                </td>
+                                <td id="category<%= i %>">
+                                    <%= x.category.category %>
+                                </td>
+                                <td id="brand<%= i %>">
+                                    <%= x.brand %>
+                                </td>
+                                <td style="width: 10px;">
+                                    <input type="hidden" name="id" value="<%= x._id %> " id="cat_id<%= i %>">
+                                    <button class="buttons my-2" id="editButton" onclick="editProduct('<%= i %>')">EDIT</button>
+                                   
+                                    <button class="buttons my-2"><a href="/admin/productDelete/<%= x._id %>">DELETE</a></button>
+                                </td>
+                            </tr>
+                            <% }); %>
+                    </tbody>
+                </table>
 
-                                <button class="buttons">DELETE</button>
-                            </div>
-                        </div>
-                        <% }); %>
-                </div>
+
+
             </div>
         </div>
     </div>
+    </div>
+
+    
+
+
+
+
+    <script>
+        const button = document.getElementById('editButton');
+        function editProduct(i) {
+
+            // Get the current values from the table
+            var id = document.querySelector(`#cat_id${i}`).value;
+            var name = document.querySelector(`#name${i}`).innerText;
+            const image = document.querySelector(`#image${i}`).getAttribute('src');
+            var description = document.querySelector(`#description${i}`).innerText;
+            var price = document.querySelector(`#price${i}`).innerText;
+            var color = document.querySelector(`#color${i}`).innerText;
+            // var size = document.querySelector(`#size${i}`).innerText;
+            // var category = document.querySelector(`#category${i}`).innerText;
+            // var brand = document.querySelector(`#brand${i}`).innerText;
+
+
+
+            // Set the values in the popup
+            document.querySelector("#cat_id").value = id;
+            document.querySelector("#card_title").value = name;
+            document.querySelector("#card_image").fileName = image;
+            document.querySelector("#card_Description").value = description;
+            document.querySelector("#card_Price").value = price;
+            document.querySelector("#card_Color").value = color;
+            // document.querySelector("#card_Size").value = size;
+            // document.querySelector("#card_Category").value = category;
+            // document.querySelector("#card_Brand").value = brand;
+
+
+
+            // Open the popup
+            document.querySelector("#editPopupLarge").style.display = "block";
+        }
+
+        // close the popup
+        function onFormClose() {
+            document.querySelector("#editPopupLarge").style.display = "none";
+        }
+    </script>
+     <script>
+        //searching the users
+
+        // Get the search input and table rows
+        const searchInput = document.querySelector('input[type="search"]');
+        const tableRows = document.querySelectorAll('tbody tr');
+
+        // Add an event listener to the search input
+        searchInput.addEventListener('input', function () {
+            const searchValue = this.value.toLowerCase();
+
+            // Loop through the table rows and hide/show them based on the search input
+            tableRows.forEach(function (row) {
+                const productName = row.querySelector('td:nth-of-type(3)').textContent.toLowerCase();
+
+                if (productName.includes(searchValue)) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"

@@ -27,26 +27,28 @@
                 </div>
                 <br>
                 <button class="menubutton my-2"><a href="/admin/dashboard">Dashboard</a></button>
-                <button class="menubutton my-2"><a href="/admin/userlist">Users</a></button>
+                <button class="selectedbutton my-2"><a href="/admin/userlist">Users</a></button>
                 <button class="menubutton my-2"><a href="/admin/categorylist">Category</a></button>
                 <button class="menubutton my-2"><a href="/admin/productlist">Product</a></button>
-                <button class="menubutton my-2"><a href="/adminLogout">Logout</a></button>
+                <button class="menubutton my-2"><a href="/admin/adminLogout">Logout</a></button>
             </div>
             <div class="col-sm-10 right">
-                <div class="fline">
-
-
-                    <h2>User List</h2>
+                <br>
+                <div class=" d-flex justify-content-end">
+                    <input class="col-6 form-control me-2  w-25" id="search" type="search" placeholder="Search Users"
+                        aria-label="Search">
                 </div>
+                <br>
+
                 <table id='myTable'>
-                    <thead>
+                    <thead >
                         <tr>
-                            <th>Sl.No</th>
-                            <th>Full Name</th>
-                            <th>Email ID</th>
-                            <th>Mobile Number</th>
+                            <th>SL.NO</th>
                             <th>ID</th>
-                            <th>Edit</th>
+                            <th>NAME</th>
+                            <th>EMAIL ID</th>
+                            <th>MOBILE NUMBER</th>
+                            <th>ACTION</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -56,6 +58,9 @@
                                     <%= i+1 %>
                                 </td>
                                 <td>
+                                    <%= x._id %>
+                                </td>
+                                <td>
                                     <%= x.name %>
                                 </td>
                                 <td>
@@ -63,9 +68,6 @@
                                 </td>
                                 <td>
                                     <%= x.number %>
-                                </td>
-                                <td>
-                                    <%= x._id %>
                                 </td>
                                 <td>
                                     <%if(x.blockStatus){ %>
@@ -108,6 +110,31 @@
                     console.log(error);
                 });
         }
+    </script>
+    <script>
+        //searching the users
+
+        // Get the search input and table rows
+        const searchInput = document.querySelector('input[type="search"]');
+        const tableRows = document.querySelectorAll('tbody tr');
+
+        // Add an event listener to the search input
+        searchInput.addEventListener('input', function () {
+            const searchValue = this.value.toLowerCase();
+
+            // Loop through the table rows and hide/show them based on the search input
+            tableRows.forEach(function (row) {
+                const name = row.querySelector('td:nth-of-type(3)').textContent.toLowerCase();
+                const email = row.querySelector('td:nth-of-type(4)').textContent.toLowerCase();
+                const number = row.querySelector('td:nth-of-type(5)').textContent.toLowerCase();
+
+                if (name.includes(searchValue) || email.includes(searchValue) || number.includes(searchValue)) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"

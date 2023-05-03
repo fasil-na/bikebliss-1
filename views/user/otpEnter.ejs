@@ -45,8 +45,8 @@
             <form action="/otpEnter" method="post">
              
               <div class="form-group last mb-3">
-                <label for="otp">OTP</label>
-                <input type="number" class="form-control" id="otp" name="otp">
+
+                <input type="number" class="form-control" id="otp" name="otp" placeholder="OTP">
 
               </div>
 
@@ -54,10 +54,25 @@
 
               <input type="submit" value="Submit" class="btn btn-block btn-primary">
 
-
-              <p class="text-center my-4">Resend</p>
+              <p class=" text-center my-4"><%= footer %></p>
 
             </form>
+
+            <!-- <span id="verifiBtn"> <button disabled="true"
+              class="btn btn-danger px-4 w-100 border-dark mt-2">resend Otp in<span
+                class="timer"></span> </span>
+            <span id="counter"></span>
+            </span></button><br>  -->
+
+            <!-- <div class="text-center mt-3">
+              <h6 >Didn't get otp? <a class="mt-3" href="/resend_otp">Resend</a> </h6>
+            </div> -->
+
+            <div class="text-center mt-5">
+              <h6 id="resend_link" style="display: none;">Didn't get otp? <a class="mt-3" href="/resend_otp">Resend</a> </h6>
+            </div>
+            <div id="countdown" class="text-primary text-center mt-5"></div>
+
           </div>
         </div>
       </div>
@@ -65,6 +80,31 @@
 
 
   </div>
+
+  <script>
+    const resendLink = document.getElementById("resend_link");
+    if (resendLink) {
+      setTimeout(() => {
+        resendLink.style.display = "block";
+      }, 60 * 1000);
+    }
+  </script>
+
+  <script>
+    const countdownElem = document.getElementById("countdown");
+    let countdown = 60; // start countdown at 60 seconds
+    
+    const countdownInterval = setInterval(() => {
+      countdown--; // decrement countdown by 1
+      countdownElem.textContent = `00:${countdown}`; // update countdown text
+      
+      if (countdown === 0) {
+        clearInterval(countdownInterval); // clear the countdown interval
+        countdownElem.style.display = "none"; // hide the countdown element
+      }
+    }, 1000); // update countdown every second (1000ms)
+  </script>
+  
 
   <script src="/login/js/jquery-3.3.1.min.js"></script>
   <script src="/login/js/popper.min.js"></script>

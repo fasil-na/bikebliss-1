@@ -44,13 +44,18 @@
 		<div id="top-header">
 			<div class="container">
 				<ul class="header-links pull-left">
-					<li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-					<li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
-					<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+					<!-- <li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li> -->
+					<li><a href="#"><i class="fa fa-envelope-o"></i> <%=Email%></a></li>
+					<!-- <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li> -->
 				</ul>
 				<ul class="header-links pull-right">
 					<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
 					<li><a href="\myAccount"><i class="fa fa-user-o"></i> My Account</a></li>
+					<%if(sessionCheck) { %>
+						<li><a href="\logout"></i>Logout</a></li>
+						<% }else{ %>
+							<li><a href="\login"></i>Login</a></li>
+							<% } %>
 				</ul>
 			</div>
 		</div>
@@ -65,9 +70,9 @@
 					<!-- LOGO -->
 					<div class="col-md-3">
 						<div class="header-logo">
-							<a href="#" class="logo">
-								<img src="./main/img/logo.png" width="30%" alt="">
-
+							<a href="/" class="logo">
+								<img src="/main/img/logo.png" width="30%" alt="">
+							
 							</a>
 						</div>
 					</div>
@@ -172,7 +177,7 @@
 			<!-- responsive-nav -->
 			<div id="responsive-nav">
 				<!-- NAV -->
-				<ul class="main-nav nav navbar-nav">
+				<!-- <ul class="main-nav nav navbar-nav">
 					<li class="active"><a href="#">Home</a></li>
 					<li><a href="#">Hot Deals</a></li>
 					<li><a href="#">Categories</a></li>
@@ -180,7 +185,7 @@
 					<li><a href="#">Smartphones</a></li>
 					<li><a href="#">Cameras</a></li>
 					<li><a href="#">Accessories</a></li>
-				</ul>
+				</ul> -->
 				<!-- /NAV -->
 			</div>
 			<!-- /responsive-nav -->
@@ -190,13 +195,13 @@
 	<!-- /NAVIGATION -->
 
 	<!-- SECTION -->
-	<div class="section">
+	<!-- <div class="section">
 		<!-- container -->
-		<div class="container">
+		<!-- <div class="container">
 			<!-- row -->
-			<div class="row">
+			<!-- <div class="row">
 				<!-- shop -->
-				<div class="col-md-4 col-xs-6">
+				<!-- <div class="col-md-4 col-xs-6">
 					<div class="shop">
 						<div class="shop-img">
 							<img src="./main/img/shop01.png" alt="">
@@ -206,11 +211,11 @@
 							<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- /shop -->
 
 				<!-- shop -->
-				<div class="col-md-4 col-xs-6">
+				<!-- <div class="col-md-4 col-xs-6">
 					<div class="shop">
 						<div class="shop-img">
 							<img src="./main/img/shop03.png" alt="">
@@ -220,11 +225,11 @@
 							<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- /shop -->
 
 				<!-- shop -->
-				<div class="col-md-4 col-xs-6">
+				<!-- <div class="col-md-4 col-xs-6">
 					<div class="shop">
 						<div class="shop-img">
 							<img src="./main/img/shop02.png" alt="">
@@ -234,13 +239,13 @@
 							<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- /shop -->
-			</div>
+			</div> -->
 			<!-- /row -->
-		</div>
+		</div> -->
 		<!-- /container -->
-	</div>
+	</div> -->
 	<!-- /SECTION -->
 
 	<!-- SECTION -->
@@ -251,9 +256,9 @@
 			<div class="row">
 
 				<!-- section title -->
-				<div class="col-md-12">
+				<!-- <div class="col-md-12">
 					<div class="section-title">
-						<h3 class="title">New Products</h3>
+						
 						<div class="section-nav">
 							<ul class="section-tab-nav tab-nav">
 								<li class="active"><a data-toggle="tab" href="#tab1">Laptops</a></li>
@@ -263,7 +268,7 @@
 							</ul>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- /section title -->
 
 				<!-- Products tab & slick -->
@@ -280,15 +285,14 @@
 											<div class="product-img">
 												<img src="/images/uploads/<%= x.imageUrl[0] %>" alt="">
 												<div class="product-label">
-													<span class="sale">-30%</span>
-													<span class="new">NEW</span>
+													
 												</div>
 											</div>
 											<div class="product-body">
-												<p class="product-category">Category</p>
-												<h3 class="product-name"><a href="#">product name goes here</a></h3>
-												<h4 class="product-price">$980.00 <del
-														class="product-old-price">$990.00</del></h4>
+												<p class="product-category"></p>
+												<h3 class="product-name"><a href="#"><%= x.productName %></a></h3>
+												<h4 class="product-price"><%= x.price %></h4> 
+													<!-- <del class="product-old-price">$990.00</del> -->
 												<div class="product-rating">
 													<i class="fa fa-star"></i>
 													<i class="fa fa-star"></i>
@@ -330,11 +334,11 @@
 	<!-- /SECTION -->
 
 	<!-- HOT DEAL SECTION -->
-	<div id="hot-deal" class="section">
+	<!-- <div id="hot-deal" class="section">
 		<!-- container -->
-		<div class="container">
+		<!-- <div class="container">
 			<!-- row -->
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-md-12">
 					<div class="hot-deal">
 						<ul class="hot-deal-countdown">
@@ -368,22 +372,22 @@
 						<a class="primary-btn cta-btn" href="#">Shop now</a>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<!-- /row -->
-		</div>
+		</div> -->
 		<!-- /container -->
-	</div>
+	</div> -->
 	<!-- /HOT DEAL SECTION -->
 
 	<!-- SECTION -->
-	<div class="section">
+	<!-- <div class="section">
 		<!-- container -->
-		<div class="container">
+		<!-- <div class="container">
 			<!-- row -->
-			<div class="row">
+			<!-- <div class="row">
 
 				<!-- section title -->
-				<div class="col-md-12">
+				<!-- <div class="col-md-12">
 					<div class="section-title">
 						<h3 class="title">Top selling</h3>
 						<div class="section-nav">
@@ -395,7 +399,7 @@
 							</ul>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- /section title -->
 
 				<!-- Products tab & slick -->
@@ -406,7 +410,7 @@
 							<div id="tab2" class="tab-pane fade in active">
 								<div class="products-slick" data-nav="#slick-nav-2">
 									<!-- product -->
-									<div class="product">
+									<!-- <div class="product">
 										<div class="product-img">
 											<img src="./main/img/product06.png" alt="">
 											<div class="product-label">
@@ -439,11 +443,11 @@
 											<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to
 												cart</button>
 										</div>
-									</div>
+									</div> -->
 									<!-- /product -->
 
 									<!-- product -->
-									<div class="product">
+									<!-- <div class="product">
 										<div class="product-img">
 											<img src="./main/img/product07.png" alt="">
 											<div class="product-label">
@@ -475,11 +479,11 @@
 											<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to
 												cart</button>
 										</div>
-									</div>
+									</div> -->
 									<!-- /product -->
 
 									<!-- product -->
-									<div class="product">
+									<!-- <div class="product">
 										<div class="product-img">
 											<img src="./main/img/product08.png" alt="">
 											<div class="product-label">
@@ -506,11 +510,11 @@
 											<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to
 												cart</button>
 										</div>
-									</div>
+									</div> -->
 									<!-- /product -->
 
 									<!-- product -->
-									<div class="product">
+									<!-- <div class="product">
 										<div class="product-img">
 											<img src="./main/img/product09.png" alt="">
 										</div>
@@ -539,11 +543,11 @@
 											<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to
 												cart</button>
 										</div>
-									</div>
+									</div> -->
 									<!-- /product -->
 
 									<!-- product -->
-									<div class="product">
+									<!-- <div class="product">
 										<div class="product-img">
 											<img src="./main/img/product01.png" alt="">
 										</div>
@@ -572,7 +576,7 @@
 											<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to
 												cart</button>
 										</div>
-									</div>
+									</div> -->
 									<!-- /product -->
 								</div>
 								<div id="slick-nav-2" class="products-slick-nav"></div>
@@ -582,11 +586,11 @@
 					</div>
 				</div>
 				<!-- /Products tab & slick -->
-			</div>
+			</div> -->
 			<!-- /row -->
-		</div>
+		</div> -->
 		<!-- /container -->
-	</div>
+	</div> -->
 	<!-- /SECTION -->
 
 	<!-- SECTION -->
@@ -594,7 +598,7 @@
 		<!-- container -->
 		<div class="container">
 			<!-- row -->
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-md-4 col-xs-6">
 					<div class="section-title">
 						<h4 class="title">Top selling</h4>
@@ -606,7 +610,7 @@
 					<div class="products-widget-slick" data-nav="#slick-nav-3">
 						<div>
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product07.png" alt="">
 								</div>
@@ -615,11 +619,11 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- /product widget -->
 
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product08.png" alt="">
 								</div>
@@ -628,11 +632,11 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- /product widget -->
 
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product09.png" alt="">
 								</div>
@@ -641,13 +645,13 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- product widget -->
 						</div>
 
 						<div>
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product01.png" alt="">
 								</div>
@@ -656,11 +660,11 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- /product widget -->
 
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product02.png" alt="">
 								</div>
@@ -669,11 +673,11 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- /product widget -->
 
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product03.png" alt="">
 								</div>
@@ -682,13 +686,13 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- product widget -->
 						</div>
 					</div>
 				</div>
 
-				<div class="col-md-4 col-xs-6">
+				<!-- <div class="col-md-4 col-xs-6">
 					<div class="section-title">
 						<h4 class="title">Top selling</h4>
 						<div class="section-nav">
@@ -699,7 +703,7 @@
 					<div class="products-widget-slick" data-nav="#slick-nav-4">
 						<div>
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product04.png" alt="">
 								</div>
@@ -708,11 +712,11 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- /product widget -->
 
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product05.png" alt="">
 								</div>
@@ -721,11 +725,11 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- /product widget -->
 
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product06.png" alt="">
 								</div>
@@ -734,13 +738,13 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- product widget -->
 						</div>
 
 						<div>
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product07.png" alt="">
 								</div>
@@ -749,11 +753,11 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- /product widget -->
 
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product08.png" alt="">
 								</div>
@@ -762,11 +766,11 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- /product widget -->
 
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product09.png" alt="">
 								</div>
@@ -775,15 +779,15 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- product widget -->
 						</div>
 					</div>
-				</div>
+				</div> -->
 
 				<div class="clearfix visible-sm visible-xs"></div>
 
-				<div class="col-md-4 col-xs-6">
+				<!-- <div class="col-md-4 col-xs-6">
 					<div class="section-title">
 						<h4 class="title">Top selling</h4>
 						<div class="section-nav">
@@ -794,7 +798,7 @@
 					<div class="products-widget-slick" data-nav="#slick-nav-5">
 						<div>
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product01.png" alt="">
 								</div>
@@ -803,11 +807,11 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- /product widget -->
 
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product02.png" alt="">
 								</div>
@@ -816,11 +820,11 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- /product widget -->
 
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product03.png" alt="">
 								</div>
@@ -829,13 +833,13 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- product widget -->
 						</div>
 
 						<div>
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product04.png" alt="">
 								</div>
@@ -844,11 +848,11 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- /product widget -->
 
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product05.png" alt="">
 								</div>
@@ -857,11 +861,11 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- /product widget -->
 
 							<!-- product widget -->
-							<div class="product-widget">
+							<!-- <div class="product-widget">
 								<div class="product-img">
 									<img src="./main/img/product06.png" alt="">
 								</div>
@@ -870,13 +874,13 @@
 									<h3 class="product-name"><a href="#">product name goes here</a></h3>
 									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
 								</div>
-							</div>
+							</div> -->
 							<!-- product widget -->
 						</div>
 					</div>
-				</div>
+				</div> -->
 
-			</div>
+			</div> -->
 			<!-- /row -->
 		</div>
 		<!-- /container -->
@@ -888,7 +892,7 @@
 		<!-- container -->
 		<div class="container">
 			<!-- row -->
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-md-12">
 					<div class="newsletter">
 						<p>Sign Up for the <strong>NEWSLETTER</strong></p>
@@ -912,7 +916,7 @@
 						</ul>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<!-- /row -->
 		</div>
 		<!-- /container -->
@@ -926,7 +930,7 @@
 			<!-- container -->
 			<div class="container">
 				<!-- row -->
-				<div class="row">
+				<!-- <div class="row">
 					<div class="col-md-3 col-xs-6">
 						<div class="footer">
 							<h3 class="footer-title">About Us</h3>
@@ -980,7 +984,7 @@
 							</ul>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- /row -->
 			</div>
 			<!-- /container -->
@@ -993,22 +997,15 @@
 				<!-- row -->
 				<div class="row">
 					<div class="col-md-12 text-center">
-						<ul class="footer-payments">
+						<!-- <ul class="footer-payments">
 							<li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
 							<li><a href="#"><i class="fa fa-credit-card"></i></a></li>
 							<li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
 							<li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
 							<li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
 							<li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
-						</ul>
-						<span class="copyright">
-							<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-							Copyright &copy;
-							<script>document.write(new Date().getFullYear());</script> All rights reserved | This
-							template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a
-								href="https://colorlib.com" target="_blank">Colorlib</a>
-							<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-						</span>
+						</ul> -->
+					
 					</div>
 				</div>
 				<!-- /row -->

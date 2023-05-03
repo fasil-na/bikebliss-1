@@ -29,15 +29,13 @@
                 <br>
                 <button class="menubutton my-2"><a href="/admin/dashboard">Dashboard</a></button>
                 <button class="menubutton my-2"><a href="/admin/userlist">Users</a></button>
-                <button class="menubutton my-2"><a href="/admin/categorylist">Category</a></button>
+                <button class="selectedbutton my-2"><a href="/admin/categorylist">Category</a></button>
+                <button class="menubutton"><a href="/admin/catCreate">Create Category</a></button>
                 <button class="menubutton my-2"><a href="/admin/productlist">Product</a></button>
-                <button class="menubutton my-2"><a href="/adminLogout">Logout</a></button>
+                <button class="menubutton my-2"><a href="/admin/adminLogout">Logout</a></button>
             </div>
             <div class="col-sm-10 right">
-                <div class="fline">
-                    <h2>Category List</h2>
-                    <button class="buttons"><a href="/admin/catCreate">CREATE</a></button>
-                </div>
+
                 <br>
 
                 <!-- popup element -->
@@ -45,7 +43,9 @@
                 <div id="editPopup" style="display:none;">
                     <form action="/admin/updateCategory" method="post" enctype="multipart/form-data">
                         <label for="name">Category Name:</label>
-                        <input class="w-75 mx-auto my-2 form-control" type="text" id="card_title" name="card_title"><br>
+                        <input class="w-75 mx-auto my-2 form-control" type="text" id="card_title" name="card_title"
+                            oninput="validateCategoryName()"><span id="nameError" style="color: red;"></span><br>
+
                         <label for="name">Category Image:</label>
                         <input class="w-50 mx-auto my-3 form-control" type="file" id="card_image" name="image"><br>
                         <input type="hidden" name="id" id="cat_id">
@@ -59,16 +59,18 @@
                 <div class="card-container col-sm-3 col-md-6 col-lg-12">
                     <% data.forEach(function(x,i) { %>
                         <div class="card" style="width: 18rem;">
+                            <h4 class="card-text mx-auto my-2"><span id="card_title<%= i %>">
+                                <%= x.category %>
+                            </span>
+                            </h4>
                             <img id="image_container<%= i %>" class="card-img-top"
                                 src="/images/uploads/<%= x.imageUrl %>" alt="Card image cap">
                             <div class="card-body">
-                                <p class="card-text"><span id="card_title<%= i %>">
-                                        <%= x.category %>
-                                    </span>
-                                </p>
+                               
                                 <input type="hidden" name="id" value="<%= x._id %> " id="cat_id<%= i %>">
                                 <button class="buttons" id="editButton" onclick="editCategory('<%= i %>')">EDIT</button>
-                                <button class="buttons"><a href="/admin/categoryDelete">DELETE</a></button>
+
+                                <button class="buttons"><a href="/admin/categoryDelete/<%= x._id %>">DELETE</a></button>
                             </div>
                         </div>
                         <% }); %>
@@ -104,6 +106,32 @@
             document.querySelector("#editPopup").style.display = "none";
         }
     </script>
+
+    <!-- <script>
+        function validateCategoryName() {
+            var name = document.querySelector(`#card_title${card}`).innerText
+            const regex = /^[a-zA-Z0-9\s]+$/;
+            const maxLength = 50;
+            if (!name) {
+                name = false
+                document.getElementById("nameError").innerText = "Category name is required"
+            }
+
+            if (name.length > maxLength) {
+                name = false
+                document.getElementById("nameError").innerText = `Category name cannot be longer than ${maxLength} characters.`
+            }
+
+            if (!regex.test(name)) {
+                name = false
+                document.getElementById("nameError").innerText = "Category name can only contain letters, numbers, and spaces."
+            }
+
+            name = true;
+            document.getElementById("nameError").innerText = ""
+        }
+
+    </script> -->
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"

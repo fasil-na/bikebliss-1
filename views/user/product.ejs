@@ -44,13 +44,18 @@
 		<div id="top-header">
 			<div class="container">
 				<ul class="header-links pull-left">
-					<li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-					<li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
-					<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+					<!-- <li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li> -->
+					<li><a href="#"><i class="fa fa-envelope-o"></i> <%=Email%></a></li>
+					<!-- <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li> -->
 				</ul>
 				<ul class="header-links pull-right">
 					<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
 					<li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
+					<%if(sessionCheck) { %>
+						<li><a href="\logout"></i>Logout</a></li>
+						<% }else{ %>
+							<li><a href="\login"></i>Login</a></li>
+							<% } %>
 				</ul>
 			</div>
 		</div>
@@ -65,8 +70,9 @@
 					<!-- LOGO -->
 					<div class="col-md-3">
 						<div class="header-logo">
-							<a href="#" class="logo">
-								<img src="./main/img/logo.png" alt="">
+							<a href="/" class="logo">
+								<img src="/main/img/logo.png" width="30%" alt="">
+							
 							</a>
 						</div>
 					</div>
@@ -171,7 +177,7 @@
 			<!-- responsive-nav -->
 			<div id="responsive-nav">
 				<!-- NAV -->
-				<ul class="main-nav nav navbar-nav">
+				<!-- <ul class="main-nav nav navbar-nav">
 					<li class="active"><a href="#">Home</a></li>
 					<li><a href="#">Hot Deals</a></li>
 					<li><a href="#">Categories</a></li>
@@ -179,7 +185,7 @@
 					<li><a href="#">Smartphones</a></li>
 					<li><a href="#">Cameras</a></li>
 					<li><a href="#">Accessories</a></li>
-				</ul>
+				</ul> -->
 				<!-- /NAV -->
 			</div>
 			<!-- /responsive-nav -->
@@ -195,7 +201,7 @@
 			<!-- row -->
 			<div class="row">
 				<div class="col-md-12">
-					<ul class="breadcrumb-tree">
+					<!-- <ul class="breadcrumb-tree">
 						<li><a href="#">Home</a></li>
 						<li><a href="#">All Categories</a></li>
 						<li><a href="#">Accessories</a></li>
@@ -203,7 +209,7 @@
 						<li class="active">
 							<%=data.productName%>
 						</li>
-					</ul>
+					</ul> -->
 				</div>
 			</div>
 			<!-- /row -->
@@ -234,10 +240,11 @@
 				<div class="col-md-2  col-md-pull-5">
 					<div id="product-imgs">
 						<%data.imageUrl.forEach(function(x, i) { %>
-							<div class="product-preview">
-								<img src="/images/uploads/<%=data.imageUrl[i]%>" alt="">
-							</div>
-							<% }); %>
+						<div class="product-preview">
+							<img src="/images/uploads/<%=data.imageUrl[i]%>" alt="">
+						</div>
+						<% }); %>
+
 					</div>
 				</div>
 				<!-- /Product thumb imgs -->
@@ -259,24 +266,23 @@
 							<a class="review-link" href="#">10 Review(s) | Add your review</a>
 						</div>
 						<div>
-							<h3 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h3>
+							<h3 class="product-price"><%=data.price%> </h3>
+							<!-- <del class="product-old-price">$990.00</del> -->
 							<span class="product-available">In Stock</span>
 						</div>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-							labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-							laboris nisi ut aliquip ex ea commodo consequat.</p>
+						<p><%=data.description%></p>
 
 						<div class="product-options">
 							<label>
 								Size
 								<select class="input-select">
-									<option value="0">X</option>
+									<option value="0"><%=data.size%></option>
 								</select>
 							</label>
 							<label>
 								Color
 								<select class="input-select">
-									<option value="0">Red</option>
+									<option value="0"><%=data.color%></option>
 								</select>
 							</label>
 						</div>
@@ -333,12 +339,7 @@
 							<div id="tab1" class="tab-pane fade in active">
 								<div class="row">
 									<div class="col-md-12">
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-											tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-											quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-											consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-											cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-											non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+										<p><%=data.description%>
 										</p>
 									</div>
 								</div>
@@ -349,12 +350,7 @@
 							<div id="tab2" class="tab-pane fade in">
 								<div class="row">
 									<div class="col-md-12">
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-											tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-											quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-											consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-											cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-											non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+										<p><%=data.description%>
 										</p>
 									</div>
 								</div>
@@ -465,9 +461,7 @@
 														</div>
 													</div>
 													<div class="review-body">
-														<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-															do eiusmod tempor incididunt ut labore et dolore magna
-															aliqua</p>
+														<p><%=data.description%></p>
 													</div>
 												</li>
 												<li>
@@ -483,9 +477,7 @@
 														</div>
 													</div>
 													<div class="review-body">
-														<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-															do eiusmod tempor incididunt ut labore et dolore magna
-															aliqua</p>
+														<p><%=data.description%></p>
 													</div>
 												</li>
 												<li>
@@ -501,9 +493,7 @@
 														</div>
 													</div>
 													<div class="review-body">
-														<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-															do eiusmod tempor incididunt ut labore et dolore magna
-															aliqua</p>
+														<p><%=data.description%></p>
 													</div>
 												</li>
 											</ul>
@@ -561,11 +551,11 @@
 	<!-- /SECTION -->
 
 	<!-- Section -->
-	<div class="section">
+	<!-- <div class="section">
 		<!-- container -->
-		<div class="container">
+		<!-- <div class="container">
 			<!-- row -->
-			<div class="row">
+			<!-- <div class="row">
 
 				<div class="col-md-12">
 					<div class="section-title text-center">
@@ -574,7 +564,7 @@
 				</div>
 
 				<!-- product -->
-				<div class="col-md-3 col-xs-6">
+				<!-- <div class="col-md-3 col-xs-6">
 					<div class="product">
 						<div class="product-img">
 							<img src="./main/img/product01.png" alt="">
@@ -601,11 +591,11 @@
 							<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- /product -->
 
 				<!-- product -->
-				<div class="col-md-3 col-xs-6">
+				<!-- <div class="col-md-3 col-xs-6">
 					<div class="product">
 						<div class="product-img">
 							<img src="./main/img/product02.png" alt="">
@@ -637,13 +627,13 @@
 							<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- /product -->
 
 				<div class="clearfix visible-sm visible-xs"></div>
 
 				<!-- product -->
-				<div class="col-md-3 col-xs-6">
+				<!-- <div class="col-md-3 col-xs-6">
 					<div class="product">
 						<div class="product-img">
 							<img src="./main/img/product03.png" alt="">
@@ -672,11 +662,11 @@
 							<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- /product -->
 
 				<!-- product -->
-				<div class="col-md-3 col-xs-6">
+				<!-- <div class="col-md-3 col-xs-6">
 					<div class="product">
 						<div class="product-img">
 							<img src="./main/img/product04.png" alt="">
@@ -700,14 +690,14 @@
 							<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- /product -->
 
-			</div>
+			</div> -->
 			<!-- /row -->
-		</div>
+		</div> -->
 		<!-- /container -->
-	</div>
+	</div> -->
 	<!-- /Section -->
 
 	<!-- NEWSLETTER -->
@@ -715,7 +705,7 @@
 		<!-- container -->
 		<div class="container">
 			<!-- row -->
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-md-12">
 					<div class="newsletter">
 						<p>Sign Up for the <strong>NEWSLETTER</strong></p>
@@ -739,7 +729,7 @@
 						</ul>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<!-- /row -->
 		</div>
 		<!-- /container -->
@@ -753,7 +743,7 @@
 			<!-- container -->
 			<div class="container">
 				<!-- row -->
-				<div class="row">
+				<!-- <div class="row">
 					<div class="col-md-3 col-xs-6">
 						<div class="footer">
 							<h3 class="footer-title">About Us</h3>
@@ -807,7 +797,7 @@
 							</ul>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- /row -->
 			</div>
 			<!-- /container -->
@@ -818,7 +808,7 @@
 		<div id="bottom-footer" class="section">
 			<div class="container">
 				<!-- row -->
-				<div class="row">
+				<!-- <div class="row">
 					<div class="col-md-12 text-center">
 						<ul class="footer-payments">
 							<li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
@@ -828,16 +818,9 @@
 							<li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
 							<li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
 						</ul>
-						<span class="copyright">
-							<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-							Copyright &copy;
-							<script>document.write(new Date().getFullYear());</script> All rights reserved | This
-							template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a
-								href="https://colorlib.com" target="_blank">Colorlib</a>
-							<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-						</span>
+		
 					</div>
-				</div>
+				</div> -->
 				<!-- /row -->
 			</div>
 			<!-- /container -->

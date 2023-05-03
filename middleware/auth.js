@@ -1,32 +1,51 @@
-
 const userLogin = (req, res, next) => {
-  if (req.session.user) {
-    next();
-  } else {
-    res.redirect("/login");
-  }
-};
-
-const userLogout = (req, res, next) => {
-  if (req.session.user) {
-    req.session.user = false;
+  try{
+    if (!req.session.user) {
     res.redirect("/");
   } else {
-    next();
+    next(); 
   }
+  }
+  catch (error) {
+    console.log(error.message);
+} 
 };
+
+// const userLogout = (req, res, next) => {
+//   try{
+//     if (req.session.user) {
+//     res.redirect("/");
+//   } else {
+//     next();
+//   }
+//   }catch (error) {
+//     console.log(error.message); 
+// };
+// }
 
 const adminLogin = (req, res, next) => {
-  if (req.session.admin) {
-    next();
-  } else {
-    res.redirect("/admin");
-  }
+  try{
+    if (!req.session.admin) {
+      res.redirect("/admin");
+    } else {
+      next(); 
+    }
+  }catch (error) {
+    console.log(error.message); 
+}; 
+  
 };
 
-const adminLogout = (req, res, next) => {
-  if (req.session.admin) {
-    next();
-  }
-};
-module.exports = { userLogin, userLogout, adminLogin, adminLogout };
+// const adminLogout = (req, res, next) => {
+//   try{
+//     if (req.session.admin) {
+//       res.redirect("/admin");
+//     } else {
+//       next(); 
+//     }
+//   }catch (error) {
+//     console.log(error.message); 
+// }; 
+// };
+
+module.exports = { userLogin,  adminLogin };

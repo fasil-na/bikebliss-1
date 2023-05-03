@@ -32,10 +32,6 @@ const productSchema = new Schema({
     type: String,
     required: false,
   },
-  material: {
-    type: String,
-    required: false,
-  },
   color: {
     type: String,
     required: false,

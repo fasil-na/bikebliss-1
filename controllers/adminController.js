@@ -51,21 +51,45 @@ const dashboardload = async (req, res) => {
 
 const prodlistload = async (req, res) => {
     try {
-        const productData = await Product.find({});
-        const categoryData = await Category.find({});
-        if (productData && categoryData) {
-            const productWithCatName = productData.map((product) => {
-                let prevObj = {}
-                prevObj = product;
-                const categories = categoryData.find((c) => c._id.toString() === product.category.toString());
-                const categoryName = categories ? categories.category : null;
-                prevObj.categoryName = categoryName
-                return prevObj;
-            });
-            console.log('productWithCatName>>>', productWithCatName)
-            await res.render("adminProdList", { data: productWithCatName });
+
+        const productData = await Product.aggregate([
+            {
+              $lookup: {
+                from: "categories",
+                localField: "category",
+                foreignField: "_id",
+                as: "category",
+              },
+            },
+            {
+              $unwind: "$category",
+            }, {
+                $match: {
+                  isDeleted: false
+                }
+            }
+          ]);
+          await res.render("adminProdList", { data: productData });
+      
+        //   res.render("admin/products", { productData });
+        // const productData = await Product.find({});
+        // const categoryData = await Category.find({});
+        // if (productData && categoryData) {
+        //     const productWithCatName = productData.map((product) => {
+        //         let prevObj = {}
+        //         prevObj = product;
+        //         const categories = categoryData.find((c) => c._id.toString() === product.category.toString());
+        //         console.log("catCheck>>>>>>",categories);
+        //         const categoryName = categories ? categories.category : null;
+        //         prevObj.categoryName = categoryName
+        //         return prevObj;
+        //     });
+            // const products =  productWithCatName.find({isDeleted: false});
+
+            // await res.render("adminProdList", { data: productWithCatName });
         }
-    } catch (error) {
+    // } 
+    catch (error) {
         console.log(error.message);
     }
 };
@@ -92,7 +116,7 @@ const createProduct = async (req, res) => {
 const blockUser = async (req, res) => {
     try {
         const id = req.params.id;
-        await User.updateOne({ _id: new Object(id) }, { $set: { is_blocked: 1 } });
+        await User.updateOne({ _id: new ObjectId(id) }, { $set: { is_blocked: 1 } });
         res.redirect("/admin/dashboard");
     } catch (error) {
         console.log(error);
@@ -102,7 +126,7 @@ const blockUser = async (req, res) => {
 const unblockUser = async (req, res) => {
     try {
         const id = req.params.id;
-        await User.updateOne({ _id: new Object(id) }, { $set: { is_blocked: 0 } });
+        await User.updateOne({ _id: new ObjectId(id) }, { $set: { is_blocked: 0 } });
         res.redirect("/admin/dashboard");
     } catch (error) {
         console.log(error);
@@ -188,7 +212,6 @@ const addNewProduct = async (req, res) => {
             imageUrl: images,
             brand: req.body.brand,
             size: req.body.size,
-            material: req.body.material,
             color: req.body.color,
             isDeleted: false,
         });
@@ -203,6 +226,11 @@ const addNewProduct = async (req, res) => {
 
 const deleteCategory = async (req, res) => {
     try {
+
+        const idVal = req.params.id;
+        const userId = new ObjectId(idVal);
+       
+        await Category.deleteOne({_id:userId});
         const categoryData = await Category.find();
         res.render("adminCatList", { data: categoryData });
     } catch (error) {
@@ -231,6 +259,49 @@ const updateCategory = async (req, res) => {
     }
 }
 
+const deleteProduct = async (req, res) => {
+    try {
+
+        const idVal = req.params.id;
+        const userId = new ObjectId(idVal);
+       
+        await Product.updateOne({_id:userId}, {$set: {isDeleted: true}});
+
+        const productData = await Product.find({isDeleted: false});
+        res.render("adminProdList", { data: productData });
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+const updateProduct = async (req, res) => {
+
+    // if (req.body.id && req.body.card_title) {
+        var myId = req.body.id.replace(/\s+$/, '');
+        const objectId = new ObjectId(myId);
+        
+        const name = req.body.card_title;
+        const image = req.files.map((file) => {
+            return file.filename;
+          });
+        const description = req.body.card_Description;
+        const price = req.body.card_Price;
+        const color = req.body.card_Color;
+    
+        try {
+            await Product.findByIdAndUpdate(
+                { _id: objectId },
+                { $set: { productName: name, imageUrl: image.filename ,description: description,price:price, color:color} }
+            ).then((response) => {
+                res.redirect("/admin/productlist");
+            });
+        } catch (error) {
+            console.log(error.message);
+        }
+
+    // }
+}
+
 
 
 
@@ -251,5 +322,7 @@ module.exports = {
     addNewCategory,
     addNewProduct,
     deleteCategory,
-    updateCategory
+    updateCategory,
+    deleteProduct,
+    updateProduct,
 };

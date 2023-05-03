@@ -38,6 +38,17 @@
   background-color:rgb(255, 183, 50); 
   border-radius: 10px;
 }
+.selectedbutton{
+  padding: 5px 15px;
+  border: solid white 2px;
+  width: 200px;  
+  background-color:white; 
+  border-radius: 10px;
+}
+.selectedbutton a{
+  color: black;
+  text-decoration: none;
+}
 .menubutton a{
   color: black;
   text-decoration: none;
@@ -68,10 +79,16 @@ table {
 
    
   }
+  /* .tHead{
+
+    position: fixed;
+    top: 0;
+  } */
   
   table th {
     background-color:rgb(255, 183, 50); 
     border: 5px solid white
+  
 
   }
   
@@ -117,3 +134,24 @@ table {
   border-radius: 10px;
   margin-left: 5%;
 }
+
+#editPopupLarge {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 650px;
+  background-color: white;
+  background-color:rgb(255, 183, 50);
+  padding: 10px;
+  z-index: 1;
+}
+
+
+
+
+
+
+

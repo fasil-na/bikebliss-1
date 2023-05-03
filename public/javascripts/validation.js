@@ -2,18 +2,19 @@ var username = false
 var useremail = false
 var usernumber = false
 var userpassword = false
+var userconfirmpassword=false
 
 
-  function updateSubmitButton() {
+function updateSubmitButton() {
 
-    const submitButton = document.getElementById('submitButton'); 
+    const submitButton = document.getElementById('submitButton');
 
-    if (username && useremail && usernumber && userpassword) {
-      submitButton.removeAttribute('disabled'); 
+    if (username && useremail && usernumber && userpassword && userconfirmpassword) {
+        submitButton.removeAttribute('disabled');
     } else {
-      submitButton.setAttribute('disabled', 'disabled'); 
+        submitButton.setAttribute('disabled', 'disabled');
     }
-  }
+}
 
 
 
@@ -82,6 +83,28 @@ function validatePassword() {
         updateSubmitButton();
     }
 }
+
+function validateConfirmPassword() {
+    var password = document.getElementById("password").value;
+    var confirmPassword = document.getElementById("confirm_password").value;
+
+
+    if (!confirmPassword) {
+        userconfirmpassword = false;
+        document.getElementById("confirm_passwordError").innerText = "Confirm password is required";
+    }
+    else if (password !== confirmPassword) {
+        userconfirmpassword = false;
+        document.getElementById("confirm_passwordError").innerText = "Passwords do not match";
+    }
+
+    else {
+        userconfirmpassword = true;
+        document.getElementById("confirm_passwordError").innerText = "";
+        updateSubmitButton();
+    }
+}
+
 
 
 

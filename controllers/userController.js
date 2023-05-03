@@ -8,7 +8,7 @@ const { ObjectId } = require("mongodb");
 const homeload = async (req, res) => {
   try {
     const CategoryList = await Category.find({});
-        res.render("home", { data: CategoryList });
+    res.render("home", { data: CategoryList, sessionCheck: false, Email: "" });
   } catch (error) {
     console.log(error.message);
   }
@@ -16,9 +16,7 @@ const homeload = async (req, res) => {
 
 const loginload = async (req, res) => {
   try {
-    const productList = await Product.find({});
-    console.log('productList>>>', productList);
-    res.render("login", { footer: "", data: productList });
+    res.render("login", { footer: "" });
   } catch (error) {
     console.log(error.message);
   }
@@ -44,18 +42,26 @@ let name;
 let email;
 let number;
 let password;
+let otpExpirationTime;
 const sendOtp = async (req, res) => {
   try {
-    const emailExist = await User.findOne({ email: req.body.email });
+    const emailExist = await User.findOne({ email: req.body.email?req.body.email:email });
     if (!emailExist) {
-      const generatedOtp = generateOTP();
+      if(!saveOtp){
+        let generatedOtp = generateOTP();
       saveOtp = generatedOtp;
-      name = req.body.name;
-      email = req.body.email;
-      number = req.body.number;
-      password = req.body.password;
+      name = req.body.name?req.body.name:name;
+      email = req.body.email?req.body.email:email;
+      number = req.body.number?req.body.number:number;
+      password = req.body.password?req.body.password:password;
       sendOtpMail(email, generatedOtp);
-      res.render("otpEnter")
+      res.render("otpEnter", { footer: "" })
+      setTimeout(() => {
+        saveOtp=null;
+      }, 60 * 1000);
+      }else{
+        res.render("otpEnter", { footer: "", })
+      }
     } else {
       res.render("signup", { footer: "Userdata already exists" })
     }
@@ -120,9 +126,9 @@ const verifyOtp = async (req, res) => {
       blockStatus: false,
     });
     await newUser.save();
-    res.redirect("/login");
+    res.render("login", { footer: "Account Created Successfully, Please Login" });
   } else {
-    res.render("signup", { footer: "Email already exists" })
+    res.render("otpEnter", { footer: "Incorrect OTP" })
   }
 }
 
@@ -134,9 +140,14 @@ const verifyLogin = async (req, res) => {
     if (user) {
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (passwordMatch) {
-        req.session.user = req.body.email;
-        const CategoryList = await Category.find({});
-        res.render("home", { data: CategoryList });
+        if (user.blockStatus) {
+          res.render("login", { footer: "User Is Blocked" });
+        } else {
+          req.session.user = req.body.email;
+          const CategoryList = await Category.find({});
+          res.render("home", { data: CategoryList, sessionCheck: req.session.user ? true : false, Email: req.body.email ? req.body.email : "" });
+        }
+
       } else {
         res.render("login", { footer: "Email and  Password is  Invalid" });
       }
@@ -153,9 +164,11 @@ const categoryDetail = async (req, res) => {
   console.log('requestParam>>>', req.params.id);
   if (req.params.id) {
     try {
-      const categoryId = req.params.id;
-      const productList = await Product.find({ category: categoryId });
-      res.render('productList', { data: productList })
+      req.session.user = req.session.body;
+      console.log(req.session.user, "SessionCheck>>>>");
+      const categoryId = new ObjectId(req.params.id);
+      const productList = await Product.find({ category: categoryId, isDeleted: false });
+      res.render('productList', { data: productList, sessionCheck: req.session.user ? true : false, Email: req.body.email ? req.body.email : "" })
     } catch (error) {
       console.log(error.message);
     }
@@ -167,12 +180,23 @@ const prodDetails = async (req, res) => {
     try {
       const productId = req.params.id;
       const productObj = await Product.findById({ _id: new ObjectId(productId) });
-      res.render('product', { data: productObj })
+      res.render('product', { data: productObj, sessionCheck: req.session.user ? true : false, Email: req.body.email ? req.body.email : "" })
     } catch (error) {
       console.log(error.message);
     }
   }
 };
+
+const logoutload = async (req, res) => {
+  try {
+    req.session.user = false;
+    res.render("login", { footer: "Logged Out Successfully" });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+
 
 module.exports = {
   loginload,
@@ -184,4 +208,5 @@ module.exports = {
   verifyLogin,
   categoryDetail,
   prodDetails,
+  logoutload,
 };
