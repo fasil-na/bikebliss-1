@@ -1,8 +1,8 @@
-var username = false
-var useremail = false
-var usernumber = false
-var userpassword = false
-var userconfirmpassword=false
+let username = false
+let useremail = false
+let usernumber = false
+let userpassword = false
+let userconfirmpassword=false
 
 
 function updateSubmitButton() {
@@ -19,7 +19,7 @@ function updateSubmitButton() {
 
 
 function validateName() {
-    var name = document.getElementById("name").value
+    let name = document.getElementById("name").value
     const nameRegex = /^[A-Za-z\s]+$/;
     if (!name) {
         username = false
@@ -35,7 +35,7 @@ function validateName() {
 }
 
 function validateEmail() {
-    var email = document.getElementById("email").value;
+    let email = document.getElementById("email").value;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) {
         useremail = false
@@ -52,7 +52,7 @@ function validateEmail() {
 
 
 function validateMobile() {
-    var mobile = document.getElementById("number").value;
+    let mobile = document.getElementById("number").value;
     const mobileRegex = /^\d{10}$/;
     if (!mobile) {
         usernumber = false
@@ -68,7 +68,7 @@ function validateMobile() {
 }
 
 function validatePassword() {
-    var password = document.getElementById("password").value;
+    let password = document.getElementById("password").value;
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
     if (!password) {
         userpassword = false
@@ -85,8 +85,8 @@ function validatePassword() {
 }
 
 function validateConfirmPassword() {
-    var password = document.getElementById("password").value;
-    var confirmPassword = document.getElementById("confirm_password").value;
+    let password = document.getElementById("password").value;
+    let confirmPassword = document.getElementById("confirm_password").value;
 
 
     if (!confirmPassword) {

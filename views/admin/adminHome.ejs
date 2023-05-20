@@ -9,45 +9,286 @@
     <link rel="stylesheet" href="/stylesheets/adminHomestyle.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand text-primary" href="#">BIKEBLISS.COM</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-center" id="navbarText">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/dashboard">DASHBOARD</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/userlist">USERS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/categorylist">CATEGORIES</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/productlist">PRODUCTS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/bannerlist">BANNERS</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/adminLogout">
+                            <i class="fas fa-sign-out-alt"></i> LOGOUT
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+
     <div class="container-fluid">
         <div class="row">
-            <div class="left col-sm-2">
-
-                <h2>Welcome</h2>
-
-                <div class="col-md-5 mx-auto">
-                    <div class="head">
-                        <img
-                            src="https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg">
-
-                    </div>
-                </div>
+            <div class="col-sm-12 right">
                 <br>
-                <button class="selectedbutton my-2"><a href="/admin/dashboard">Dashboard</a></button>
-                <button class="menubutton my-2"><a href="/admin/userlist">Users</a></button>
-                <button class="menubutton my-2"><a href="/admin/categorylist">Category</a></button>
-                <button class="menubutton my-2"><a href="/admin/productlist">Product</a></button>
-                <button class="menubutton my-2"><a href="/admin/adminLogout">Logout</a></button>
-            </div>
-            <div class="col-sm-10 right">
-                <div class="fline">
 
-
-                    <h2>Dashboard</h2>
-                </div>
-                <br>
                 <div class="dashDetails">
-                    <div class="userDetails ">
-                        <h4 class="mx-5 ">Total Users</h4>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div
+                                class="userDetails d-flex flex-column align-items-center justify-content-center mx-auto my-2">
+                                <h2>
+                                    <%= data.length %>
+                                </h2>
+                                <h5>Registered Users</h5>
+                            </div>
+                        </div>
 
+                        <div class="col-sm-12 col-md-6 col-lg-3 ">
+                            <div
+                                class="userDetails d-flex flex-column align-items-center justify-content-center mx-auto my-2">
+                                <h2>
+                                    <%= totalPriceSum[0].totalPriceSum %>
+                                        <span style="display: inline-block;">
+                                            <p style="font-size: 16px; display: inline; margin-right: 5px;">INR</p>
+                                        </span>
+                                </h2>
+                                <h5>Total Earnings</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3 ">
+                            <div
+                                class="userDetails d-flex flex-column align-items-center justify-content-center mx-auto my-2">
+                                <h2>
+                                    <%= weeklyEarnings[0].totalPriceSum %>
+                                        <span style="display: inline-block;">
+                                            <p style="font-size: 16px; display: inline; margin-right: 5px;">INR</p>
+                                        </span>
+                                </h2>
+                                <h5>Weekly Earnings</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3 ">
+                            <div
+                                class="userDetails d-flex flex-column align-items-center justify-content-center mx-auto my-2">
+                                <h2>
+                                    <%= orderNumber.length %>
+                                </h2>
+                                <h5>Total Orders</h5>
+                            </div>
+                        </div>
                     </div>
-                    <div class="userDetails">
-                        <h4 class="mx-5 ">Total Sales</h4>
+                </div>
 
+                <br><br>
+
+                <script>
+                    getlineChartData()
+                    async function getlineChartData() {
+                        await fetch("/admin/lineChart", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(
+                                {}
+                            )
+                        }).then((res) => res.json()).then((res) => {
+                            const count = res.result.map(item => item.count);
+                            const date = res.result.map(item => item._id);
+                            orderlineChart(date, count)
+                        })
+                    }
+
+                    getbarChartData()
+                    async function getbarChartData() {
+                        await fetch("/admin/barChart", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(
+                                {}
+                            )
+                        }).then((res) => res.json()).then((res) => {
+                            const totalPrice = res.result.map(item => item.totalPrice);
+                            const date = res.result.map(item => item._id);
+
+                            orderbarChart(date, totalPrice)
+                        })
+                    }
+
+                    getpieChartData()
+                    async function getpieChartData() {
+                        await fetch("/admin/pieChart", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(
+                                {}
+                            )
+                        }).then((res) => res.json()).then((res) => {
+                            const count = res.result.map(item => item.count);
+                            const paymentType = res.result.map(item => item._id);
+
+                            orderpieChart(count, paymentType)
+                        })
+                    }
+
+                </script>
+
+
+                <div class="row">
+                    <div class="col-lg-8 col-md-12 d-flex align-items-center justify-content-center">
+                        <canvas id="myChart"></canvas>
                     </div>
+
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                    <script>
+
+
+                        const ctx = document.getElementById('myChart');
+                        function orderlineChart(date, count) {
+                            new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: date,
+                                    datasets: [{
+                                        label: 'Orders',
+                                        data: count,
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    </script>
+                    <br><br>
+                    <div class="col-lg-4 col-md-12 d-flex align-items-center justify-content-center">
+                        <canvas id="myChart2"></canvas>
+                    </div>
+                </div>
+
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                <script>
+                    const ctxxx = document.getElementById('myChart2');
+                    function orderpieChart(count, paymentType) {
+                        new Chart(ctxxx, {
+                            type: 'pie',
+                            data: {
+                                labels: paymentType,
+                                datasets: [{
+                                    label: 'Payment Method',
+                                    data: count,
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    }
+                </script>
+
+
+
+
+
+                <br><br>
+                <div class="row">
+                    <div class="col-lg-8 col-md-12 d-flex align-items-center justify-content-center">
+                        <canvas id="myChart1"></canvas>
+                    </div>
+                    
+
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                    <script>
+
+
+
+
+                        const ctxx = document.getElementById('myChart1');
+                        function orderbarChart(date, totalPrice) {
+                            new Chart(ctxx, {
+                                type: 'bar',
+                                data: {
+                                    labels: date,
+                                    datasets: [{
+                                        label: `Earnings`,
+                                        data: totalPrice,
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    </script>
+                    <br><br>
+                    <div class="col-lg-4 col-md-12 download ">
+                        <div class="downloadPdf">
+                            <p>Daily Sales Report</p>
+                            <a href="/admin/exportPdfDailySales"><i class="fa-solid fa-download"></i></a>
+                        </div>
+                        <div class="downloadPdf">
+                            <p>Weekly Sales Report</p>
+                            <a href="/admin/exportPdfWeeklySales"><i class="fa-solid fa-download"></i></a>
+                        </div>
+                        <div class="downloadPdf">
+                            <p>Yearly Sales Report</p>
+                            <a href="/admin/exportPdfYearlySales"><i class="fa-solid fa-download"></i></a>
+                        </div>
+                    </div>
+
+
+
                 </div>
 
 

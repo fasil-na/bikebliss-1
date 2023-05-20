@@ -9,31 +9,53 @@
     <link rel="stylesheet" href="/stylesheets/adminHomestyle.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand text-primary" href="#">BIKEBLISS.COM</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-center" id="navbarText">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/dashboard">DASHBOARD</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/userlist">USERS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/categorylist">CATEGORIES</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/productlist">PRODUCTS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/bannerlist">BANNERS</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/adminLogout">
+                            <i class="fas fa-sign-out-alt"></i> LOGOUT
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
     <div class="container-fluid">
         <div class="row">
-            <div class="left col-sm-2">
-
-                <h2>Welcome</h2>
-
-
-                <div class="col-md-5 mx-auto">
-                    <div class="head">
-                        <img
-                            src="https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg">
-
-                    </div>
-                </div>
-                <br>
-                <button class="menubutton my-2"><a href="/admin/dashboard">Dashboard</a></button>
-                <button class="menubutton my-2"><a href="/admin/userlist">Users</a></button>
-                <button class="menubutton my-2"><a href="/admin/categorylist">Category</a></button>
-                <button class="selectedbutton my-2"><a href="/admin/productlist">Product</a></button>
-                <button class="menubutton my-2"><a href="/admin/adminLogout">Logout</a></button>
-            </div>
-            <div class="col-sm-10 right">
+            
+            <div class="col-sm-12 right">
                 <div class="fline">
                     <h2 class="w-50 mx-auto my-2">Create Product</h2>
                 </div>
@@ -41,9 +63,11 @@
                 <div id="image-previews"></div>
 
                 <form action="/admin/addProduct" method="post" enctype="multipart/form-data">
-                    <input class="w-50 mx-auto my-3 form-control" type="text" placeholder="Product Name" name="name">
+
+                    <input class="w-50 mx-auto my-3 form-control" type="text" placeholder="Product Name" name="name" id="name" oninput="validateProductName()">
+                    <span class="text-danger d-flex justify-content-center align-items-center" id="nameError"></span>
                     <input class="w-50 mx-auto my-3 form-control" type="text" placeholder="Description"
-                        name="description">
+                        name="description" required>
                     <select class="w-50 mx-auto my-3 form-control" name="category">
                         <%for(let i=0;i <category.length; i++){%>
                             <option value=<%=category[i]._id%>><%=category[i].category%>
@@ -52,21 +76,34 @@
                     </select>
                     <!-- imageupload handle -->
                     <input type="file" class="w-50 mx-auto my-3 form-control" name="image" id="image" accept="image/*"
-                        multiple />
+                        multiple required/>
                     <!-- image upload handle end -->
                     <select class="w-50 mx-auto my-3 form-control" name="brand">
                         <option value="Scott">Scott</option>
                         <option value="Giant">Giant</option>
                         <option value="Btwin">Btwin</option>
                     </select>
-                    <input class="w-50 mx-auto my-3 form-control" type="number" placeholder="Price" name="price">
+                    <input class="w-50 mx-auto my-3 form-control" type="number" placeholder="Price" name="price" id="price" oninput="validateProductPrice()">
+                    <span class="text-danger d-flex justify-content-center align-items-center" id="priceError"></span>
                     <select class="w-50 mx-auto my-3 form-control" name="size">
                         <option value="S">S</option>
                         <option value="M">M</option>
                         <option value="L">L</option>
                     </select>
-                    <input class="w-50 mx-auto my-3 form-control" type="text" placeholder="Color" name="color">
-                    <button class="w-50 login mx-auto my-3 form-control" type="submit">ADD</button>
+                    <select class="w-50 mx-auto my-3 form-control" name="color">
+                        <option value="BLACK">BLACK</option>
+                        <option value="WHITE">WHITE</option>
+                        <option value="RED">RED</option>
+                        <option value="BLUE">BLUE</option>
+                        <option value="GREEN">GREEN</option>
+                        <option value="YELLOW">YELLOW</option>
+                        <option value="ORANGE">ORANGE</option>
+                        <option value="GREY">GREY</option>
+                        <option value="ASH">ASH</option>
+                    </select>
+                    <input class="w-50 mx-auto my-3 form-control" type="number" placeholder="Stock" name="stock" id="stock" oninput="validateProductStock()">
+                    <span class="text-danger d-flex justify-content-center align-items-center" id="stockError"></span>
+                    <button class="w-50 login mx-auto my-3 form-control" type="submit" id="submitButton" disabled>ADD</button>
                     <p>
 
                     </p>
@@ -78,7 +115,7 @@
 
     </div>
 
-
+    <script src="/javascripts/validation Prodcreate.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
         crossorigin="anonymous"></script>

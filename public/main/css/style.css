@@ -2189,3 +2189,36 @@ textarea.input {
     margin-top: 10px;
   }
 }
+
+.address-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.address-card {
+  border: 1px solid #ccc;
+  padding: 20px;
+  width: 300px;
+}
+
+.address-card input[type="radio"] {
+  margin-right: 10px;
+}
+
+.address-card p {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.tableHeight{
+  min-height: 80px;
+}
+.bannerTitle {
+  font-size: 10em; 
+}
+
+ .bannerDescription {
+  font-size: 5em; 
+}
+

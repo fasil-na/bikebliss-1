@@ -9,30 +9,55 @@
     <link rel="stylesheet" href="/stylesheets/adminHomestyle.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand text-primary" href="#">BIKEBLISS.COM</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-center" id="navbarText">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/dashboard">DASHBOARD</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/userlist">USERS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/categorylist">CATEGORIES</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/productlist">PRODUCTS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/bannerlist">BANNERS</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/adminLogout">
+                            <i class="fas fa-sign-out-alt"></i> LOGOUT
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+
     <div class="container-fluid">
         <div class="row">
-            <div class="left col-sm-2">
 
-                <h2>Welcome</h2>
-
-                <div class="col-md-5 mx-auto">
-                    <div class="head">
-                        <img
-                            src="https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg">
-
-                    </div>
-                </div>
-                <br>
-                <button class="menubutton my-2"><a href="/admin/dashboard">Dashboard</a></button>
-                <button class="selectedbutton my-2"><a href="/admin/userlist">Users</a></button>
-                <button class="menubutton my-2"><a href="/admin/categorylist">Category</a></button>
-                <button class="menubutton my-2"><a href="/admin/productlist">Product</a></button>
-                <button class="menubutton my-2"><a href="/admin/adminLogout">Logout</a></button>
-            </div>
-            <div class="col-sm-10 right">
+            <div class="col-sm-12 right">
                 <br>
                 <div class=" d-flex justify-content-end">
                     <input class="col-6 form-control me-2  w-25" id="search" type="search" placeholder="Search Users"
@@ -41,13 +66,14 @@
                 <br>
 
                 <table id='myTable'>
-                    <thead >
+                    <thead>
                         <tr>
                             <th>SL.NO</th>
                             <th>ID</th>
                             <th>NAME</th>
                             <th>EMAIL ID</th>
                             <th>MOBILE NUMBER</th>
+                            <th>ORDERS</th>
                             <th>ACTION</th>
                         </tr>
                     </thead>
@@ -70,12 +96,16 @@
                                     <%= x.number %>
                                 </td>
                                 <td>
+                                    <button onclick="orderList('<%=x._id%>')"
+                                        class="btn btn-primary userListButton">Orders</button>
+                                </td>
+                                <td>
                                     <%if(x.blockStatus){ %>
                                         <button onclick="BlockUnblock('<%=x._id%>', 'unBlock')"
-                                            class="btn btn-success">Unblock</button>
+                                            class="btn btn-success userListButton">Unblock</button>
                                         <% }else{%>
                                             <button onclick="BlockUnblock('<%=x._id%>', 'block')"
-                                                class="btn btn-danger">Block</button>
+                                                class="btn btn-danger userListButton">Block</button>
                                             <%}%>
                                 </td>
                             </tr>
@@ -101,7 +131,6 @@
                 })
             })
                 .then(response => {
-                    console.log(response)
                 })
                 .then(data => {
                     location.reload()
@@ -111,6 +140,34 @@
                 });
         }
     </script>
+    <script>
+        function orderList(userId) {
+            fetch("/admin/orderList", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ userId })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    } else {
+                        throw new Error("Request failed.");
+                    }
+                })
+                .then(html => {
+                    document.open();
+                    document.write(html);
+                    document.close();
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
+    </script>
+
+
     <script>
         //searching the users
 

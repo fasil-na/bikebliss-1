@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title>Electro - HTML Ecommerce Template</title>
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="/main/css/bootstrap.min.css" />
+
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="/main/css/slick.css" />
+	<link type="text/css" rel="stylesheet" href="/main/css/slick-theme.css" />
+
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="/main/css/nouislider.min.css" />
+
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="/main/css/font-awesome.min.css">
+
+	<!-- Custom stlylesheet -->
+	<link type="text/css" rel="stylesheet" href="/main/css/style.css" />
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+ 		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+ 		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+ 		<![endif]-->
+
+</head>
+
+<body>
+	<!-- HEADER -->
+	<!-- HEADER -->
+
+		<%-include('userloged') %>
+	
+
+
+	<!-- /HEADER -->
+
+
+	<!-- NAVIGATION -->
+
+	<!-- /NAVIGATION -->
+
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb" class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<div class="col-md-12">
+					<h3 class="breadcrumb-header">Your Cart</h3>
+				</div>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /BREADCRUMB -->
+
+	<!-- SECTION -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+
+				<!--================Cart Area =================-->
+				<section class="cart_area padding_top">
+					<div class="container">
+						<div class="cart_inner">
+							<div class="table-responsive">
+								<table class="table">
+									<thead>
+										<tr>
+											<th scope="col">Product</th>
+											<th scope="col">Name</th>
+											<th scope="col">Price</th>
+											<th scope="col">Quantity</th>
+											<th scope="col">Total</th>
+											<th scope="col"></th>
+										</tr>
+									</thead>
+									<tbody>
+
+										<% items.forEach((i)=> { %>
+
+											<tr>
+												<td style="width: 200px;">
+													<div class="media">
+														<div class="d-flex">
+															<img class="img-fluid" style="height: 100px;width: 100px;"
+																src="/images/uploads/<%= i.item.product.imageUrl[0] %>"
+																alt="<%= i.item.product.productName %>" />
+
+														</div>
+														<div class="media-body">
+														</div>
+													</div>
+												</td>
+												<td>
+													<h5 style="font-weight: bolder;
+												">
+														<%= i.item.product.productName %>
+													</h5>
+												</td>
+												<td>
+													<h5 style="font-weight: bolder;" id="total-price-<%= i.item._id %>">
+														<%= i.item.price.toFixed(2) %> ₹
+													</h5>
+
+												</td>
+												<td>
+													<div class="product_count">
+														<button class="quantity__minus btn" min="1"
+															data-id="<%=i.item._id%>" data-index=""
+															onclick="decrementOrIncrementCart('<%= i._id %>','<%= i.item._id %>',-1)">-</button>
+														<input min="1" max="10" class="input-number" style="width: 30px; text-align: center;" type="text"
+															value="<%= i.item.quantity %>" readonly>
+														<button class="quantity__plus btn" data-id="<%=i.item._id%>"
+															data-index=""
+															onclick="decrementOrIncrementCart('<%= i._id %>','<%= i.item._id %>',1)">
+															+</button>
+
+														<button style="background-color: white;"
+															class="remove-item-btn btn "
+															data-item-id="<%=i.item._id%>"><i
+																class="fa-sharp fa-solid fa-circle-xmark"></i></button>
+													</div>
+												</td>
+												<td>
+													<p style="font-weight: bolder;"> <span
+															id="price-<%= i.item._id %>">
+															<%= (i.item.price * i.item.quantity).toFixed(2) %> ₹
+														</span></p>
+												</td>
+												<td><button class="btn btn-danger" onclick="removeCartItem('<%= i._id %>','<%= i.item._id %>')">Remove From Cart</button></td>
+											</tr>
+											<% }); %>
+												
+												<tr>
+													<td>
+														<h5 style="font-weight: bolder;">Total Amount =
+													</td>
+
+													<td></td>
+													<td>
+													<td>
+
+													</td>
+													</td>
+													<td>
+
+														<span style="font-weight: bolder;" id="total-price"><%=
+																totalPrice.toFixed(2) %> ₹</span>
+														</span></h5>
+
+													</td>
+												</tr>
+
+									</tbody>
+								</table>
+								<div class="checkout_btn_inner float-right">
+									<a class="btn btn-primary" href="/">Continue Shopping</a>
+									<a class="btn btn-warning mt-5" href="/checkout">Proceed to checkout</a>
+								</div>
+							</div>
+						</div>
+				</section>
+				<!--================End Cart Area =================-->
+
+
+
+
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /SECTION -->
+
+
+
+	
+
+	<!-- jQuery Plugins -->
+	<script src="/main/js/jquery.min.js"></script>
+	<script src="/main/js/bootstrap.min.js"></script>
+	<script src="/main/js/slick.min.js"></script>
+	<script src="/main/js/nouislider.min.js"></script>
+	<script src="/main/js/jquery.zoom.min.js"></script>
+	<script src="/main/js/main.js"></script>
+
+	<script>
+		function decrementOrIncrementCart(cartId, itemId, value) {
+			event.preventDefault();
+			let data = {
+				cartId: cartId,
+				itemId: itemId,
+				value: value
+			};
+			fetch("/decrementOrIncrementCart", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			})
+				.then(response => {
+					window.location.href = "/cart";
+				})
+				.catch(error => {
+					console.error(error);
+				});
+		}
+
+		async function removeCartItem(cartId,itemId) {
+			try {
+				const response = await fetch("/removeCartItem", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ itemId: itemId,cartId:cartId }),
+				})
+				.then(response => {
+					location.reload();
+				})
+				.catch(error => {
+					console.error(error);
+				});
+			} catch (error) {
+				console.error(error);
+			}
+		}
+	</script>	
+
+</body>
+
+</html>

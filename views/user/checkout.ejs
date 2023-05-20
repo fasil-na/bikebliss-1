@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title>Electro - HTML Ecommerce Template</title>
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="/main/css/bootstrap.min.css" />
+
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="/main/css/slick.css" />
+	<link type="text/css" rel="stylesheet" href="/main/css/slick-theme.css" />
+
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="/main/css/nouislider.min.css" />
+
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="/main/css/font-awesome.min.css">
+
+	<!-- Custom stlylesheet -->
+	<link type="text/css" rel="stylesheet" href="/main/css/style.css" />
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+</head>
+
+<body>
+	<!-- HEADER -->
+
+	<%-include('userloged') %>
+
+		<!-- SECTION -->
+		<div class="section">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-7">
+						<div class="address-section">
+							<% userData.address.forEach((i, index)=> { %>
+								<div class="address-card">
+									<input type="radio" name="selectedAddress" value="<%= index %>">
+									<p><strong>Full Name:</strong>
+										<%= i.fullname %>
+									</p>
+									<p><strong>Email ID:</strong>
+										<%= i.email %>
+									</p>
+									<p><strong>Address:</strong>
+										<%= i.address %>
+									</p>
+									<p><strong>City:</strong>
+										<%= i.city %>
+									</p>
+									<p><strong>Country:</strong>
+										<%= i.country %>
+									</p>
+									<p><strong>PIN:</strong>
+										<%= i.pin %>
+									</p>
+									<p><strong>Telephone:</strong>
+										<%= i.tel %>
+									</p>
+								</div>
+								<% }) %>
+						</div>
+						<div class="billing-details">
+							<div class="section-title">
+								<h3 class="title">Add Address</h3>
+							</div>
+							<form action="/addAddress" method="post">
+								<div class="form-group">
+									<input class="input" type="text" name="fullname" placeholder="Full Name">
+								</div>
+								<div class="form-group">
+									<input class="input" type="email" name="email" placeholder="Email">
+								</div>
+								<div class="form-group">
+									<input class="input" type="text" name="address" placeholder="Address">
+								</div>
+								<div class="form-group">
+									<input class="input" type="text" name="city" placeholder="City">
+								</div>
+								<div class="form-group">
+									<input class="input" type="text" name="country" placeholder="Country">
+								</div>
+								<div class="form-group">
+									<input class="input" type="text" name="pin" placeholder="PIN Code">
+								</div>
+								<div class="form-group">
+									<input class="input" type="tel" name="tel" placeholder="Telephone">
+								</div>
+								<input type="submit" Id="submitButton" name="submitButton" value="Add Address"
+									class="btn btn-block btn-primary">
+							</form>
+						</div>
+						<div class="order-notes">
+							<textarea class="input" placeholder="Order Notes"></textarea>
+						</div>
+					</div>
+					<div class="col-md-5 order-details">
+						<div class="section-title text-center">
+							<h3 class="title">Your Order</h3>
+						</div>
+						<div class="order-summary">
+							<div class="order-col">
+								<div><strong>PRODUCT</strong></div>
+								<div><strong>TOTAL</strong></div>
+							</div>
+							<% items.forEach((i)=> { %>
+								<div class="order-products">
+									<div class="order-col">
+										<div>
+											<%= i.item.quantity %> x <%= i.item.product.productName %>
+										</div>
+										<div>
+											<%= (i.item.product.price)*(i.item.quantity) %>
+										</div>
+									</div>
+								</div>
+								<% }); %>
+									<div class="order-col">
+										<div>Shipping</div>
+										<div><strong>FREE</strong></div>
+									</div>
+									<div class="order-col">
+										<div><strong>TOTAL</strong></div>
+										<div><strong class="order-total">
+												<%= totalPrice %>
+											</strong></div>
+									</div>
+						</div>
+						<div class="payment-method">
+							<div class="input-radio">
+								<input type="radio" name="payment" id="payment-0">
+								<label for="payment-0">
+									<span></span>
+									Cash On Delivery
+								</label>
+							</div>
+							<div class="input-radio">
+								<input type="radio" name="payment" id="payment-1">
+								<label for="payment-1">
+									<span></span>
+									UPI
+								</label>
+							</div>
+							<div class="input-radio">
+								<input type="radio" name="payment" id="payment-2">
+								<label for="payment-2">
+									<span></span>
+									Credit/Debit Card
+								</label>
+							</div>
+						</div>
+						<a class="primary-btn order-submit" onclick="submitOrder(event,' <%= items[0].userId %>')"
+							id="rzp-button1">Placeorder</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /SECTION -->
+
+		<!-- jQuery Plugins -->
+		<script src="/main/js/jquery.min.js"></script>
+		<script src="/main/js/bootstrap.min.js"></script>
+		<script src="/main/js/slick.min.js"></script>
+		<script src="/main/js/nouislider.min.js"></script>
+		<script src="/main/js/jquery.zoom.min.js"></script>
+		<script src="/main/js/main.js"></script>
+		<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+		<script>
+
+			function submitOrder(event, userId) {
+				let selectedPayment = '';
+				const paymentRadios = document.getElementsByName('payment');
+				for (let i = 0; i < paymentRadios.length; i++) {
+					if (paymentRadios[i].checked) {
+						selectedPayment = paymentRadios[i].id;
+						break;
+					}
+				}
+				if (selectedPayment == "payment-1" || selectedPayment == "payment-2") {
+					fetch("/createRP", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({
+							userId: userId
+						})
+					})
+						.then(response => response.json())
+						.then(data => {
+							rpOrderID = data.rpOrderID
+							let options = {
+								"key": "rzp_test_Z6ogCp3lsMS6mX",
+								"amount": "100",
+								"currency": "INR",
+								"name": "Bike Corp",
+								"description": "Test Transaction",
+								"image": "https://example.com/your_logo",
+								"order_id": data.rpOrderID,
+
+							};
+							let rzp1 = new Razorpay(options);
+							rzp1.open();
+						})
+						.catch(error => {
+							console.log(error);
+						});
+				} else if (selectedPayment == "payment-0") {
+					const selectedAddressRadio = document.querySelector('input[name="selectedAddress"]:checked');
+					if (selectedAddressRadio) {
+						const addressId = selectedAddressRadio.value;
+						const paymentMethod = selectedPayment.replace('payment-', '');
+						const url = `/placeOrder?addressId=${addressId}&payment=${paymentMethod}`;
+						window.location.href = url;
+					} else {
+						console.log('No address selected');
+					}
+
+				}
+
+			}
+
+			const placeOrderLink = document.querySelector('.order-submit');
+			const paymentRadios = document.querySelectorAll('input[name="payment"]');
+			const addressRadios = document.querySelectorAll('input[name="selectedAddress"]');
+
+			placeOrderLink.disabled = true;
+
+			paymentRadios.forEach(radio => {
+				radio.addEventListener('change', checkFormValidity);
+			});
+
+			addressRadios.forEach(radio => {
+				radio.addEventListener('change', checkFormValidity);
+			});
+
+			function checkFormValidity() {
+				const isPaymentSelected = Array.from(paymentRadios).some(radio => radio.checked);
+				const isAddressSelected = Array.from(addressRadios).some(radio => radio.checked);
+				placeOrderLink.disabled = !(isPaymentSelected && isAddressSelected);
+			}
+
+		</script>
+		<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</body>
+
+</html>

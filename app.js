@@ -1,9 +1,9 @@
-var createError = require('http-errors');
-var express = require('express');
+const createError = require('http-errors');
+const express = require('express');
 const session = require('express-session');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const { v4: uuidv4 } = require("uuid");
 const bodyParser =require("body-parser")
 
@@ -18,10 +18,11 @@ mongoose.connect(uri)
     console.error("Error connecting to MongoDB:", err);
   });
 
-var adminRoute = require('./routes/adminRoute');
-var userRoute = require('./routes/userRoute');
+const adminRoute = require('./routes/adminRoute');
+const userRoute = require('./routes/userRoute');
+const { request } = require('http');
 
-var app = express();
+const app = express();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
