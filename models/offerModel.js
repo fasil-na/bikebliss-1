@@ -2,17 +2,17 @@ const mongoose = require("mongoose");
 
 const offerSchema = mongoose.Schema({
 
-    categoryId: {
+    name: {
+        type: String,
+        required: true
+    },
+    category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category",
     },
-    productId: {
+    product: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Prodcut",
-    },
-    startdate: {
-        type: String,
-        required: true,
     },
     percentage: {
         type: Number,

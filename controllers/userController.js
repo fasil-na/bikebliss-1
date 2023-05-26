@@ -8,6 +8,7 @@ const Cart = require("../models/cartModel");
 const Order = require("../models/orderModel");
 const Banner = require('../models/bannerModel');
 const Wishlist = require("../models/wishlistModel");
+const Coupon = require("../models/couponModel");
 const Razorpay = require("razorpay");
 
 
@@ -55,6 +56,7 @@ let name;
 let email;
 let number;
 let password;
+let refCode;
 const sendOtp = async (req, res) => {
   try {
     const emailExist = await User.findOne({ email: req.body.email ? req.body.email : email });
@@ -66,6 +68,7 @@ const sendOtp = async (req, res) => {
         email = req.body.email ? req.body.email : email;
         number = req.body.number ? req.body.number : number;
         password = req.body.password ? req.body.password : password;
+        refCode = req.body.referral 
         sendOtpMail(email, generatedOtp);
         res.render("otpEnter", { footer: "" })
         setTimeout(() => {
@@ -120,7 +123,7 @@ async function sendOtpMail(email, otp) {
       service: 'gmail',
       auth: {
         user: 'fazilfaizy4@gmail.com',
-        pass: 'hedhxgkqhzgvhzmj'
+        pass: 'jxrvchrvqwygaflw'
       }
     });
     const mailOptions = {
@@ -174,8 +177,11 @@ const securePassword = async (password) => {
 }
 
 const verifyOtp = async (req, res) => {
+  const userExist = await User.find({referral:refCode})
+if(userExist.length==0){
   const EnteredOtp = req.body.otp;
   if (EnteredOtp === saveOtp) {
+    const referralCode = generateReferralCode(8);
     const securedPassword = await securePassword(password);
     const newUser = new User({
       name: name,
@@ -183,12 +189,50 @@ const verifyOtp = async (req, res) => {
       number: number,
       password: securedPassword,
       blockStatus: false,
+      referral: referralCode,
     });
     await newUser.save();
     res.render("login", { footer: "Account Created Successfully, Please Login" });
   } else {
     res.render("otpEnter", { footer: "Incorrect OTP" })
   }
+}else{
+  const referredUserId= userExist[0]._id 
+  let existingWalletAmount=userExist[0].wallet;
+  let updatedWalletAmount = existingWalletAmount+100;
+  await User.findByIdAndUpdate(referredUserId, { $set: { wallet: updatedWalletAmount } });
+  const EnteredOtp = req.body.otp;
+  if (EnteredOtp === saveOtp) {
+    const referralCode = generateReferralCode(8);
+    const securedPassword = await securePassword(password);
+    const newUser = new User({
+      name: name,
+      email: email,
+      number: number,
+      password: securedPassword,
+      blockStatus: false,
+      referral: referralCode,
+      wallet:100
+    });
+    await newUser.save();
+    res.render("login", { footer: "Account Created Successfully, Please Login" });
+  } else {
+    res.render("otpEnter", { footer: "Incorrect OTP" })
+  }
+
+}
+
+  
+}
+
+function generateReferralCode(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let code = '';
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    code += characters.charAt(randomIndex);
+  }
+  return code;
 }
 
 const verifyForgotPasswordOtp = async (req, res) => {
@@ -246,6 +290,16 @@ const resettingPassword = async (req, res) => {
     console.log(error.message);
   }
 }
+
+const loadMyAccount = async (req, res) => {
+  try {
+    let session = req.session.user;
+    const user = await User.findOne({ _id: session })
+    res.render("myAccount", { userData: user, message: "" });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 const categoryDetail = async (req, res) => {
   if (req.params.id) {
@@ -459,9 +513,14 @@ const loadCart = async (req, res) => {
     let session = req.session.user;
     const user = await User.findOne({ _id: session })
     const cart = await Cart.findOne({ userId: session })
+    const today = new Date();
+    const coupon = await Coupon.find({
+      expiryDate: { $gte: today },
+      usedBy: { $nin: [user._id] }
+    });
 
     if (!cart) {
-      res.render("cart", { userData: user, items: [], totalPrice });
+      res.render("cart", { userData: user, items: [], totalPrice, coupon: coupon });
     } else {
       const cartData = await Cart.aggregate([
         {
@@ -500,7 +559,7 @@ const loadCart = async (req, res) => {
       } else {
         totalPrice = 0
       }
-      res.render("cart", { userData: user, items: cartData, totalPrice });
+      res.render("cart", { userData: user, items: cartData, totalPrice, coupon: coupon });
     }
 
   } catch (err) {
@@ -653,6 +712,32 @@ const decrementOrIncrementCart = async (req, res) => {
     console.log(error.message);
   }
 };
+
+const applyCoupon = async (req, res) => {
+  const userId = req.session.user;
+  const couponId = req.body.couponId;
+  const couponDoc = await Coupon.findById({ _id: couponId })
+  await Coupon.findByIdAndUpdate(couponId, { $push: { usedBy: userId } })
+  const percentage = couponDoc.percentage;
+  const userCart = await Cart.find({ userId: userId })
+  const totalPrice = userCart[0].totalPrice;
+  const updatedTotalPrice = Math.round(totalPrice - (totalPrice * percentage / 100))
+  await Cart.findOneAndUpdate({ userId: userId }, { $set: { totalPrice: updatedTotalPrice } })
+  res.json(updatedTotalPrice)
+}
+
+const cancelSelection = async (req, res) => {
+  const userId = req.session.user;
+  const selectedCouponId = req.body.selectedCouponId;
+  const couponDoc = await Coupon.findById({ _id: selectedCouponId })
+  await Coupon.findByIdAndUpdate(selectedCouponId, { $pull: { usedBy: userId } })
+  const percentage = couponDoc.percentage;
+  const userCart = await Cart.find({ userId: userId })
+  const totalPrice = userCart[0].totalPrice;
+  const updatedTotalPrice = Math.round(totalPrice / (1 - (percentage / 100)))
+  await Cart.findOneAndUpdate({ userId: userId }, { $set: { totalPrice: updatedTotalPrice } })
+  res.json(updatedTotalPrice)
+}
 
 const loadWishlist = async (req, res) => {
   try {
@@ -893,14 +978,100 @@ const addAddress = async (req, res) => {
   }
 };
 
+const addAddressFromProfile = async (req, res) => {
+  try {
+    const data = req.body;
+    const userId = new ObjectId(req.session.user);
+    const userData = await User.find({ _id: userId });
+    if (!userData || userData.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    const user = userData[0];
+    user.address.push(data);
+    await user.save();
+    res.redirect("/myAccount");
+  }
+  catch (error) {
+    console.log(error);
+  }
+};
+
+const deleteAddress = async (req, res) => {
+  try {
+    const addressIndex = req.params.index;
+    let userId = req.session.user;
+    const userDoc = await User.findOne({ _id: userId });
+    if (!userDoc) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    userDoc.address.splice(addressIndex, 1);
+    await userDoc.save();
+    const userData = await User.findOne({ _id: userId });
+    res.render("myAccount", { userData: userData });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const editName = async (req, res) => {
+  try {
+    const newName = req.body.newName;
+    let userId = req.session.user;
+    await User.findByIdAndUpdate({ _id: userId }, { name: newName });
+    const userData = await User.findOne({ _id: userId });
+    res.render("myAccount", { userData: userData, message: "" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const editEmail = async (req, res) => {
+  try {
+    const newEmail = req.body.newEmail;
+    let userId = req.session.user;
+    const emailExist = await User.find({ email: newEmail });
+    if (emailExist.length === 0) {
+      await User.findByIdAndUpdate({ _id: userId }, { email: newEmail });
+      const userData = await User.findOne({ _id: userId });
+      res.render("myAccount", { userData: userData, message: "" });
+    } else {
+      const userData = await User.findOne({ _id: userId });
+      res.render("myAccount", { userData: userData, message: "Email already exists" });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const editNumber = async (req, res) => {
+  try {
+    const newNumber = req.body.newNumber;
+    let userId = req.session.user;
+    const numberExist = await User.find({ number: newNumber });
+    if (numberExist.length === 0) {
+      await User.findByIdAndUpdate({ _id: userId }, { number: newNumber });
+      const userData = await User.findOne({ _id: userId });
+      res.render("myAccount", { userData: userData, message: "" });
+    } else {
+      const userData = await User.findOne({ _id: userId });
+      res.render("myAccount", { userData: userData, message: "Number already exists" });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
 const placeOrder = async (req, res) => {
   try {
     const paymentArray = ["COD", "UPI", "Credit/Debit Card"]
     const addressId = req.query.addressId;
     const paymentMethod = req.query.payment;
+    const wallet=parseInt(req.query.wallet,10);
     const userId = new ObjectId(req.session.user);
     const userData = await User.findOne({ _id: userId });
-
+    const update = await User.findByIdAndUpdate(userId,{$set:{wallet:userData.wallet-wallet}})
     const cartData = await Cart.aggregate([
       {
         $match: {
@@ -942,7 +1113,7 @@ const placeOrder = async (req, res) => {
     orderData.totalPrice = cartData[0].totalPrice;
     orderData.address = userData.address[addressId];
     orderData.paymentType = paymentArray[paymentMethod];
-    if (orderData.paymentType === 'COD') {
+    if (true) {
 
       const createNew = await Order.create(orderData);
       const deletCart = await Cart.deleteOne({ userId: userId })
@@ -962,31 +1133,7 @@ const placeOrder = async (req, res) => {
       res.render("orderSuccess")
     }
 
-    if (orderData.paymentType === 'UPI') {
 
-      const amount = orderData.totalPrice
-
-      let instance = new Razorpay({
-        key_id: "rzp_test_Z6ogCp3lsMS6mX",
-        key_secret: "GfeGBYD3Jojxqd7vdqZoRzzP"
-      })
-
-      const order = await instance.orders.create({
-        amount: amount * 100,
-        currency: 'INR',
-        receipt: 'muhammed fasil n a',
-      })
-
-      // saveOrder()
-
-      res.json({
-        razorPaySucess: true,
-        order,
-        amount,
-      })
-
-
-    }
   } catch (error) {
     console.log(error);
   }
@@ -1054,15 +1201,25 @@ const handleLogout = async (req, res) => {
 };
 
 const createRP = async (req, res) => {
+  const userId=req.body.userId.replace(/\s/g, "")
+	const wallet=req.body.wallet
+  const cartData=  Cart.findOne({userId: new ObjectId(userId)})
+  const userData=await User.findById(userId)
   let instance = new Razorpay({ key_id: 'rzp_test_Z6ogCp3lsMS6mX', key_secret: "GfeGBYD3Jojxqd7vdqZoRzzP" })
-
+  if (wallet){
+    var amount=cartData.totalPrice-userData.wallet
+  }else{
+    var amount=cartData.totalPrice
+  }
+  var amount=100
   let options = {
-    amount: 100, 
+    amount: amount,
     currency: "INR",
     receipt: "order_rcptid_11"
   };
   instance.orders.create(options, function (err, order) {
     res.json({ rpOrderId: order.id });
+
   });
 }
 
@@ -1075,6 +1232,7 @@ module.exports = {
   verifyOtp,
   verifyLogin,
   categoryDetail,
+  loadMyAccount,
   prodDetails,
   handleLogout,
   forgotPasswordOtp,
@@ -1085,8 +1243,15 @@ module.exports = {
   addToCart,
   decrementOrIncrementCart,
   removeCartItem,
+  applyCoupon,
+  cancelSelection,
   loadCheckOut,
   addAddress,
+  addAddressFromProfile,
+  deleteAddress,
+  editName,
+  editEmail,
+  editNumber,
   placeOrder,
   orderData,
   cancelOrder,

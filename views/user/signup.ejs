@@ -40,55 +40,52 @@
               <h3>Sign Up</h3>
             </div>
             <form action="/signup" method="post">
-
-              <div class="form-group first">
+              <div class="form-group">
                 <input type="text" class="form-control" id="name" name="name" placeholder="Username" oninput="validateName()">
                 <span id="nameError" style="color: red;"></span>
               </div>
-
-              <div class="form-group first">
+            
+              <div class="form-group">
                 <input type="email" class="form-control" id="email" name="email" placeholder="Email Id" oninput="validateEmail()">
                 <span id="emailError" style="color: red;"></span>
               </div>
-
-              <div class="form-group first">
+            
+              <div class="form-group">
                 <input type="number" class="form-control" id="number" name="number" placeholder="Mobile Number" oninput="validateMobile()">
                 <span id="numberError" style="color: red;"></span>
               </div>
-
-              <div class="form-group last mb-3">
+            
+              <div class="form-group">
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" oninput="validatePassword()">
                 <span id="passwordError" style="color: red;"></span>
               </div>
-
-              <div class="form-group last mb-3">
+            
+              <div class="form-group">
                 <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password" oninput="validateConfirmPassword()">
                 <span id="confirm_passwordError" style="color: red;"></span>
               </div>
-
-              <div class="d-flex mb-5 align-items-center">
+            
+              <div class="form-group">
+                <input type="text" class="form-control" id="referral" name="referral" placeholder="Referral Code (Optional)">
               </div>
-
-              <input type="submit" Id="submitButton"  name="submitButton" disabled value="signup" class="btn btn-block btn-primary">
-
-              <p class="text-center my-4">Already have an account?  <a href="/login">Back to Login</a></p>
-
-              <p class=" text-center my-4"><%= footer %></p>
-
+            
+              <input type="submit" id="submitButton" name="submitButton" disabled value="signup" class="btn btn-block btn-primary">
+            
+              <p class="text-center my-4">Already have an account? <a href="/login">Back to Login</a></p>
+            
+              <p class="text-center my-4"><%= footer %></p>
             </form>
+            
           </div>
         </div>
       </div>
     </div>
-
-
   </div>
 
   <script>
     (function(){
       localStorage.setItem("countdown", 60)
-    }())
-    
+    }()) 
   </script>
 
   <script src="/javascripts/validation.js"></script>
@@ -113,19 +110,3 @@
 
 
 
-
-// Function to enable or disable the submit button based on form validation
-function updateSubmitButton() {
-  const isValid = validateForm();
-  const submitButton = document.getElementById('submitButton');
-
-  if (isValid) {
-    submitButton.disabled = false;
-  } else {
-    submitButton.disabled = true;
-  }
-}
-
-// Add event listeners to form fields or other events that trigger validation
-// For example, if you have an input field with id "inputField", you can add an event listener like this:
-document.getElementById('inputField').addEventListener('input', updateSubmitButton);

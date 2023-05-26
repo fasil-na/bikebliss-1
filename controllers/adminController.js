@@ -4,7 +4,6 @@ const Product = require("../models/productModel");
 const Order = require("../models/orderModel");
 const { ObjectId } = require("mongodb");
 const { orderData } = require("./userController");
-
 const pdf = require("html-pdf");
 const ejs = require("ejs");
 const fs = require("fs");
@@ -194,9 +193,6 @@ const exportPdfDailySales = async (req, res) => {
 
         const filePathName = path.resolve(__dirname, "../views/admin/htmlToPdf.ejs")
         const htmlString = fs.readFileSync(filePathName).toString();
-        let options = {
-            format: "A4"
-        }
         const ejsData = ejs.render(htmlString, orderData)
 
         await createDailySalesPdf(ejsData);
@@ -229,11 +225,11 @@ const exportPdfWeeklySales = async (req, res) => {
         const today = new Date();
         const startOfWeek = new Date(today);
         startOfWeek.setDate(today.getDate() - today.getDay());
-        startOfWeek.setHours(0, 0, 0, 0); 
+        startOfWeek.setHours(0, 0, 0, 0);
 
         const endOfWeek = new Date(today);
         endOfWeek.setDate(today.getDate() - today.getDay() + 6);
-        endOfWeek.setHours(23, 59, 59, 999); 
+        endOfWeek.setHours(23, 59, 59, 999);
 
         const todaysOrders = await Order.aggregate([
             {
@@ -268,9 +264,7 @@ const exportPdfWeeklySales = async (req, res) => {
 
         const filePathName = path.resolve(__dirname, "../views/admin/htmlToPdf.ejs")
         const htmlString = fs.readFileSync(filePathName).toString();
-        let options = {
-            format: "A4"
-        }
+
         const ejsData = ejs.render(htmlString, orderData)
 
         await createWeeklySalesPdf(ejsData);
@@ -304,10 +298,10 @@ const exportPdfYearlySales = async (req, res) => {
         const year = today.getFullYear();
 
         const startOfYear = new Date(year, 0, 1);
-        startOfYear.setHours(0, 0, 0, 0); 
+        startOfYear.setHours(0, 0, 0, 0);
 
         const endOfYear = new Date(year, 11, 31);
-        endOfYear.setHours(23, 59, 59, 999); 
+        endOfYear.setHours(23, 59, 59, 999);
 
         const todaysOrders = await Order.aggregate([
             {
@@ -340,11 +334,10 @@ const exportPdfYearlySales = async (req, res) => {
             todaysOrders: todaysOrders
         }
 
+
         const filePathName = path.resolve(__dirname, "../views/admin/htmlToPdf.ejs")
         const htmlString = fs.readFileSync(filePathName).toString();
-        let options = {
-            format: "A4"
-        }
+
         const ejsData = ejs.render(htmlString, orderData)
 
         await createYearlySalesPdf(ejsData);
@@ -461,6 +454,16 @@ const createCategory = async (req, res) => {
     }
 };
 
+const editCategoryPageLoad = async (req, res) => {
+    try {
+        const categoryId=req.params.id;
+        const categoryData= await Category.findById(categoryId)
+        res.render("adminCatedit",{categoryData:categoryData});
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
 const createProduct = async (req, res) => {
     try {
         const categoryData = await Category.find({});
@@ -545,6 +548,28 @@ const addNewCategory = async (req, res) => {
     } catch (error) { }
 };
 
+const editCategory = async (req, res) => {
+
+    const categoryName = req.body.name;
+    const image = req.file;
+    const lowerCategoryName = categoryName.toLowerCase();
+    try {
+        const categoryExist = await Category.findOne({ category: lowerCategoryName });
+        if (!categoryExist) {
+            const newCategory = new Category({
+                category: lowerCategoryName,
+                imageUrl: image.filename,
+            });
+            await newCategory.save().then((response) => {
+                res.redirect("/admin/categorylist");
+            })
+        } else {
+            res.redirect("/categoryEdit/:id");
+        }
+    } catch (error) { }
+};
+
+
 const catlistload = async (req, res) => {
     try {
         const categoryData = await Category.find();
@@ -601,6 +626,7 @@ const addNewProduct = async (req, res) => {
     const productData = new Product({
         productName: req.body.name,
         price: req.body.price,
+        offerPrice: req.body.price,
         description: req.body.description,
         category: req.body.category,
         imageUrl: images,
@@ -674,8 +700,10 @@ module.exports = {
     userlistload,
     dashboardload,
     catlistload,
+    editCategory,
     prodlistload,
     createCategory,
+    editCategoryPageLoad,
     createProduct,
     handleLogout,
     userBlockUnblock,
@@ -693,5 +721,4 @@ module.exports = {
     exportPdfDailySales,
     exportPdfWeeklySales,
     exportPdfYearlySales,
-
 };

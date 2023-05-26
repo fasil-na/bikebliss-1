@@ -44,5 +44,13 @@ const productSchema = new Schema({
     type: Number,
     required: true,
   },
+  offerPrice: {
+    type: Number,
+  },
+  offerPercentage: {
+    type: Number,
+    default:0,
+  },
 });
-module.exports = mongoose.model("Product", productSchema);
+module.exports = mongoose.model("Product", productSchema)
+;

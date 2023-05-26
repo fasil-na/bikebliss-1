@@ -42,6 +42,12 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/admin/bannerlist">BANNERS</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/offerlist">OFFERS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/couponlist">COUPONS</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -64,37 +70,6 @@
                 <br>
                 <!-- popup element -->
 
-                <div id="editPopup" style="display:none;">
-
-                    <form action="/admin/updateCategory" method="post" enctype="multipart/form-data">
-                        <button class="close me-2" type="button" data-dismiss="modal" aria-label="Close"
-                            onclick="onFormClose()">X</button>
-
-                        <br>
-
-                        <div class="row align-items-center">
-                            <label for="name" class="col-sm-3 col-form-label">Category Name:</label>
-                            <div class="col-sm-9">
-                                <input class="w-75 my-3 form-control" type="text" id="card_title" name="card_title">
-                            </div>
-                        </div>
-
-                        <div class="row align-items-center">
-                            <label for="name" class="col-sm-3 col-form-label">Product Image:</label>
-                            <div class="col-sm-9">
-                                <img name="card_image" id="card_image" width="40%" height="40%" src="" alt=""><button
-                                    class="btn bg-light mx-2" type="button" id="imgEdit" onclick="editImage()"><i
-                                        class="fa-solid fa-pen"></i></button>
-                                <input class="w-75 my-3 form-control" type="file" id="imageinput" name="imageinput"
-                                    style="display: none;">
-                            </div>
-                        </div>
-
-                        <input type="hidden" name="id" id="cat_id">
-
-                        <button class="w-25 mx-auto my-3 form-control" type="submit">Submit</button>
-                    </form>
-                </div>
                 <!---->
                 <h2 class="text-danger text-center">
                     <%= text %>
@@ -118,8 +93,9 @@
                                 src="/images/uploads/<%= x.imageUrl %>" alt="Card image cap">
                             <div class="card-body">
 
-                                <input type="hidden" name="id" value="<%= x._id %> " id="cat_id<%= i %>">
-                                <button class="buttons" id="editButton" onclick="editCategory('<%= i %>')">EDIT</button>
+                        
+
+                                <button class="buttons"><a href="/admin/categoryEdit/<%= x._id %>">EDIT</a></button>
 
                                 <button class="buttons"><a href="/admin/categoryDelete/<%= x._id %>">DELETE</a></button>
                             </div>
@@ -130,46 +106,7 @@
         </div>
     </div>
 
-    <script>
-        const button = document.getElementById('editButton');
-
-        function editCategory(i) {
-            // Get the current values from the table
-            let title = document.querySelector(`#card_title${i}`).innerText;
-            const image = document.querySelector(`#image_container${i}`).getAttribute('src');
-            let id = document.querySelector(`#cat_id${i}`).value;
-            // Set the values in the popup
-            document.querySelector("#card_title").value = title;
-            document.querySelector("#card_image").setAttribute('src', image);
-            document.querySelector("#cat_id").value = id;
-            // Open the popup
-            document.querySelector("#editPopup").style.display = "block";
-        }
-
-        // function editCategory(i) {
-        //     // Get the current values from the table
-        //     var title = document.querySelector(`#card_title${i}`).innerText;
-        //     const image = document.querySelector(`#image_container${i}`).getAttribute('src');
-        //     var id = document.querySelector(`#cat_id${i}`).value;
-        //     // Set the values in the popup
-        //     document.querySelector("#card_title").value = title;
-        //     document.querySelector("#card_image").setAttribute('src', image);
-        //     document.querySelector("#cat_id").value = id;
-        //     // Open the popup
-        //     document.querySelector("#editPopup").style.display = "block";
-        // }
-        // close the popup
-        function onFormClose() {
-            document.querySelector("#editPopup").style.display = "none";
-        }
-
-        function editImage() {
-            document.querySelector("#card_image").style.display = "none";
-            document.querySelector("#imgEdit").style.display = "none";
-            document.querySelector("#imageinput").style.display = "block";
-
-        }
-    </script>
+    
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

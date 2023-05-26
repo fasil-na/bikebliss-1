@@ -1,6 +1,6 @@
 const Banner = require('../models/bannerModel');
 
-const bannerDashboard = async (req, res) => {
+const bannerlistload = async (req, res) => {
   try {
     const bannerData = await Banner.find();
     if(bannerData.length>0){
@@ -62,7 +62,7 @@ const deleteBanner = async (req, res) => {
 };
 
 module.exports = {
-  bannerDashboard,
+  bannerlistload,
   createBanner,
   addNewBanner,
   deleteBanner,

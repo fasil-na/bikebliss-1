@@ -6,7 +6,6 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const { v4: uuidv4 } = require("uuid");
 const bodyParser =require("body-parser")
-
 const mongoose = require('mongoose');
 const uri ="mongodb+srv://bikebliss:bikebliss@cluster0.vsu52vv.mongodb.net/?retryWrites=true&w=majority"
 
@@ -35,7 +34,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 app.use(session({
   secret: uuidv4(),
