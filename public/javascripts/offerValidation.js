@@ -15,7 +15,7 @@ function updateSubmitButton() {
 
 
 function validateName() {
-  let name = document.getElementById("name").value
+  let name = document.getElementById("name").value.trim();
   const nameRegex = /^[A-Za-z\s]+$/;
   if (!name) {
     offerName = false
@@ -23,6 +23,9 @@ function validateName() {
   } else if (!name.match(nameRegex)) {
     offerName = false
     document.getElementById("nameError").innerText = "Name can only contain letters and spaces"
+  } else if (name.length > 25) {
+    offerName = false;
+    document.getElementById("nameError").innerText = "Name cannot exceed 25 characters";
   } else {
     offerName = true;
     document.getElementById("nameError").innerText = ""
@@ -32,7 +35,7 @@ function validateName() {
 
 function validatePercentage() {
   let percentage = document.getElementById("percentage").value;
-  const percentageRegex = /^\d+$/;
+  const percentageRegex = /^(?!0$)\d+$/;
   const maxDiscount = 70;
 
   if (!percentage) {

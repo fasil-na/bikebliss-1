@@ -26,6 +26,7 @@ adminRoute.get('/dashboard', auth.adminLogin, adminController.dashboardload);
 // ================ user management ================//
 adminRoute.get('/userlist', auth.adminLogin, adminController.userlistload);
 adminRoute.post("/blockUnblockUser", auth.adminLogin, adminController.userBlockUnblock);
+// adminRoute.get("/orderList", auth.adminLogin, adminController.orderList);
 adminRoute.post("/orderList", auth.adminLogin, adminController.orderList);
 adminRoute.post("/updateStatus", auth.adminLogin, adminController.updateStatus);
 //======================================================//
@@ -34,8 +35,10 @@ adminRoute.post("/updateStatus", auth.adminLogin, adminController.updateStatus);
 adminRoute.get('/productlist', auth.adminLogin, adminController.prodlistload);
 adminRoute.get('/prodCreate', auth.adminLogin, adminController.createProduct);
 adminRoute.post('/addProduct', auth.adminLogin, store.array('image', 3), adminController.addNewProduct);
-adminRoute.get('/productDelete/:id', auth.adminLogin, adminController.deleteProduct);
-adminRoute.post('/updateProduct', auth.adminLogin, store.array('image', 3), adminController.updateProduct);
+adminRoute.get('/productEdit/:id', auth.adminLogin, adminController.editProductPageload);
+adminRoute.post('/editProduct', auth.adminLogin, store.array('image', 3), adminController.editProduct);
+adminRoute.get('/productUnlist/:id', auth.adminLogin, adminController.unlistProduct);
+adminRoute.get('/productList/:id', auth.adminLogin, adminController.listProduct);
 //======================================================//
 
 //============== category management ==================//
@@ -44,8 +47,9 @@ adminRoute.get('/catCreate', auth.adminLogin, adminController.createCategory);
 adminRoute.post('/addCategory', auth.adminLogin, store.single('image'), adminController.addNewCategory);
 adminRoute.get('/categoryEdit/:id', auth.adminLogin, adminController.editCategoryPageLoad);
 adminRoute.post('/editCategory', auth.adminLogin,  store.single('image'),adminController.editCategory);
-adminRoute.get('/categoryDelete/:id', auth.adminLogin, adminController.deleteCategory);
-adminRoute.post('/updateCategory', auth.adminLogin, store.single('image'), adminController.updateCategory);
+adminRoute.get('/categoryUnlist/:id', auth.adminLogin, adminController.unlistCategory);
+adminRoute.get('/categoryList/:id', auth.adminLogin, adminController.listCategory);
+
 //======================================================//
 
 //============== banner management ==================//

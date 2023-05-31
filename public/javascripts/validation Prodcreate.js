@@ -16,7 +16,7 @@ function updateSubmitButton() {
 
 
 function validateProductName() {
-    let name = document.getElementById("name").value
+    let name = document.getElementById("name").value.trim();
     const nameRegex = /^[A-Za-z\s]+$/;
     if (!name) {
         productName = false

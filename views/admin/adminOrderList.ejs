@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>orderlist</title>
+    <link rel="icon"
+        href="/images/uploads/1.jpg">
     <link rel="stylesheet" href="/stylesheets/adminHomestyle.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -61,13 +63,18 @@
     </nav>
     <div class="container-fluid">
         <div class="row">
-            
+
             <div class="col-sm-12 right">
+                <br>
+
+                <div class=" d-flex justify-content-end">
+                    <input class="col-6 form-control me-2  w-25" id="search" type="search" placeholder="Search Orders"
+                        aria-label="Search">
+                </div>
                 <br>
                 <table id='myTable'>
                     <thead>
                         <tr>
-                            <th>SL.NO</th>
                             <th>ORDER ID</th>
                             <th>PRODUCT NAME</th>
                             <th>QUANTITY</th>
@@ -80,9 +87,7 @@
                     <tbody>
                         <% orderData.forEach(function(i,x) { %>
                             <tr>
-                                <td style="width: 10px;">
-                                    <%= x+1 %>
-                                </td>
+
                                 <td>
                                     <%= i._id %>
                                 </td>
@@ -131,6 +136,37 @@
                             <% }); %>
                     </tbody>
                 </table>
+                <style>
+                    .pagination-container {
+                        display: flex;
+                        justify-content: center;
+                        margin-top: 20px;
+                    }
+
+                    .pagination-link {
+                        margin: 0 5px;
+                        padding: 5px 10px;
+                        border: 1px solid #ccc;
+                        text-decoration: none;
+                        color: #333;
+                        background-color: #f7f7f7;
+                        cursor: pointer;
+                    }
+
+                    .pagination-link.active {
+                        background-color: #555;
+                        color: #fff;
+                    }
+                </style>
+
+                <div class="pagination-container">
+                    <% for (let i=1; i <=totalPages; i++) { %>
+                        <a href="/admin/orderlist?page=<%= i %>"
+                            class="pagination-link<%= i === currentPage ? ' active' : '' %>">
+                            <%= i %>
+                        </a>
+                        <% } %>
+                </div>
             </div>
         </div>
     </div>
@@ -166,6 +202,29 @@
                 });
         }
 
+    </script>
+    <script>
+        //searching the users
+
+        // Get the search input and table rows
+        const searchInput = document.querySelector('input[type="search"]');
+        const tableRows = document.querySelectorAll('tbody tr');
+
+        // Add an event listener to the search input
+        searchInput.addEventListener('input', function () {
+            const searchValue = this.value.toLowerCase();
+
+            // Loop through the table rows and hide/show them based on the search input
+            tableRows.forEach(function (row) {
+                const name = row.querySelector('td:nth-of-type(2)').textContent.toLowerCase();
+
+                if (name.includes(searchValue)) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
     </script>
 </body>
 

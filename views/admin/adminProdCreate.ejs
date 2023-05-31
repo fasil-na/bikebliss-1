@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>product create</title>
+    <link rel="icon"
+        href="/images/uploads/1.jpg">
     <link rel="stylesheet" href="/stylesheets/adminHomestyle.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
@@ -60,17 +62,14 @@
     </nav>
     <div class="container-fluid">
         <div class="row">
-            
             <div class="col-sm-12 right">
                 <div class="fline">
                     <h2 class="w-50 mx-auto my-2">Create Product</h2>
                 </div>
-
                 <div id="image-previews"></div>
-
                 <form action="/admin/addProduct" method="post" enctype="multipart/form-data">
-
-                    <input class="w-50 mx-auto my-3 form-control" type="text" placeholder="Product Name" name="name" id="name" oninput="validateProductName()">
+                    <input class="w-50 mx-auto my-3 form-control" type="text" placeholder="Product Name" name="name"
+                        id="name" oninput="validateProductName()">
                     <span class="text-danger d-flex justify-content-center align-items-center" id="nameError"></span>
                     <input class="w-50 mx-auto my-3 form-control" type="text" placeholder="Description"
                         name="description" required>
@@ -80,16 +79,23 @@
                             </option>
                             <%}%>
                     </select>
-                    <!-- imageupload handle -->
+                    <div class="text-center">
+                        <div id="image-previews"></div>
+                    </div>
+                    
                     <input type="file" class="w-50 mx-auto my-3 form-control" name="image" id="image" accept="image/*"
-                        multiple required/>
-                    <!-- image upload handle end -->
+                        multiple required onchange="previewImages(event)" />
+
+
+
+
                     <select class="w-50 mx-auto my-3 form-control" name="brand">
                         <option value="Scott">Scott</option>
                         <option value="Giant">Giant</option>
                         <option value="Btwin">Btwin</option>
                     </select>
-                    <input class="w-50 mx-auto my-3 form-control" type="number" placeholder="Price" name="price" id="price" oninput="validateProductPrice()">
+                    <input class="w-50 mx-auto my-3 form-control" type="number" placeholder="Price" name="price"
+                        id="price" oninput="validateProductPrice()">
                     <span class="text-danger d-flex justify-content-center align-items-center" id="priceError"></span>
                     <select class="w-50 mx-auto my-3 form-control" name="size">
                         <option value="S">S</option>
@@ -107,11 +113,13 @@
                         <option value="GREY">GREY</option>
                         <option value="ASH">ASH</option>
                     </select>
-                    <input class="w-50 mx-auto my-3 form-control" type="number" placeholder="Stock" name="stock" id="stock" oninput="validateProductStock()">
+                    <input class="w-50 mx-auto my-3 form-control" type="number" placeholder="Stock" name="stock"
+                        id="stock" oninput="validateProductStock()">
                     <span class="text-danger d-flex justify-content-center align-items-center" id="stockError"></span>
-                    <button class="w-50 login mx-auto my-3 form-control" type="submit" id="submitButton" disabled>ADD</button>
-                    <p>
-
+                    <button class="w-50 login mx-auto my-3 form-control" type="submit" id="submitButton"
+                        disabled>ADD</button>
+                    <p class="text-center text-danger">
+                        <%=text%>
                     </p>
                 </form>
 
@@ -131,6 +139,34 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+    <script>
+        function previewImages(event) {
+            var input = event.target;
+            var imagePreviews = document.getElementById('image-previews');
+            imagePreviews.innerHTML = ''; // Clear any previous image previews
+
+            if (input.files && input.files.length > 0) {
+                for (var i = 0; i < input.files.length; i++) {
+                    var reader = new FileReader();
+                    reader.onload = (function (file) {
+                        return function (e) {
+                            var imagePreview = document.createElement('img');
+                            imagePreview.src = e.target.result;
+                            imagePreview.alt = 'Selected Image';
+                            imagePreview.style.display = 'block';
+                            imagePreview.style.maxWidth = '10%';
+                            imagePreview.style.height = 'auto';
+                            imagePreview.style.margin = '10px auto';
+                            imagePreviews.appendChild(imagePreview);
+                        };
+                    })(input.files[i]);
+
+                    reader.readAsDataURL(input.files[i]);
+                }
+            }
+        }
+
+    </script>
 </body>
 
 </html>

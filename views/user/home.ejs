@@ -8,6 +8,8 @@
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
 	<title>Bikebliss</title>
+	<link rel="icon"
+        href="/images/logo.png">
 
 	<!-- Google font -->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
@@ -54,56 +56,92 @@
 			<%}else{%>
 				<%-include('usernotloged') %>
 					<%}%>
-
-
-
 						<!-- /HEADER -->
 
-						
+
 
 						<!-- BANNER -->
 						<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
 							<div class="carousel-indicators">
-							  <% bannerData.forEach(function(item, index) { %>
-							  <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="<%= index %>"
-								<% if (index===0) { %>class="active" aria-current="true"<% } %> aria-label="Slide <%= index + 1 %>"></button>
-							  <% }) %>
+								<% bannerData.forEach(function(item, index) { %>
+									<button type="button" data-bs-target="#carouselExampleDark"
+										data-bs-slide-to="<%= index %>" <% if (index===0) { %>class="active"
+										aria-current="true"<% } %> aria-label="Slide <%= index + 1 %>"></button>
+									<% }) %>
 							</div>
 							<div class="carousel-inner">
-							  <% bannerData.forEach(function(item, index) { %>
-							  <div class="carousel-item <% if (index === 0) { %>active<% } %>" data-bs-interval="10000">
-								<img src="/images/uploads/<%= item.bannerImage %>" class="d-block w-100" alt="Slide <%= index + 1 %>">
-								<div class="carousel-caption">
-								  <div class="caption-container">
-									<h1 class="text-light bannerTitle">
-									  <%= item.mainHeading %>
-									</h1>
-									<h1 class="text-light bannerDescriptionbanner">
-									  <%= item.description %>
-									</h1>
-								  </div>
-								</div>
-							  </div>
-							  <% }) %>
+								<% bannerData.forEach(function(item, index) { %>
+									<div class="carousel-item <% if (index === 0) { %>active<% } %>"
+										data-bs-interval="10000">
+										<img src="/images/uploads/<%= item.bannerImage %>" class="d-block w-100"
+											alt="Slide <%= index + 1 %>">
+										<div class="carousel-caption">
+											<div class="caption-container">
+												<h1 class="text-light bannerTitle">
+													<%= item.mainHeading %>
+												</h1>
+												<h1 class="text-light bannerDescriptionbanner">
+													<%= item.description %>
+												</h1>
+											</div>
+										</div>
+									</div>
+									<% }) %>
 							</div>
-							<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-							  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-							  <span class="visually-hidden">Previous</span>
+							<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark"
+								data-bs-slide="prev">
+								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Previous</span>
 							</button>
-							<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-							  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-							  <span class="visually-hidden">Next</span>
+							<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark"
+								data-bs-slide="next">
+								<span class="carousel-control-next-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Next</span>
 							</button>
-						  </div>
-						  
-						  
+						</div>
+
+
 
 
 
 
 						<!-- /BANNER -->
 
+						<!-- SECTION -->
+						<div class="section">
+							<!-- container -->
+							<div class="container">
+								<!-- row -->
+								<div class="row">
+									<br>
+									<h3 class="title">CATEGORIES</h3>
 
+									<br>
+									<% data.forEach(function(x,i) { %>
+										<!-- shop -->
+										<div class="col-md-4 col-xs-6">
+											<div class="shop"
+												onclick="window.location.href='/login/catDetails/<%= x._id %>'">
+												<div class="shop-img">
+													<img src="/images/uploads/<%= x.imageUrl %>" alt="">
+												</div>
+												<div class="shop-body">
+													<h3>
+														<%= x.category %><br>Collection
+													</h3>
+													<a href="#" class="cta-btn">Shop now <i
+															class="fa fa-arrow-circle-right"></i></a>
+												</div>
+											</div>
+										</div>
+										<% }); %>
+											<!-- /shop -->
+								</div>
+								<!-- /row -->
+							</div>
+							<!-- /container -->
+						</div>
+						<!-- /SECTION -->
 
 						<!-- SECTION -->
 						<div class="section">
@@ -115,7 +153,7 @@
 									<!-- section title -->
 									<div class="col-md-12">
 										<div class="section-title">
-											<h3 class="title">CATEGORIES</h3>
+											<h3 class="title">NEW ARRIVALS</h3>
 											<!-- <div class="section-nav">
 								<ul class="section-tab-nav tab-nav">
 									<li class="active"><a data-toggle="tab" href="#tab1">Laptops</a></li>
@@ -135,26 +173,56 @@
 												<!-- tab -->
 												<div id="tab1" class="tab-pane active">
 													<div class="products-slick" data-nav="#slick-nav-1">
-														<!-- product -->
-														<% data.forEach(function(x,i) { %>
+
+														<% lastAddedProducts.forEach(function(x,i) { %>
 															<div class="product"
-																onclick="window.location.href='/login/catDetails/<%= x._id %>'">
+																onclick="window.location.href='/login/prodDetails/<%= x._id %>'"
+																>
 																<div class="product-img">
-																	<img src="/images/uploads/<%= x.imageUrl %>" alt="" >
+																	<img src="/images/uploads/<%= x.imageUrl[0] %>"
+																		alt="">
 																	<div class="product-label">
-																		<!-- <span class="sale">-30%</span>
-													<span class="new">NEW</span> -->
+																		<% if(x.offerPercentage!=0) { %>
+																			<span class="sale">-<%= x.offerPercentage %> %
+																			</span>
+																			<% }; %>
 																	</div>
 																</div>
-																<div class="add-to-cart">
-																	<button class="add-to-cart-btn"><i
-																			class="fa fa-shopping-cart"></i>
-																		<%= x.category %>
-																	</button>
+																<div class="product-body">
+
+																	<h3 class="product-name"><a href="#">
+																			<%= x.productName %>
+																		</a></h3>
+																	<h4 class="product-price">
+																		<%= x.price %> ₹
+																			<% if(x.offerPercentage!=0) { %><del
+																					class="product-old-price">
+																					<%= x.offerPrice %> ₹
+																				</del>
+																				<% }; %>
+																	</h4>
+																	<div class="product-rating">
+																	</div>
+																	<div class="product-btns">
+																		<button class="add-to-wishlist">
+																		  <i class="fa fa-heart-o"></i>
+																		  <span class="tooltipp">Add to Wishlist</span>
+																		</button>
+																		<button class="addTocart">
+																		  <i class="fa fa-shopping-cart"></i>
+																		  <span class="tooltipp">Add to Cart</span>
+																		</button>
+																	
+																	  </div>
+																	  
 																</div>
+																<!-- <div class="add-to-cart">
+																	<button class="add-to-cart-btn"><i
+																			class="fa fa-shopping-cart"></i> add to
+																		cart</button>
+																</div> -->
 															</div>
 															<% }); %>
-																<!-- /product -->
 
 
 													</div>
@@ -215,18 +283,18 @@
 							<!-- /row -->
 						</div>
 						<!-- /container -->
-						</div> 
+						</div>
 						<!-- /HOT DEAL SECTION
 
 	
 						<div class="section">
 							<!-- container -->
-							<div class="container">
-								<!-- row -->
-								<div class="row">
+						<div class="container">
+							<!-- row -->
+							<div class="row">
 
-									<!-- section title -->
-									<!-- <div class="col-md-12">
+								<!-- section title -->
+								<!-- <div class="col-md-12">
 						<div class="section-title">
 							<h3 class="title">Top selling</h3>
 							<div class="section-nav">
@@ -239,17 +307,17 @@
 							</div>
 						</div>
 					</div> -->
-									<!-- /section title -->
+								<!-- /section title -->
 
-									<!-- Products tab & slick -->
-									<div class="col-md-12">
-										<div class="row">
-											<div class="products-tabs">
-												<!-- tab -->
-												<div id="tab2" class="tab-pane fade in active">
-													<div class="products-slick" data-nav="#slick-nav-2">
-														<!-- product -->
-														<!-- <div class="product">
+								<!-- Products tab & slick -->
+								<div class="col-md-12">
+									<div class="row">
+										<div class="products-tabs">
+											<!-- tab -->
+											<div id="tab2" class="tab-pane fade in active">
+												<div class="products-slick" data-nav="#slick-nav-2">
+													<!-- product -->
+													<!-- <div class="product">
 											<div class="product-img">
 												<img src="./main/img/product06.png" alt="">
 												<div class="product-label">
@@ -278,10 +346,10 @@
 												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 											</div>
 										</div> -->
-														<!-- /product -->
+													<!-- /product -->
 
-														<!-- product -->
-														<!-- <div class="product">
+													<!-- product -->
+													<!-- <div class="product">
 											<div class="product-img">
 												<img src="./main/img/product07.png" alt="">
 												<div class="product-label">
@@ -309,10 +377,10 @@
 												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 											</div>
 										</div> -->
-														<!-- /product -->
+													<!-- /product -->
 
-														<!-- product -->
-														<!-- <div class="product">
+													<!-- product -->
+													<!-- <div class="product">
 											<div class="product-img">
 												<img src="./main/img/product08.png" alt="">
 												<div class="product-label">
@@ -335,10 +403,10 @@
 												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 											</div>
 										</div> -->
-														<!-- /product -->
+													<!-- /product -->
 
-														<!-- product -->
-														<!-- <div class="product">
+													<!-- product -->
+													<!-- <div class="product">
 											<div class="product-img">
 												<img src="./main/img/product09.png" alt="">
 											</div>
@@ -363,10 +431,10 @@
 												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 											</div>
 										</div> -->
-														<!-- /product -->
+													<!-- /product -->
 
-														<!-- product -->
-														<!-- <div class="product">
+													<!-- product -->
+													<!-- <div class="product">
 											<div class="product-img">
 												<img src="./main/img/product01.png" alt="">
 											</div>
@@ -391,19 +459,19 @@
 												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 											</div>
 										</div> -->
-														<!-- /product -->
-													</div>
-													<div id="slick-nav-2" class="products-slick-nav"></div>
+													<!-- /product -->
 												</div>
-												<!-- /tab -->
+												<div id="slick-nav-2" class="products-slick-nav"></div>
 											</div>
+											<!-- /tab -->
 										</div>
 									</div>
-									<!-- /Products tab & slick -->
 								</div>
-								<!-- /row -->
+								<!-- /Products tab & slick -->
 							</div>
-							<!-- /container -->
+							<!-- /row -->
+						</div>
+						<!-- /container -->
 						</div>
 						<!-- /SECTION -->
 
@@ -711,45 +779,47 @@
 									<!-- row -->
 									<div class="row">
 										<div class="col-md-4 col-xs-6">
-										  <div class="footer text-center">
-											<h3 class="footer-title">About Us</h3>
-											<ul class="footer-links">
-											  <li><a href="#"><i class="fa fa-map-marker"></i>1734 Stonecoal Road</a></li>
-											  <li><a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a></li>
-											  <li><a href="#"><i class="fa fa-envelope-o"></i>email@email.com</a></li>
-											</ul>
-										  </div>
+											<div class="footer text-center">
+												<h3 class="footer-title">About Us</h3>
+												<ul class="footer-links">
+													<li><a href="#"><i class="fa fa-map-marker"></i>1734 Stonecoal
+															Road</a></li>
+													<li><a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a></li>
+													<li><a href="#"><i class="fa fa-envelope-o"></i>email@email.com</a>
+													</li>
+												</ul>
+											</div>
 										</div>
-									  
+
 										<div class="clearfix visible-xs"></div>
-									  
+
 										<div class="col-md-4 col-xs-6">
-										  <div class="footer text-center">
-											<h3 class="footer-title">Information</h3>
-											<ul class="footer-links">
-											  <li><a href="#">About Us</a></li>
-											  <li><a href="#">Contact Us</a></li>
-											  <li><a href="#">Privacy Policy</a></li>
-											  <li><a href="#">Orders and Returns</a></li>
-											  <li><a href="#">Terms & Conditions</a></li>
-											</ul>
-										  </div>
+											<div class="footer text-center">
+												<h3 class="footer-title">Information</h3>
+												<ul class="footer-links">
+													<li><a href="#">About Us</a></li>
+													<li><a href="#">Contact Us</a></li>
+													<li><a href="#">Privacy Policy</a></li>
+													<li><a href="#">Orders and Returns</a></li>
+													<li><a href="#">Terms & Conditions</a></li>
+												</ul>
+											</div>
 										</div>
-									  
+
 										<div class="col-md-4 col-xs-6">
-										  <div class="footer text-center">
-											<h3 class="footer-title">Service</h3>
-											<ul class="footer-links">
-											  <li><a href="#">My Account</a></li>
-											  <li><a href="#">View Cart</a></li>
-											  <li><a href="#">Wishlist</a></li>
-											  <li><a href="#">Track My Order</a></li>
-											  <li><a href="#">Help</a></li>
-											</ul>
-										  </div>
+											<div class="footer text-center">
+												<h3 class="footer-title">Service</h3>
+												<ul class="footer-links">
+													<li><a href="#">My Account</a></li>
+													<li><a href="#">View Cart</a></li>
+													<li><a href="#">Wishlist</a></li>
+													<li><a href="#">Track My Order</a></li>
+													<li><a href="#">Help</a></li>
+												</ul>
+											</div>
 										</div>
-									  </div>
-									  
+									</div>
+
 									</row>
 								</div>
 								<!-- /container -->

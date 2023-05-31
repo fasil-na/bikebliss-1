@@ -19,7 +19,7 @@ function updateSubmitButton() {
 
 
 function validateName() {
-    let name = document.getElementById("name").value
+    let name = document.getElementById("name").value.trim()
     const nameRegex = /^[A-Za-z\s]+$/;
     if (!name) {
         username = false

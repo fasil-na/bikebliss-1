@@ -6,7 +6,7 @@ let usernumber = false
 
 
 function validateName() {
-    let name = document.getElementById("newName").value
+    let name = document.getElementById("newName").value.trim()
     const nameRegex = /^[A-Za-z\s]+$/;
     if (!name) {
         username = false

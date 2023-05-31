@@ -7,7 +7,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-	<title>Electro - HTML Ecommerce Template</title>
+	<title>product list</title>
+	<link rel="icon"
+	href="/images/logo.png">
 
 	<!-- Google font -->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
@@ -131,8 +133,15 @@
 
 														<div class="product-img">
 															<img src="/images/uploads/<%= x.imageUrl[0] %>" alt="">
+															<div class="product-label">
+																<% if(x.offerPercentage!=0) { %>
+																	<span class="sale">-<%= x.offerPercentage %> %
+																	</span>
+																	<% }; %>
+															</div>
 
 														</div>
+														
 														<div class="product-body">
 															<p class="product-category">
 																<%= x.category.category %>
@@ -145,7 +154,7 @@
 															</h4>
 															<% if ( x.offerPercentage!=0) { %>
 																<span class="product-available"><del><%=x.offerPrice%></del> ₹</span>
-																<span class="product-available"><%=x.offerPercentage%> %</span>
+																
 																<% } %>
 														</div>
 													</div>

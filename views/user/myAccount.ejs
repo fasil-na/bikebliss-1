@@ -7,7 +7,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-	<title>Electro - HTML Ecommerce Template</title>
+	<title>profile</title>
+	<link rel="icon"
+	href="/images/logo.png">
 
 	<!-- Google font -->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
@@ -221,10 +223,12 @@
 							</div>
 							<form action="/addAddressFromProfile" method="post">
 								<div class="form-group">
-									<input class="input" type="text" name="fullname" placeholder="Full Name">
+									<input class="input" type="text" name="fullname" id="aName" placeholder="Full Name" oninput="validateAName()">
+									<span id="aNameError" style="color: red;"></span>
 								</div>
 								<div class="form-group">
-									<input class="input" type="email" name="email" placeholder="Email">
+									<input class="input" type="email" name="email" id="aEmail" placeholder="Email" oninput="validateAEmail()">
+									<span id="aEmailError" style="color: red;"></span>
 								</div>
 								<div class="form-group">
 									<input class="input" type="text" name="address" placeholder="Address">
@@ -233,15 +237,18 @@
 									<input class="input" type="text" name="city" placeholder="City">
 								</div>
 								<div class="form-group">
-									<input class="input" type="text" name="country" placeholder="Country">
+									<input class="input" type="text" name="country" id="countryName" placeholder="Country" oninput="validateCountryName()">
+									<span id="countryNameError" style="color: red;"></span>
 								</div>
 								<div class="form-group">
-									<input class="input" type="text" name="pin" placeholder="PIN Code">
+									<input class="input" type="text" name="pin" id="pin" placeholder="PIN Code" oninput="validatePinCode()">
+									<span id="pinError" style="color: red;"></span>
 								</div>
 								<div class="form-group">
-									<input class="input" type="tel" name="tel" placeholder="Telephone">
+									<input class="input" type="tel" name="tel" id="aNumber" placeholder="Telephone" oninput="validateAMobile()">
+									<span id="aNumberError" style="color: red;"></span>
 								</div>
-								<input type="submit" Id="submitButton" name="submitButton" value="Add Address"
+								<input type="submit" Id="aSubmitButton" name="aSubmitButton" disabled value="Add Address"
 									class="btn btn-block btn-primary">
 							</form>
 						</div>
@@ -251,6 +258,7 @@
 			<!-- /SECTION -->
 
 			<!-- jQuery Plugins -->
+			<script src="/javascripts/address validation.js"></script>
 			<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
 				integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
 				crossorigin="anonymous"></script>

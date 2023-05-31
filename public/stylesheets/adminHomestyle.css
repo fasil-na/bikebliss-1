@@ -8,8 +8,8 @@
 
 .right {
   background-color: white;
-  height: 100vh;
-  overflow-y: scroll;
+  overflow-x: hidden;
+  overflow-y: auto; 
 }
 
 .head {
@@ -189,6 +189,8 @@ table tr {
   color: #888;
   margin-left: auto; /* Added */
 }
+
+
 
 
 

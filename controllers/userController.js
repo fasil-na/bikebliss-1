@@ -15,17 +15,25 @@ const Razorpay = require("razorpay");
 const { ObjectId } = require("mongodb");
 
 const homeload = async (req, res) => {
-  const category = await Category.find({});
-  const bannerData = await Banner.find();
-  if (req.session.user) {
-    userData = req.session.user;
-    User.findOne({ _id: userData }).then((user) => {
-      res.render("home", { userData: user, data: category, bannerData: bannerData });
-    });
-  } else {
-    res.render("home", { data: category, bannerData: bannerData });
+  try {
+    const category = await Category.find({ isDeleted: false });
+    const bannerData = await Banner.find();
+    const lastAddedProducts = await Product.find({ isDeleted: false })
+      .sort({ _id: -1 })
+      .limit(3);
+    let userData = null;
+    if (req.session.user) {
+      const userId = req.session.user;
+      userData = await User.findOne({ _id: userId });
+      res.render("home", { userData, data: category, bannerData, lastAddedProducts });
+    } else {
+      res.render("home", { data: category, bannerData, lastAddedProducts });
+    }
+  } catch (error) {
+    console.log(error.message);
   }
 };
+
 
 const loginload = async (req, res) => {
   try {
@@ -68,7 +76,7 @@ const sendOtp = async (req, res) => {
         email = req.body.email ? req.body.email : email;
         number = req.body.number ? req.body.number : number;
         password = req.body.password ? req.body.password : password;
-        refCode = req.body.referral 
+        refCode = req.body.referral
         sendOtpMail(email, generatedOtp);
         res.render("otpEnter", { footer: "" })
         setTimeout(() => {
@@ -147,7 +155,7 @@ async function sendForgotPasswordOtpMail(email, otp) {
       service: 'gmail',
       auth: {
         user: 'fazilfaizy4@gmail.com',
-        pass: 'hedhxgkqhzgvhzmj'
+        pass: 'jxrvchrvqwygaflw'
       }
     });
 
@@ -177,52 +185,52 @@ const securePassword = async (password) => {
 }
 
 const verifyOtp = async (req, res) => {
-  const userExist = await User.find({referral:refCode})
-if(userExist.length==0){
-  const EnteredOtp = req.body.otp;
-  if (EnteredOtp === saveOtp) {
-    const referralCode = generateReferralCode(8);
-    const securedPassword = await securePassword(password);
-    const newUser = new User({
-      name: name,
-      email: email,
-      number: number,
-      password: securedPassword,
-      blockStatus: false,
-      referral: referralCode,
-    });
-    await newUser.save();
-    res.render("login", { footer: "Account Created Successfully, Please Login" });
+  const userExist = await User.find({ referral: refCode })
+  if (userExist.length == 0) {
+    const EnteredOtp = req.body.otp;
+    if (EnteredOtp === saveOtp) {
+      const referralCode = generateReferralCode(8);
+      const securedPassword = await securePassword(password);
+      const newUser = new User({
+        name: name,
+        email: email,
+        number: number,
+        password: securedPassword,
+        blockStatus: false,
+        referral: referralCode,
+      });
+      await newUser.save();
+      res.render("login", { footer: "Account Created Successfully, Please Login" });
+    } else {
+      res.render("otpEnter", { footer: "Incorrect OTP" })
+    }
   } else {
-    res.render("otpEnter", { footer: "Incorrect OTP" })
-  }
-}else{
-  const referredUserId= userExist[0]._id 
-  let existingWalletAmount=userExist[0].wallet;
-  let updatedWalletAmount = existingWalletAmount+100;
-  await User.findByIdAndUpdate(referredUserId, { $set: { wallet: updatedWalletAmount } });
-  const EnteredOtp = req.body.otp;
-  if (EnteredOtp === saveOtp) {
-    const referralCode = generateReferralCode(8);
-    const securedPassword = await securePassword(password);
-    const newUser = new User({
-      name: name,
-      email: email,
-      number: number,
-      password: securedPassword,
-      blockStatus: false,
-      referral: referralCode,
-      wallet:100
-    });
-    await newUser.save();
-    res.render("login", { footer: "Account Created Successfully, Please Login" });
-  } else {
-    res.render("otpEnter", { footer: "Incorrect OTP" })
+    const referredUserId = userExist[0]._id
+    let existingWalletAmount = userExist[0].wallet;
+    let updatedWalletAmount = existingWalletAmount + 100;
+    await User.findByIdAndUpdate(referredUserId, { $set: { wallet: updatedWalletAmount } });
+    const EnteredOtp = req.body.otp;
+    if (EnteredOtp === saveOtp) {
+      const referralCode = generateReferralCode(8);
+      const securedPassword = await securePassword(password);
+      const newUser = new User({
+        name: name,
+        email: email,
+        number: number,
+        password: securedPassword,
+        blockStatus: false,
+        referral: referralCode,
+        wallet: 100
+      });
+      await newUser.save();
+      res.render("login", { footer: "Account Created Successfully, Please Login" });
+    } else {
+      res.render("otpEnter", { footer: "Incorrect OTP" })
+    }
+
   }
 
-}
 
-  
 }
 
 function generateReferralCode(length) {
@@ -257,21 +265,23 @@ const verifyLogin = async (req, res) => {
           res.render("login", { footer: "User Is Blocked" });
         } else {
           req.session.user = user._id;
-          const CategoryList = await Category.find({});
-          res.render("home", { data: CategoryList, userData: user, bannerData: bannerData });
+          const CategoryList = await Category.find({ isDeleted: false });
+          const lastAddedProducts = await Product.find({ isDeleted: false })
+            .sort({ _id: -1 })
+            .limit(3);
+          res.render("home", { data: CategoryList, userData: user, bannerData: bannerData, lastAddedProducts });
         }
-
       } else {
-        res.render("login", { footer: "Email and  Password is  Invalid" });
+        res.render("login", { footer: "Email and Password is Invalid" });
       }
     } else {
-      res.render("login", { footer: "Email and  Password is  Invalid" });
+      res.render("login", { footer: "Email and Password is Invalid" });
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error.message);
   }
 };
+
 
 const resettingPassword = async (req, res) => {
   try {
@@ -1068,10 +1078,10 @@ const placeOrder = async (req, res) => {
     const paymentArray = ["COD", "UPI", "Credit/Debit Card"]
     const addressId = req.query.addressId;
     const paymentMethod = req.query.payment;
-    const wallet=parseInt(req.query.wallet,10);
+    const wallet = parseInt(req.query.wallet, 10);
     const userId = new ObjectId(req.session.user);
     const userData = await User.findOne({ _id: userId });
-    const update = await User.findByIdAndUpdate(userId,{$set:{wallet:userData.wallet-wallet}})
+    const update = await User.findByIdAndUpdate(userId, { $set: { wallet: userData.wallet - wallet } })
     const cartData = await Cart.aggregate([
       {
         $match: {
@@ -1201,17 +1211,17 @@ const handleLogout = async (req, res) => {
 };
 
 const createRP = async (req, res) => {
-  const userId=req.body.userId.replace(/\s/g, "")
-	const wallet=req.body.wallet
-  const cartData=  Cart.findOne({userId: new ObjectId(userId)})
-  const userData=await User.findById(userId)
+  const userId = req.body.userId.replace(/\s/g, "")
+  const wallet = req.body.wallet
+  const cartData = Cart.findOne({ userId: new ObjectId(userId) })
+  const userData = await User.findById(userId)
   let instance = new Razorpay({ key_id: 'rzp_test_Z6ogCp3lsMS6mX', key_secret: "GfeGBYD3Jojxqd7vdqZoRzzP" })
-  if (wallet){
-    var amount=cartData.totalPrice-userData.wallet
-  }else{
-    var amount=cartData.totalPrice
+  if (wallet) {
+    var amount = cartData.totalPrice - userData.wallet
+  } else {
+    var amount = cartData.totalPrice
   }
-  var amount=100
+  var amount = 100
   let options = {
     amount: amount,
     currency: "INR",
