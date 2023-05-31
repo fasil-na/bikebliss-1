@@ -30,11 +30,11 @@
 	<!-- Custom stlylesheet -->
 	<link type="text/css" rel="stylesheet" href="/main/css/style.css" />
 
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+	<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-		crossorigin="anonymous"></script>
+		crossorigin="anonymous"></script> -->
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -89,27 +89,35 @@
 							</div>
 							<form action="/addAddress" method="post">
 								<div class="form-group">
-									<input class="input" type="text" name="fullname" placeholder="Full Name">
+									<input class="input" type="text" name="fullname" id="aName" placeholder="Full Name" oninput="validateAName()">
+									<span id="aNameError" style="color: red;"></span>
 								</div>
 								<div class="form-group">
-									<input class="input" type="email" name="email" placeholder="Email">
+									<input class="input" type="email" name="email" id="aEmail" placeholder="Email" oninput="validateAEmail()">
+									<span id="aEmailError" style="color: red;"></span>
 								</div>
 								<div class="form-group">
-									<input class="input" type="text" name="address" placeholder="Address">
+									<input class="input" type="text" name="address" id="address" placeholder="Address" oninput="validateAddress()">
+									<span id="addressError" style="color: red;"></span>
+								</div>
+								
+								<div class="form-group">
+									<input class="input" type="text" name="city" id="city" placeholder="City" oninput="validateCityName()">
+									<span id="cityNameError" style="color: red;"></span>
 								</div>
 								<div class="form-group">
-									<input class="input" type="text" name="city" placeholder="City">
+									<input class="input" type="text" name="country" id="countryName" placeholder="Country" oninput="validateCountryName()">
+									<span id="countryNameError" style="color: red;"></span>
 								</div>
 								<div class="form-group">
-									<input class="input" type="text" name="country" placeholder="Country">
+									<input class="input" type="text" name="pin" id="pin" placeholder="PIN Code" oninput="validatePinCode()">
+									<span id="pinError" style="color: red;"></span>
 								</div>
 								<div class="form-group">
-									<input class="input" type="text" name="pin" placeholder="PIN Code">
+									<input class="input" type="tel" name="tel" id="aNumber" placeholder="Telephone" oninput="validateAMobile()">
+									<span id="aNumberError" style="color: red;"></span>
 								</div>
-								<div class="form-group">
-									<input class="input" type="tel" name="tel" placeholder="Telephone">
-								</div>
-								<input type="submit" Id="submitButton" name="submitButton" value="Add Address"
+								<input type="submit" Id="aSubmitButton" name="aSubmitButton"  value="Add Address"
 									class="btn btn-block btn-primary">
 							</form>
 						</div>
@@ -186,12 +194,12 @@
 		<!-- /SECTION -->
 
 		<!-- jQuery Plugins -->
-		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+		<!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
 			integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
 			crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
 			integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
-			crossorigin="anonymous"></script>
+			crossorigin="anonymous"></script> -->
 		<script src="/main/js/jquery.min.js"></script>
 		<script src="/main/js/bootstrap.min.js"></script>
 		<script src="/main/js/slick.min.js"></script>
@@ -199,6 +207,7 @@
 		<script src="/main/js/jquery.zoom.min.js"></script>
 		<script src="/main/js/main.js"></script>
 		<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+		<script src="/javascripts/address validation.js"></script>
 		<script>
 			const walletCheckbox = document.getElementById('wallet-0');
 			const totalPriceLabel = document.querySelector('.order-submit');

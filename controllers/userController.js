@@ -565,7 +565,10 @@ const loadCart = async (req, res) => {
         },
       ]);
       if (cartData.length > 0) {
-        totalPrice = cartData[0].totalPrice
+        
+        for(let i=0;i<cartData.length;i++)
+        {totalPrice = totalPrice+(cartData[i].item.product.price*cartData[i].item.quantity)}
+        
       } else {
         totalPrice = 0
       }
@@ -927,6 +930,7 @@ const addToCartFromWishlist = async (req, res) => {
 };
 
 const loadCheckOut = async (req, res) => {
+  let totalPrice=0
   let userId = new ObjectId(req.session.user)
   const user = await User.findOne({ _id: userId })
   const cartData = await Cart.aggregate([
@@ -962,7 +966,8 @@ const loadCheckOut = async (req, res) => {
     },
   ]);
   if (cartData.length > 0) {
-    totalPrice = cartData[0].totalPrice
+        for(let i=0;i<cartData.length;i++)
+        {totalPrice = totalPrice+(cartData[i].item.product.price*cartData[i].item.quantity)}
     res.render("checkout", { userData: user, items: cartData, totalPrice });
   } else {
     totalPrice = 0
@@ -1017,7 +1022,8 @@ const deleteAddress = async (req, res) => {
     userDoc.address.splice(addressIndex, 1);
     await userDoc.save();
     const userData = await User.findOne({ _id: userId });
-    res.render("myAccount", { userData: userData });
+    // res.render("myAccount", { userData: userData });
+    res.redirect("/myAccount");
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ error: "Internal server error" });
@@ -1075,6 +1081,7 @@ const editNumber = async (req, res) => {
 
 const placeOrder = async (req, res) => {
   try {
+    let totalPrice=0
     const paymentArray = ["COD", "UPI", "Credit/Debit Card"]
     const addressId = req.query.addressId;
     const paymentMethod = req.query.payment;
@@ -1118,9 +1125,14 @@ const placeOrder = async (req, res) => {
     orderData.userId = userId;
     orderData.item = []
     for (let i = 0; i < cartData.length; i++) {
+      cartData[i].item.price=cartData[i].item.product.price
       orderData.item.push(cartData[i].item)
     }
-    orderData.totalPrice = cartData[0].totalPrice;
+    for(let i=0;i<cartData.length;i++)
+    {
+      totalPrice = totalPrice+(cartData[i].item.product.price*cartData[i].item.quantity)
+    }
+    orderData.totalPrice = totalPrice;
     orderData.address = userData.address[addressId];
     orderData.paymentType = paymentArray[paymentMethod];
     if (true) {
@@ -1165,6 +1177,8 @@ const orderData = async (req, res) => {
           foreignField: "_id",
           as: "productDetails"
         }
+      },{
+        $sort:{_id:-1}
       }
     ]);
     orderDetails.forEach((order) => {

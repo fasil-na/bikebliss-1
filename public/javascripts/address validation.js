@@ -1,22 +1,21 @@
 let aName = false
 let aEmail = false
 let aNumber = false
-let pinCodeValid=false
-let countryNameValid=false
+let pinCodeValid = false
+let countryNameValid = false
+let addressValid = false;
+let cityNameValid = false;
 
+// function updateASubmitButton() {
 
-function updateASubmitButton() {
+//     const submitButton = document.getElementById('aSubmitButton');
 
-    const submitButton = document.getElementById('aSubmitButton');
-
-    if (aName && aEmail && aNumber && pinCodeValid &&countryNameValid) {
-        submitButton.removeAttribute('disabled');
-    } else {
-        submitButton.setAttribute('disabled', 'disabled');
-    }
-}
-
-
+//     if (aName && aEmail && aNumber && pinCodeValid && countryNameValid && cityNameValid && addressValid) {
+//         submitButton.removeAttribute('disabled');
+//     } else {
+//         submitButton.setAttribute('disabled', 'disabled');
+//     }
+// }
 
 function validateAName() {
     let name = document.getElementById("aName").value.trim()
@@ -30,7 +29,7 @@ function validateAName() {
     } else {
         aName = true;
         document.getElementById("aNameError").innerText = ""
-        updateASubmitButton();
+        // updateASubmitButton();
     }
 }
 
@@ -46,7 +45,7 @@ function validateAEmail() {
     } else {
         aEmail = true
         document.getElementById("aEmailError").innerText = ""
-        updateASubmitButton();
+        // updateASubmitButton();
     }
 }
 
@@ -63,45 +62,76 @@ function validateAMobile() {
     } else {
         aNumber = true
         document.getElementById("aNumberError").innerText = ""
-        updateASubmitButton();
+        // updateASubmitButton();
     }
 }
 
 function validatePinCode() {
     let pinCode = document.getElementById("pin").value;
     const pinCodeRegex = /^\d{6}$/;
-    
-    if (!pinCode) {
-      pinCodeValid = false;
-      document.getElementById("pinError").innerText = "Pin code is required";
-    } else if (!pinCode.match(pinCodeRegex)) {
-      pinCodeValid = false;
-      document.getElementById("pinError").innerText = "Please enter a valid 6-digit pin code";
-    } else {
-      pinCodeValid = true;
-      document.getElementById("pinError").innerText = "";
-      updateASubmitButton();
-    }
-  }
 
-  function validateCountryName() {
+    if (!pinCode) {
+        pinCodeValid = false;
+        document.getElementById("pinError").innerText = "Pin code is required";
+    } else if (!pinCode.match(pinCodeRegex)) {
+        pinCodeValid = false;
+        document.getElementById("pinError").innerText = "Please enter a valid 6-digit pin code";
+    } else {
+        pinCodeValid = true;
+        document.getElementById("pinError").innerText = "";
+        // updateASubmitButton();
+    }
+}
+
+function validateCountryName() {
     let countryName = document.getElementById("countryName").value.trim();
     const countryNameRegex = /^[a-zA-Z\s]+$/;
-    
     if (!countryName) {
-      countryNameValid = false;
-      document.getElementById("countryNameError").innerText = "Country name is required";
+        countryNameValid = false;
+        document.getElementById("countryNameError").innerText = "Country name is required";
     } else if (!countryName.match(countryNameRegex)) {
-      countryNameValid = false;
-      document.getElementById("countryNameError").innerText = "Please enter a valid country name";
+        countryNameValid = false;
+        document.getElementById("countryNameError").innerText = "Please enter a valid country name";
     } else {
-      countryNameValid = true;
-      document.getElementById("countryNameError").innerText = "";
-      updateASubmitButton();
+        countryNameValid = true;
+        document.getElementById("countryNameError").innerText = "";
+        // updateASubmitButton();
     }
-  }
-  
-  
+}
+
+function validateCityName() {
+    let cityName = document.getElementById("city").value.trim();
+    const cityNameRegex = /^[a-zA-Z\s]+$/;
+    if (!cityName) {
+        cityNameValid = false;
+        document.getElementById("cityNameError").innerText = "City name is required";
+    } else if (!cityName.match(cityNameRegex)) {
+        cityNameValid = false;
+        document.getElementById("cityNameError").innerText = "Please enter a valid city name";
+    } else {
+        cityNameValid = true;
+        document.getElementById("cityNameError").innerText = "";
+        // updateASubmitButton();
+    }
+}
+
+
+function validateAddress() {
+    let address = document.getElementById("address").value.trim();
+    if (!address) {
+        addressValid = false;
+        document.getElementById("addressError").innerText = "Address is required";
+    } else {
+        addressValid = true;
+        document.getElementById("addressError").innerText = "";
+        updateASubmitButton();
+    }
+}
+
+
+
+
+
 
 
 

@@ -725,6 +725,7 @@ const editProduct = async (req, res) => {
     try {
         const { id, productName, price, description, category, brand, size, color, stock } = req.body;
         const images = req.files.map(({ filename }) => filename);
+        console.log(images);
         const offerPrice = price;
         const productDoc = await Product.findById(id);
         const previousImages = productDoc.imageUrl;
@@ -739,7 +740,7 @@ const editProduct = async (req, res) => {
             if (images) {
                 await Product.findByIdAndUpdate(id, {
                     productName: lowerProductName,
-                    imageUrl: images.filename,
+                    imageUrl: images,
                     price,
                     offerPrice,
                     description,
@@ -752,7 +753,7 @@ const editProduct = async (req, res) => {
             } else {
                 await Product.findByIdAndUpdate(id, {
                     productName: lowerProductName,
-                    imageUrl: previousImages.filename,
+                    imageUrl: previousImages,
                     price,
                     offerPrice,
                     description,
