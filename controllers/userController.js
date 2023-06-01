@@ -20,7 +20,7 @@ const homeload = async (req, res) => {
     const bannerData = await Banner.find();
     const lastAddedProducts = await Product.find({ isDeleted: false })
       .sort({ _id: -1 })
-      .limit(3);
+      .limit(4);
     let userData = null;
     if (req.session.user) {
       const userId = req.session.user;
@@ -140,7 +140,6 @@ async function sendOtpMail(email, otp) {
       subject: 'Your OTP for user verification',
       text: `Your OTP is ${otp}. Please enter this code to verify your account.`
     };
-
     const result = await transporter.sendMail(mailOptions);
     console.log(result);
   } catch (error) {
@@ -150,7 +149,6 @@ async function sendOtpMail(email, otp) {
 
 async function sendForgotPasswordOtpMail(email, otp) {
   try {
-    // Create a Nodemailer transport object
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -158,16 +156,12 @@ async function sendForgotPasswordOtpMail(email, otp) {
         pass: 'jxrvchrvqwygaflw'
       }
     });
-
-    // Define email options
     const mailOptions = {
       from: 'fazilfaizy4@gmail.com',
       to: email,
       subject: 'Your OTP for password resetting',
       text: `Your OTP is ${otp}. Please enter this code to reset your password.`
     };
-
-    // Send the email
     const result = await transporter.sendMail(mailOptions);
     console.log(result);
   } catch (error) {
@@ -229,8 +223,6 @@ const verifyOtp = async (req, res) => {
     }
 
   }
-
-
 }
 
 function generateReferralCode(length) {
@@ -268,7 +260,7 @@ const verifyLogin = async (req, res) => {
           const CategoryList = await Category.find({ isDeleted: false });
           const lastAddedProducts = await Product.find({ isDeleted: false })
             .sort({ _id: -1 })
-            .limit(3);
+            .limit(4);
           res.render("home", { data: CategoryList, userData: user, bannerData: bannerData, lastAddedProducts });
         }
       } else {
@@ -1022,7 +1014,6 @@ const deleteAddress = async (req, res) => {
     userDoc.address.splice(addressIndex, 1);
     await userDoc.save();
     const userData = await User.findOne({ _id: userId });
-    // res.render("myAccount", { userData: userData });
     res.redirect("/myAccount");
   } catch (error) {
     console.log(error.message);
@@ -1141,6 +1132,9 @@ const placeOrder = async (req, res) => {
       const deletCart = await Cart.deleteOne({ userId: userId })
       const updates = []
       for (let i = 0; i < cartData.length; i++) {
+        if(cartData[i].item.product.stock<cartData[i].item.quantity){
+          res.render("orderFailure")
+        }
         let update = {
           updateOne: {
             filter: { _id: cartData[i].item.product },
@@ -1160,7 +1154,51 @@ const placeOrder = async (req, res) => {
     console.log(error);
   }
 };
+const checkOrder = async (req, res) => {
+  const userId = req.body.userId
+  res.json({status:true})
+  const cartData = await Cart.aggregate([
+    {
+      $match: {
+        "userId": new ObjectId(userId)
+      }
+    },
+    {
+      $unwind: "$item",
+    },
+    {
+      $lookup: {
+        from: "products",
+        localField: "item.product",
+        foreignField: "_id",
+        as: "item.product",
+      },
+    },
+    {
+      $unwind: "$item.product",
+    },
+    {
+      $lookup: {
+        from: "categories",
+        localField: "item.product.category",
+        foreignField: "_id",
+        as: "item.product.category",
+      },
+    },
+    {
+      $unwind: "$item.product.category",
+    },
+  ]);
 
+  for(i=0;i<cartData.length;i++)
+  {
+    if(cartData[i].item.product.stock<cartData[i].item.quantity)
+    {
+      res.json({status:false})
+    }
+  }
+  res.json({status:true})
+}
 
 const orderData = async (req, res) => {
   try {
@@ -1277,6 +1315,7 @@ module.exports = {
   editEmail,
   editNumber,
   placeOrder,
+  checkOrder,
   orderData,
   cancelOrder,
   loadWishlist,

@@ -77,12 +77,13 @@
                             </option>
                             <%}%>
                     </select>
-                    <div class="text-center">
+                    <div class="text-center d-flex justify-content-center flex-wrap flex-row">
                         <div id="image-previews"></div>
                     </div>
+
                     <input type="file" class="w-50 mx-auto my-3 form-control" name="image" id="image" accept="image/*"
                         multiple required onchange="previewImages(event)" />
-                    
+
                     <select class="w-50 mx-auto my-3 form-control" name="brand">
                         <option value="Scott">Scott</option>
                         <option value="Giant">Giant</option>
@@ -134,14 +135,15 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     <script>
+
         function previewImages(event) {
             var input = event.target;
             if (input.files.length > 3) {
                 alert('You can only select up to 3 files.');
-                event.target.value = ''; 
+                event.target.value = '';
             }
             var imagePreviews = document.getElementById('image-previews');
-            imagePreviews.innerHTML = ''; 
+            imagePreviews.innerHTML = '';
 
             if (input.files && input.files.length > 0) {
                 for (var i = 0; i < input.files.length; i++) {
@@ -151,10 +153,10 @@
                             var imagePreview = document.createElement('img');
                             imagePreview.src = e.target.result;
                             imagePreview.alt = 'Selected Image';
-                            imagePreview.style.display = 'block';
-                            imagePreview.style.maxWidth = '10%';
+                            imagePreview.style.display = 'inline-block';
+                            imagePreview.style.maxWidth = '100px'; // Adjust the width as needed
                             imagePreview.style.height = 'auto';
-                            imagePreview.style.margin = '10px auto';
+                            imagePreview.style.margin = '10px';
                             imagePreviews.appendChild(imagePreview);
                         };
                     })(input.files[i]);

@@ -12,7 +12,7 @@ const path = require("path");
 // const jsPdf = require("jspdf")
 // const PDFDocument = require('pdfkit');
 const puppeteer = require('puppeteer');
-const { fail } = require("assert");
+// const { fail } = require("assert");
 
 const loginload = async (req, res) => {
     try {
@@ -43,8 +43,8 @@ const homeload = async (req, res) => {
                 }
             ]);
 
-            let currentDate = new Date();
-            let dateBefore7Days = new Date(currentDate.getTime() - (7 * 24 * 60 * 60 * 1000));
+            const currentDate = new Date();
+            const dateBefore7Days = new Date(currentDate.getTime() - (7 * 24 * 60 * 60 * 1000));
             const weeklyEarnings = await Order.aggregate([
                 {
                     $match: {
@@ -88,8 +88,8 @@ const dashboardload = async (req, res) => {
                 }
             }
         ]);
-        let currentDate = new Date();
-        let dateBefore7Days = new Date(currentDate.getTime() - (7 * 24 * 60 * 60 * 1000));
+        const currentDate = new Date();
+        const dateBefore7Days = new Date(currentDate.getTime() - (7 * 24 * 60 * 60 * 1000));
         const weeklyEarnings = await Order.aggregate([
             {
                 $match: {
@@ -407,22 +407,59 @@ const createYearlySalesPdf = async (html) => {
 
 const userlistload = async (req, res) => {
     try {
-        const page = parseInt(req.query.page) || 1; // Get the current page from the query parameters
-        const limit = 2; // Set the number of users per page
+      const page = parseInt(req.query.page) || 1; // Current page number
+      const limit = 1; // Number of users per page
+      const skip = (page - 1) * limit; // Calculate the number of users to skip
+  
+      const totalUsers = await User.countDocuments();
+      const totalPages = Math.ceil(totalUsers / limit);
+  
+      const userdata = await User.find().sort({ _id: -1 }).skip(skip).limit(limit);
+  
+      if (userdata.length !== 0) {
+        res.render("adminUserList", { data: userdata, text: "", totalPages, page });
+      } else {
+        res.render("adminUserList", { data: userdata, text: "No users registered", totalPages, page });
+      }
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).send("Internal Server Error");
+    }
+  };
+  
+  
 
-        const totalCount = await User.countDocuments(); // Get the total count of users
-        const totalPages = Math.ceil(totalCount / limit); // Calculate the total number of pages
+  const searchAndPagination = async (req, res) => {
+    try {
+        const searchValue = req.body.searchValue;
+        const pageNum = req.body.pageNum;
 
-        const skip = (page - 1) * limit; // Calculate the number of users to skip
+        console.log(searchValue, pageNum);
 
-        const userdata = await User.find().sort({ _id: -1 }).skip(skip).limit(limit); // Fetch the users for the current page
+        
+        const pageSize = 1; 
+        const query = {
+            name: { $regex: searchValue, $options: "i" } 
+        };
 
-        res.render("adminUserList", { data: userdata, totalPages, currentPage: page });
+        const totalItems = await User.countDocuments(query);
+        const totalPages = Math.ceil(totalItems / pageSize);
+
+        const users = await User.find(query)
+            .skip((pageNum - 1) * pageSize)
+            .limit(pageSize);
+
+        if (users.length !== 0) {
+            res.render("adminUserList", { data: users, text: "", totalPages });
+        } else {
+            res.render("adminUserList", { data: users, text: "No users found", totalPages });
+        }
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Internal Server Error");
     }
 };
+
 
 const userBlockUnblock = (req, res) => {
     const id = req.body.id;
@@ -440,42 +477,37 @@ const userBlockUnblock = (req, res) => {
         });
 };
 
-const orderList = async (req, res) => {
+const userorderList = async (req, res) => {
     try {
-      const userID = new ObjectId(req.body.userId);
-      const perPage = 5; 
-      const page = parseInt(req.query.page) || 1;
-      const totalCount = await Order.countDocuments({ userId: userID });
-      const totalPages = Math.ceil(totalCount / perPage);
-      const orders = await Order.aggregate([
-        {
-          $match: { userId: userID }
-        },
-        {
-          $lookup: {
-            from: "products",
-            localField: "item.product",
-            foreignField: "_id",
-            as: "productDetails"
-          }
-        },
-        {
-          $sort: { _id: -1 }
-        },
-        {
-          $skip: (page - 1) * perPage 
-        },
-        {
-          $limit: perPage 
+        const userID = new ObjectId(req.body.userId);
+        const orders = await Order.aggregate([
+            {
+                $match: { userId: userID }
+            },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "item.product",
+                    foreignField: "_id",
+                    as: "productDetails"
+                }
+            },
+            {
+                $sort: { _id: -1 }
+            }
+        ]);
+        if(orders.length!=0){
+            res.render("adminOrderList", { orderData: orders,text:""  });
+        }else{
+            res.render("adminOrderList", { orderData: orders,text:"No orders placed"  });
         }
-      ]);
-      res.render("adminOrderList", { orderData: orders, totalPages: totalPages, currentPage: page });
+        
     } catch (err) {
-      console.log(err.message);
-      res.status(500).send("Error retrieving order details.");
+        console.log(err.message);
+        res.status(500).send("Error retrieving order details.");
     }
-  };
-  
+};
+
 
 const updateStatus = async (req, res) => {
 
@@ -489,6 +521,8 @@ const updateStatus = async (req, res) => {
         console.log(error.message);
     }
 };
+
+
 
 const catlistload = async (req, res) => {
     try {
@@ -601,47 +635,49 @@ const listCategory = async (req, res) => {
 
 const prodlistload = async (req, res) => {
     try {
-      const currentPage = parseInt(req.query.page)?parseInt(req.query.page):1; 
-      const pageSize = 5; 
-  
-      const totalProducts = await Product.countDocuments(); 
-      const totalPages = Math.ceil(totalProducts / pageSize); 
-  
-      const skip = (currentPage - 1) * pageSize; 
-  
-      const productData = await Product.aggregate([
-        {
-          $lookup: {
-            from: "categories",
-            localField: "category",
-            foreignField: "_id",
-            as: "category",
-          },
-        },
-        {
-          $unwind: "$category",
-        },
-        {
-          $sort: { _id: -1 },
-        },
-        {
-          $skip: skip, 
-        },
-        {
-          $limit: pageSize, 
-        },
-      ]);
-  
-      if (productData.length > 0) {
-        res.render("adminProdList", { data: productData, text: "", totalPages, currentPage });
-      } else {
-        res.render("adminProdList", { data: productData, text: "No products have been added", totalPages, currentPage });
-      }
+        const productData = await Product.aggregate([
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "category",
+                    foreignField: "_id",
+                    as: "category",
+                },
+            },
+            {
+                $unwind: "$category",
+            },
+            {
+                $sort: { _id: -1 },
+            }
+
+        ]);
+
+        if (productData.length > 0) {
+            res.render("adminProdList", { data: productData, text: "" });
+        } else {
+            res.render("adminProdList", { data: productData, text: "No products have been added" });
+        }
     } catch (error) {
-      console.log(error.message);
+        console.log(error.message);
     }
-  };
-  
+};
+
+const searchProduct = async (req, res) => {
+    try {
+        const searchValue = req.body.search;
+        const productdata = await Product.find({ productName: { $regex: searchValue, $options: "i" } });
+        if (productdata.length!=0) {
+            res.render("adminProdList", { data: productdata, text: "" });
+        } else {
+            res.render("adminProdList", { data: productdata, text: "No products found" });
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
 
 const createProduct = async (req, res) => {
     try {
@@ -690,7 +726,6 @@ const addNewProduct = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
-
 }
 
 const editProductPageload = async (req, res) => {
@@ -724,8 +759,7 @@ const editProductPageload = async (req, res) => {
 const editProduct = async (req, res) => {
     try {
         const { id, productName, price, description, category, brand, size, color, stock } = req.body;
-        const images = req.files.map(({ filename }) => filename);
-        console.log(images);
+        const images = req.files ? req.files.map(({ filename }) => filename) : undefined;
         const offerPrice = price;
         const productDoc = await Product.findById(id);
         const previousImages = productDoc.imageUrl;
@@ -787,7 +821,6 @@ const editProduct = async (req, res) => {
             const categoryData = await Category.find()
             res.render("adminProdEdit", { data: productData, text: "Product with same name already exists", category: categoryData });
         }
-
     } catch (error) {
         console.log(error.message);
     }
@@ -818,7 +851,7 @@ const listProduct = async (req, res) => {
 
 const handleLogout = async (req, res) => {
     try {
-        req.session.admin = false;
+        delete req.session.admin
         res.render("adminlogin", { title: "Admin Login", footer: "Logged out successfully" });
     } catch (error) {
         console.log(error.message);
@@ -838,8 +871,9 @@ module.exports = {
     exportPdfYearlySales,
 
     userlistload,
+    searchAndPagination,
     userBlockUnblock,
-    orderList,
+    userorderList,
     updateStatus,
 
     catlistload,
@@ -851,6 +885,7 @@ module.exports = {
     listCategory,
 
     prodlistload,
+    searchProduct,
     createProduct,
     addNewProduct,
     editProductPageload,

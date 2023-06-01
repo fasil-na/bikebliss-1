@@ -6,8 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>product List</title>
-    <link rel="icon"
-        href="/images/uploads/1.jpg">
+    <link rel="icon" href="/images/uploads/1.jpg">
     <link rel="stylesheet" href="/stylesheets/adminHomestyle.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -18,7 +17,6 @@
 </head>
 
 <body>
-
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand text-primary" href="#">BIKEBLISS.COM</a>
@@ -26,7 +24,6 @@
                 aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse justify-content-center" id="navbarText">
                 <ul class="navbar-nav">
                     <li class="nav-item">
@@ -64,24 +61,23 @@
     </nav>
     <div class="container-fluid">
         <div class="row">
-
             <div class="col-sm-12 right">
                 <br>
                 <div class="d-flex justify-content-between align-items-center">
                     <button class="createButton"><a href="/admin/prodCreate">Create Product</a></button>
-                    <input class="col-6 form-control me-2 w-25" id="search" type="search" placeholder="Search Products"
-                        aria-label="Search">
+                    <form action="/admin/searchProduct" method="post">
+                        <div class="d-flex justify-content-end">
+                            <input class="col-6 form-control me-2 w-50" id="search" name="search" type="text"
+                                placeholder="Product Name" aria-label="Search">
+                            <button type="submit">SEARCH</button>
+                        </div>
+                    </form>
                 </div>
-
                 <br>
-
-                <h2 class="text-danger text-center">
-                    <%= text %>
-                </h2>
+                
                 <table id='myTable'>
                     <thead>
                         <tr>
-                           
                             <th>ID</th>
                             <th>NAME</th>
                             <th>IMAGE</th>
@@ -96,10 +92,11 @@
 
                         </tr>
                     </thead>
+                  
                     <tbody>
                         <% data.forEach(function(x,i) { %>
                             <tr>
-                              
+
                                 <td>
                                     <%= x._id %>
                                 </td>
@@ -149,67 +146,16 @@
                             <% }); %>
                     </tbody>
                 </table>
-                <style>
-                    .pagination-container {
-                        display: flex;
-                        justify-content: center;
-                        margin-top: 20px;
-                    }
-
-                    .pagination-link {
-                        margin: 0 5px;
-                        padding: 5px 10px;
-                        border: 1px solid #ccc;
-                        text-decoration: none;
-                        color: #333;
-                        background-color: #f7f7f7;
-                        cursor: pointer;
-                    }
-
-                    .pagination-link.active {
-                        background-color: #555;
-                        color: #fff;
-                    }
-                </style>
-
-                <div class="pagination-container">
-                    <% for (let i=1; i <=totalPages; i++) { %>
-                        <a href="/admin/productlist?page=<%= i %>"
-                            class="pagination-link<%= i === currentPage ? ' active' : '' %>">
-                            <%= i %>
-                        </a>
-                        <% } %>
-                </div>
-
+                <h2 class="text-danger text-center">
+                    <%= text %>
+                </h2>
             </div>
         </div>
     </div>
-    </div>
+  
 
 
-    <script>
-        //searching the users
 
-        // Get the search input and table rows
-        const searchInput = document.querySelector('input[type="search"]');
-        const tableRows = document.querySelectorAll('tbody tr');
-
-        // Add an event listener to the search input
-        searchInput.addEventListener('input', function () {
-            const searchValue = this.value.toLowerCase();
-
-            // Loop through the table rows and hide/show them based on the search input
-            tableRows.forEach(function (row) {
-                const productName = row.querySelector('td:nth-of-type(3)').textContent.toLowerCase();
-
-                if (productName.includes(searchValue)) {
-                    row.style.display = 'table-row';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-    </script>
 
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>

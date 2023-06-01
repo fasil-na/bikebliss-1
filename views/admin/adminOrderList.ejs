@@ -67,10 +67,14 @@
             <div class="col-sm-12 right">
                 <br>
 
-                <div class=" d-flex justify-content-end">
-                    <input class="col-6 form-control me-2  w-25" id="search" type="search" placeholder="Search Orders"
-                        aria-label="Search">
-                </div>
+                <form action="/admin/searchOrder" method="post">
+                    <div class="d-flex justify-content-end">
+                        <input class="col-6 form-control me-2 w-25" id="search" name="search" type="text"
+                            placeholder="Orders" aria-label="Search">
+                            <input type="text" name="userId" id="userId" value="" hidden>
+                        <button type="submit">SEARCH</button>
+                    </div>
+                </form>
                 <br>
                 <table id='myTable'>
                     <thead>
@@ -136,37 +140,10 @@
                             <% }); %>
                     </tbody>
                 </table>
-                <style>
-                    .pagination-container {
-                        display: flex;
-                        justify-content: center;
-                        margin-top: 20px;
-                    }
-
-                    .pagination-link {
-                        margin: 0 5px;
-                        padding: 5px 10px;
-                        border: 1px solid #ccc;
-                        text-decoration: none;
-                        color: #333;
-                        background-color: #f7f7f7;
-                        cursor: pointer;
-                    }
-
-                    .pagination-link.active {
-                        background-color: #555;
-                        color: #fff;
-                    }
-                </style>
-
-                <div class="pagination-container">
-                    <% for (let i=1; i <=totalPages; i++) { %>
-                        <a href="/admin/orderlist?page=<%= i %>"
-                            class="pagination-link<%= i === currentPage ? ' active' : '' %>">
-                            <%= i %>
-                        </a>
-                        <% } %>
-                </div>
+                <h2 class="text-danger text-center">
+                    <%= text %>
+                </h2>
+               
             </div>
         </div>
     </div>
@@ -203,29 +180,7 @@
         }
 
     </script>
-    <script>
-        //searching the users
-
-        // Get the search input and table rows
-        const searchInput = document.querySelector('input[type="search"]');
-        const tableRows = document.querySelectorAll('tbody tr');
-
-        // Add an event listener to the search input
-        searchInput.addEventListener('input', function () {
-            const searchValue = this.value.toLowerCase();
-
-            // Loop through the table rows and hide/show them based on the search input
-            tableRows.forEach(function (row) {
-                const name = row.querySelector('td:nth-of-type(2)').textContent.toLowerCase();
-
-                if (name.includes(searchValue)) {
-                    row.style.display = 'table-row';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-    </script>
+  
 </body>
 
 </html>

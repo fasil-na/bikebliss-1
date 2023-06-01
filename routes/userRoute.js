@@ -21,11 +21,11 @@ userRoute.post('/signup',userController.sendOtp);
 userRoute.post('/otpEnter',userController.verifyOtp);
 userRoute.get('/resend_otp',userController.sendOtp);
 
-userRoute.post('/login', userController.verifyLogin);
+userRoute.post('/home', userController.verifyLogin);
 
-userRoute.get('/login/catDetails/:id', userController.categoryDetail);
+userRoute.get('/catDetails/:id', userController.categoryDetail);
 userRoute.get('/sortfilter', userController.sortedProductList);
-userRoute.get('/login/prodDetails/:id', userController.prodDetails);
+userRoute.get('/prodDetails/:id', userController.prodDetails);
 
 userRoute.get("/myAccount",auth.userLogin,userController.loadMyAccount);
 userRoute.post("/addAddressFromProfile", auth.userLogin, userController.addAddressFromProfile);
@@ -51,6 +51,8 @@ userRoute.post('/createRP',auth.userLogin, userController.createRP);
 userRoute.post("/addAddress", auth.userLogin, userController.addAddress);
 userRoute.post("/placeOrder", auth.userLogin, userController.placeOrder);
 userRoute.get("/placeOrder", auth.userLogin, userController.placeOrder);
+userRoute.post("/checkOrder", auth.userLogin, userController.placeOrder);
+
 
 userRoute.get("/orders", auth.userLogin,userController.orderData);
 userRoute.post('/cancelOrder',  auth.userLogin,userController.cancelOrder);

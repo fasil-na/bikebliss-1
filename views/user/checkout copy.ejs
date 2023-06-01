@@ -229,7 +229,6 @@
 			});
 
 			function submitOrder(event, userId, totalPrice) {
-				
 				const walletCheckbox = document.getElementById('wallet-0');
 				const walletAmount = parseFloat('<%= userData.wallet %>');
 				var walletFlag = 0
@@ -253,6 +252,28 @@
 						break;
 					}
 				}
+///////////////////////////////////////////////////
+						console.log("Calling API")
+						fetch("/checkOrder", {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json"
+							},
+							body: JSON.stringify({
+								userId: userId,
+							})
+						})
+							.then(response => response.json())
+
+							.then(data => {
+								console.log("Place Order Data check:",data)
+							})
+							.catch(error => {
+								console.log(error);
+							});
+						console.log("Calling API Finished")
+
+
 				if (selectedPayment == "payment-1" || selectedPayment == "payment-2") {
 					const selectedAddressRadio = document.querySelector('input[name="selectedAddress"]:checked');
 					if (selectedAddressRadio) {

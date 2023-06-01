@@ -94,6 +94,7 @@
                                         <% } %>
                                             <% } %>
                         </select>
+
                         <div id="image-previews" class="d-flex justify-content-center">
                             <% x.imageUrl.forEach(function(image) { %>
                                 <img src="/images/uploads/<%= image %>" alt="Product Image"
@@ -163,11 +164,7 @@
                 event.target.value = ''; 
             }
             var imageContainer = document.getElementById('image-previews');
-
-            // Clear existing image previews
             imageContainer.innerHTML = '';
-
-            // Display selected images
             for (var i = 0; i < fileInput.files.length; i++) {
                 var reader = new FileReader();
                 reader.onload = function (e) {

@@ -12,7 +12,7 @@ adminRoute.set('view engine', 'ejs');
 adminRoute.set('views', './views/admin');
 
 adminRoute.get('/', adminController.loginload);
-adminRoute.post('/adminLogin', adminController.homeload);
+adminRoute.post('/dashboard', adminController.homeload);
 adminRoute.post('/lineChart', adminController.fetchlineChartData);
 adminRoute.post('/barChart', adminController.fetchbarChartData);
 adminRoute.post('/pieChart', adminController.fetchpieChartData);
@@ -25,14 +25,24 @@ adminRoute.get('/dashboard', auth.adminLogin, adminController.dashboardload);
 
 // ================ user management ================//
 adminRoute.get('/userlist', auth.adminLogin, adminController.userlistload);
+// adminRoute.post('/searchAndPagination', auth.adminLogin, adminController.searchUser);
 adminRoute.post("/blockUnblockUser", auth.adminLogin, adminController.userBlockUnblock);
-// adminRoute.get("/orderList", auth.adminLogin, adminController.orderList);
-adminRoute.post("/orderList", auth.adminLogin, adminController.orderList);
+adminRoute.post("/userorderList", auth.adminLogin, adminController.userorderList);
 adminRoute.post("/updateStatus", auth.adminLogin, adminController.updateStatus);
+
+
+
+// adminRoute.post('/searchOrder', auth.adminLogin, adminController.searchOrder);
+
+
+
+
+
 //======================================================//
 
 // ================ product management ================//
 adminRoute.get('/productlist', auth.adminLogin, adminController.prodlistload);
+adminRoute.post('/searchProduct', auth.adminLogin, adminController.searchProduct);
 adminRoute.get('/prodCreate', auth.adminLogin, adminController.createProduct);
 adminRoute.post('/addProduct', auth.adminLogin, store.array('image', 3), adminController.addNewProduct);
 adminRoute.get('/productEdit/:id', auth.adminLogin, adminController.editProductPageload);
