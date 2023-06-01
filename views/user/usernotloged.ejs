@@ -1,6 +1,6 @@
 <header>
     <div id="top-header" style="color: white; padding-left: 25px;"></div>
-    <nav class="navbar navbar-expand-lg" style="background-color: #1E1F29; border-radius: 0;">
+    <!-- <nav class="navbar navbar-expand-lg" style="background-color: #1E1F29; border-radius: 0;">
       <div class="container-fluid">
         <a class="navbar-brand" href="/" style="color: white; margin-right: auto; margin-left: 0;">BIKEBLISS.COM</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
@@ -13,27 +13,75 @@
         <div class="collapse navbar-collapse justify-content-center" id="navbarText">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="\login" style="color: white;">My Account</a>
+              <a class="nav-link active nav-position-right" aria-current="page" href="\login" style="color: white;">My Account</a>
             </li>
             <li class="nav-item d-lg-none d-xl-none">
-              <a class="nav-link active" aria-current="page" href="\login" style="color: white;">Your Wishlist</a>
+              <a class="nav-link active nav-position-right" aria-current="page" href="\login" style="color: white;">Your Wishlist</a>
             </li>
             <li class="nav-item d-lg-none d-xl-none">
-              <a class="nav-link active" aria-current="page" href="\login" style="color: white;">Your Cart</a>
+              <a class="nav-link active nav-position-right" aria-current="page" href="\login" style="color: white;">Your Cart</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="\login" style="color: white;">Your Orders</a>
+              <a class="nav-link active nav-position-right" aria-current="page" href="\login" style="color: white;">Your Orders</a>
             </li>
           </ul>
-          <ul class="navbar-nav ms-auto">
+          <ul class="navbar-nav ms-auto login-style">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="\login" style="color: white;">
+              <a class="nav-link active nav-position-right" aria-current="page" href="\login" style="color: white;">
                 <i class="fas fa-sign-out-alt"></i> Login
               </a>
             </li>
           </ul>
         </div>
       </div>
-    </nav>
+    </nav> -->
+<nav class="navbar" style="background-color: #1E1F29; border-radius: 0;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/" style="color: white; margin-right: auto; margin-left: 0;">BIKEBLISS.COM</a>
+    <div class="navbar-toggler" onclick="toggleNavbar()" style="color: white;">
+      <span class="navbar-toggler-icon navtogglericon">&#9776;</span>
+    </div>
+
+    <div class="navbar-collapse" id="navbarText">
+      <ul class="navbar-nav1">
+        <li class="nav-item">
+          <a class="" aria-current="page" href="/myAccount"
+            style="color: white; ">My Account</a>
+        </li>
+        <li class="nav-item">
+          <a class="" aria-current="page" href="/wishlist"
+            style="color: white; ">Your Wishlist</a>
+        </li>
+        <li class="nav-item">
+          <a class="" aria-current="page" href="/cart"
+            style="color: white;">Your Cart</a>
+        </li>
+        <li class="nav-item">
+          <a class="" aria-current="page" href="/orders"
+            style="color: white;">You Orders</a>
+        </li>
+        <li class="nav-item login-style">
+          <a class="nav-link active" aria-current="page" href="/logout" style="color: white;">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
   </header>
-  
+
+  <script>
+    function toggleNavbar() {
+      var navbarCollapse = document.querySelector('.navbar-collapse');
+      var togglerIcon = document.querySelector('.navbar-toggler-icon');
+
+      if (navbarCollapse.style.display === 'block') {
+        navbarCollapse.style.display = 'none';
+        togglerIcon.innerHTML = '&#9776;'; // Use your preferred icon here
+      } else {
+        navbarCollapse.style.display = 'block';
+        togglerIcon.innerHTML = '✕'; // Use your preferred icon here
+      }
+    }
+  </script>

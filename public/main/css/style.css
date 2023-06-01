@@ -189,6 +189,61 @@ textarea.input {
   height: 40px;
 }
 
+.nav-item {
+  padding: 1em !important;
+}
+
+/* home page style */
+
+
+.navtogglericon {
+  display: none;
+}
+
+.navbar-nav1 {
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+}
+
+.navtogglericon{
+  float: right;
+  padding-top: 0.4em;
+  font-size: 1.5em;
+}
+@media (max-width: 768px) {
+
+  /* Your CSS rules for screens with a minimum width of 768 pixels */
+  .navbar-nav1 {
+    flex-direction: column !important;
+    align-items: flex-end;
+  }
+  /* .login-style {
+      float: right;
+      margin-left: auto;
+    } */
+
+  .navtogglericon {
+    display: block;
+  }
+}
+@media (min-width: 768px) {
+  /* Your CSS rules for screens with a minimum width of 768 pixels */
+  .navbar-collapse {
+      display: block !important;
+    }
+}
+
+.login-style{
+  float: right;
+  margin-left: auto;
+}
+
+.nav-position-right{
+  float:right;
+}
+
 /*-- checkbox & radio input --*/
 
 .input-radio, .input-checkbox {
