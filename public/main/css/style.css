@@ -212,6 +212,81 @@ textarea.input {
   padding-top: 0.4em;
   font-size: 1.5em;
 }
+
+
+/* carosual */
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  /* Adjust the height as needed */
+  overflow: hidden;
+}
+
+.carousel-inner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-item {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-item.active {
+  opacity: 1;
+}
+
+.caption-container{
+  text-shadow: 1px 1px lightsteelblue;
+  color: white !important;
+}
+        
+
+.carousel-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  color: #fff;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.carousel-control-prev {
+  left: 10px;
+}
+
+.carousel-control-next {
+  right: 10px;
+}
+
+.carousel-button-style{
+ font-size: 35px;
+ z-index: 100;
+ width: 2em;
+ height: 2em;
+}
+
+/* carosual */
+
 @media (max-width: 768px) {
 
   /* Your CSS rules for screens with a minimum width of 768 pixels */
