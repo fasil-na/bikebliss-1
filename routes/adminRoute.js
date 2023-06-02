@@ -25,24 +25,14 @@ adminRoute.get('/dashboard', auth.adminLogin, adminController.dashboardload);
 
 // ================ user management ================//
 adminRoute.get('/userlist', auth.adminLogin, adminController.userlistload);
-// adminRoute.post('/searchAndPagination', auth.adminLogin, adminController.searchUser);
 adminRoute.post("/blockUnblockUser", auth.adminLogin, adminController.userBlockUnblock);
 adminRoute.post("/userorderList", auth.adminLogin, adminController.userorderList);
-adminRoute.post("/updateStatus", auth.adminLogin, adminController.updateStatus);
-
-
-
-// adminRoute.post('/searchOrder', auth.adminLogin, adminController.searchOrder);
-
-
-
-
+adminRoute.post("/updateStatus", auth.adminLogin, adminController.updateStatus)
 
 //======================================================//
 
 // ================ product management ================//
 adminRoute.get('/productlist', auth.adminLogin, adminController.prodlistload);
-adminRoute.post('/searchProduct', auth.adminLogin, adminController.searchProduct);
 adminRoute.get('/prodCreate', auth.adminLogin, adminController.createProduct);
 adminRoute.post('/addProduct', auth.adminLogin, store.array('image', 3), adminController.addNewProduct);
 adminRoute.get('/productEdit/:id', auth.adminLogin, adminController.editProductPageload);
@@ -86,17 +76,8 @@ adminRoute.get("/couponCreate", auth.adminLogin, couponController.couponCreate);
 adminRoute.post("/couponCreate", auth.adminLogin, couponController.addCoupon);
 adminRoute.get("/couponDelete/:id", auth.adminLogin, couponController.deleteCoupon);
 
-
 //======================================================//
 
-
-
-
 adminRoute.get('/adminLogout', adminController.handleLogout);
-
-
-
-
-
 
 module.exports = adminRoute;

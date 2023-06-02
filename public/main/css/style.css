@@ -283,6 +283,7 @@ textarea.input {
  z-index: 100;
  width: 2em;
  height: 2em;
+ opacity: 0.3;
 }
 
 /* carosual */
@@ -1178,6 +1179,7 @@ textarea.input {
   border-radius: 40px;
   -webkit-transition: 0.2s all;
   transition: 0.2s all;
+  
 }
 
 
@@ -1673,6 +1675,8 @@ textarea.input {
   border-radius: 40px;
   -webkit-transition: 0.2s all;
   transition: 0.2s all;
+  min-width: 15em;
+  margin-bottom: 0.5em;
 }
 
 .product-details .add-to-cart .add-to-cart-btn>i {
@@ -2345,11 +2349,15 @@ textarea.input {
   min-height: 80px;
 }
 .bannerTitle {
-  font-size: 10em; 
+  font-size: 8em; 
+  color:#f3ffe3;
+  text-shadow: 3px 3px rgb(0, 0, 0);
 }
 
  .bannerDescription {
-  font-size: 5em; 
+  font-size: 2em; 
+  color:#f3ffe3;
+  text-shadow: 3px 3px rgb(0, 0, 0);
 }
 
 .coupon-label {

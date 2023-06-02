@@ -3,17 +3,10 @@ const Category = require("../models/categoryModel");
 const Product = require("../models/productModel");
 const Order = require("../models/orderModel");
 const { ObjectId } = require("mongodb");
-// const { orderData } = require("./userController");
-// const pdf = require("html-pdf");
 const ejs = require("ejs");
 const fs = require("fs");
 const path = require("path");
-// const { response } = require("../app");
-// const jsPdf = require("jspdf")
-// const PDFDocument = require('pdfkit');
 const puppeteer = require('puppeteer');
-// const { fail } = require("assert");
-
 const loginload = async (req, res) => {
     try {
         res.render("adminlogin", { title: "Admin Login", footer: "" });
@@ -407,59 +400,33 @@ const createYearlySalesPdf = async (html) => {
 
 const userlistload = async (req, res) => {
     try {
-      const page = parseInt(req.query.page) || 1; // Current page number
-      const limit = 1; // Number of users per page
-      const skip = (page - 1) * limit; // Calculate the number of users to skip
-  
-      const totalUsers = await User.countDocuments();
-      const totalPages = Math.ceil(totalUsers / limit);
-  
-      const userdata = await User.find().sort({ _id: -1 }).skip(skip).limit(limit);
-  
-      if (userdata.length !== 0) {
-        res.render("adminUserList", { data: userdata, text: "", totalPages, page });
-      } else {
-        res.render("adminUserList", { data: userdata, text: "No users registered", totalPages, page });
-      }
-    } catch (error) {
-      console.log(error.message);
-      res.status(500).send("Internal Server Error");
-    }
-  };
-  
-  
+        const page = parseInt(req.query.page, 10) || 1;
+        const search = req.query.search
 
-  const searchAndPagination = async (req, res) => {
-    try {
-        const searchValue = req.body.searchValue;
-        const pageNum = req.body.pageNum;
+        const limit = 3;
+        const skip = (page - 1) * limit;
 
-        console.log(searchValue, pageNum);
+        const query = {};
 
-        
-        const pageSize = 1; 
-        const query = {
-            name: { $regex: searchValue, $options: "i" } 
-        };
+        if (search) {
+            query.name = { $regex: search, $options: "i" };
+        }
 
-        const totalItems = await User.countDocuments(query);
-        const totalPages = Math.ceil(totalItems / pageSize);
+        const totalUsers = await User.countDocuments(query)
 
-        const users = await User.find(query)
-            .skip((pageNum - 1) * pageSize)
-            .limit(pageSize);
+        const userdata = await User.find(query).sort({ _id: -1 }).skip(skip).limit(limit);
 
-        if (users.length !== 0) {
-            res.render("adminUserList", { data: users, text: "", totalPages });
+        const totalPages = Math.ceil(totalUsers / limit);
+        if (userdata.length !== 0) {
+            res.render("adminUserList", { data: userdata, text: "", totalPages, page, search });
         } else {
-            res.render("adminUserList", { data: users, text: "No users found", totalPages });
+            res.render("adminUserList", { data: userdata, text: "No users registered", totalPages, page, search });
         }
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Internal Server Error");
     }
 };
-
 
 const userBlockUnblock = (req, res) => {
     const id = req.body.id;
@@ -496,12 +463,12 @@ const userorderList = async (req, res) => {
                 $sort: { _id: -1 }
             }
         ]);
-        if(orders.length!=0){
-            res.render("adminOrderList", { orderData: orders,text:""  });
-        }else{
-            res.render("adminOrderList", { orderData: orders,text:"No orders placed"  });
+        if (orders.length != 0) {
+            res.render("adminOrderList", { orderData: orders, text: "" });
+        } else {
+            res.render("adminOrderList", { orderData: orders, text: "No orders placed" });
         }
-        
+
     } catch (err) {
         console.log(err.message);
         res.status(500).send("Error retrieving order details.");
@@ -614,7 +581,7 @@ const unlistCategory = async (req, res) => {
     try {
         const idVal = req.params.id;
         await Category.findByIdAndUpdate(idVal, { isDeleted: true });
-        await Product.updateMany({ category: idVal }, { isDeleted: true });
+        await Product.updateMany({ category: idVal }, { isCategoryDeleted: true });
         res.redirect('/admin/categorylist');
     } catch (error) {
         console.log(error.message);
@@ -625,52 +592,93 @@ const listCategory = async (req, res) => {
     try {
         const idVal = req.params.id;
         await Category.findByIdAndUpdate(idVal, { isDeleted: false });
-        await Product.updateMany({ category: idVal }, { isDeleted: false });
+        await Product.updateMany({ category: idVal }, { isCategoryDeleted: false });
         res.redirect('/admin/categorylist');
     } catch (error) {
         console.log(error.message);
     }
 };
 
-
 const prodlistload = async (req, res) => {
     try {
-        const productData = await Product.aggregate([
-            {
-                $lookup: {
-                    from: "categories",
-                    localField: "category",
-                    foreignField: "_id",
-                    as: "category",
-                },
-            },
-            {
-                $unwind: "$category",
-            },
-            {
-                $sort: { _id: -1 },
-            }
+        const page = parseInt(req.query.page, 10) || 1;
+        const search = req.query.search;
+        const limit = 3;
+        const skip = (page - 1) * limit;
 
-        ]);
+        let query = [
+                    {
+                        $lookup: {
+                            from: "categories",
+                            localField: "category",
+                            foreignField: "_id",
+                            as: "category",
+                        },
+                    },
+                    {
+                        $unwind: "$category",
+                    },
+                    {
+                        $sort: { _id: -1 },
+                    },
+                    {
+                        $skip: skip,
+                    },
+                    {
+                        $limit: limit,
+                    },
+                ];
+
+        const countquery = {};
+
+        
+        if (search) {
+            countquery.productName= { $regex: search, $options: "i" };
+            query = [
+                {
+                    $lookup: {
+                        from: "categories",
+                        localField: "category",
+                        foreignField: "_id",
+                        as: "category",
+                    },
+                },
+                {
+                    $unwind: "$category",
+                },
+                {
+                    $match: {
+                      $expr: {
+                        $regexMatch: {
+                          input: "$productName",
+                          regex: search,
+                          options: "i",
+                        },
+                      },
+                    },
+                  },
+                {
+                    $sort: { _id: -1 },
+                },
+                {
+                    $skip: skip,
+                },
+                {
+                    $limit: limit,
+                },
+            ];;
+        }
+
+        const totalProducts = await Product.countDocuments(countquery);
+
+        const productData = await Product.aggregate(query);
+
+        const totalPages = Math.ceil(totalProducts / limit);
 
         if (productData.length > 0) {
-            res.render("adminProdList", { data: productData, text: "" });
+            res.render("adminProdList", { data: productData, text: "", totalPages, page, search });
         } else {
-            res.render("adminProdList", { data: productData, text: "No products have been added" });
-        }
-    } catch (error) {
-        console.log(error.message);
-    }
-};
-
-const searchProduct = async (req, res) => {
-    try {
-        const searchValue = req.body.search;
-        const productdata = await Product.find({ productName: { $regex: searchValue, $options: "i" } });
-        if (productdata.length!=0) {
-            res.render("adminProdList", { data: productdata, text: "" });
-        } else {
-            res.render("adminProdList", { data: productdata, text: "No products found" });
+            res.render("adminProdList", { data: productData, text: "No products found", totalPages, page, search });
         }
     } catch (error) {
         console.log(error.message);
@@ -771,7 +779,7 @@ const editProduct = async (req, res) => {
             ]
         });
         if (!productExist) {
-            if (images) {
+            if (images && images.length > 0) {
                 await Product.findByIdAndUpdate(id, {
                     productName: lowerProductName,
                     imageUrl: images,
@@ -871,7 +879,6 @@ module.exports = {
     exportPdfYearlySales,
 
     userlistload,
-    searchAndPagination,
     userBlockUnblock,
     userorderList,
     updateStatus,
@@ -885,7 +892,6 @@ module.exports = {
     listCategory,
 
     prodlistload,
-    searchProduct,
     createProduct,
     addNewProduct,
     editProductPageload,

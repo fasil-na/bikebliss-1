@@ -160,33 +160,18 @@
 															From Cart</button></td>
 												</tr>
 												<% }); %>
-													<tr>
-
-														<td style="display: flex; justify-content: center; align-items: center;">
-															<select class="w-50 mx-auto my-3 form-control" name="coupon" onchange="applyCoupon(this.value)">
-															  <option value="">Select Coupon</option>
-															  <% for (let i=0; i < coupon.length; i++) { %>
-																<option value="<%= coupon[i]._id %>">
-																  <%= coupon[i].code %>
-																</option>
-															  <% } %>
-															</select>
-															<button class="btn btn-danger" id="couponCancelbutton" onclick="cancelSelection()"
-															  style="display: none; margin: auto;">Cancel</button>
-														  </td>
-														  
-														
-													<tr>
+													
 														<td>
-															<h5 style="font-weight: bolder;">Total Amount =
+															
 														</td>
 
 														<td></td>
 														<td>
 														<td>
-
+															<h5 style="font-weight: bolder;padding-top: 0.2em;">Total Amount =
 														</td>
 														</td>
+														
 														<td>
 
 															<span style="font-weight: bolder;" id="total-price">
@@ -282,48 +267,8 @@
 					console.error(error);
 				}
 			}
-			let selectedCouponId = "";
-			function applyCoupon(couponId) {
-				try {
-					selectedCouponId=couponId;
-					document.querySelector("#couponCancelbutton").style.display = "block";
-					fetch('/applyCoupon', {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({ couponId: couponId }),
-					})
-						.then((response) => response.json())
-						.then((data) => {
-							document.getElementById("total-price").innerText=data;
-						})
-						.catch((error) => {
-							console.error(error);
-						});
-				} catch (error) {
-					console.error(error);
-				}
-			}
-
-			function cancelSelection() {
-				try {
-					document.querySelector("#couponCancelbutton").style.display = "none";
-					document.querySelector("select[name='coupon']").value = "";
-					fetch('/cancelSelection', {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({ selectedCouponId: selectedCouponId }),
-					})
-						.then((response) => response.json())
-						.then((data) => {
-							document.getElementById("total-price").innerText=data;
-						})
-						.catch((error) => {
-							console.error(error);
-						});
-				} catch (error) {
-					console.error(error);
-				}
-			}
+			
+			
 		</script>
 
 </body>

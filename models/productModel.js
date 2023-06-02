@@ -38,7 +38,11 @@ const productSchema = new Schema({
   },
   isDeleted: {
     type: Boolean,
-    required: false,
+    default: false,
+  },
+  isCategoryDeleted: {
+    type: Boolean,
+    default: false,
   },
   stock: {
     type: Number,

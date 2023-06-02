@@ -8,8 +8,7 @@
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
 	<title>checkout</title>
-	<link rel="icon"
-        href="/images/logo.png">
+	<link rel="icon" href="/images/logo.png">
 
 	<!-- Google font -->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
@@ -29,19 +28,6 @@
 
 	<!-- Custom stlylesheet -->
 	<link type="text/css" rel="stylesheet" href="/main/css/style.css" />
-
-	<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-		crossorigin="anonymous"></script> -->
-
-	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
 
 </head>
 
@@ -89,35 +75,42 @@
 							</div>
 							<form action="/addAddress" method="post">
 								<div class="form-group">
-									<input class="input" type="text" name="fullname" id="aName" placeholder="Full Name" oninput="validateAName()">
+									<input class="input" type="text" name="fullname" id="aName" placeholder="Full Name"
+										oninput="validateAName()">
 									<span id="aNameError" style="color: red;"></span>
 								</div>
 								<div class="form-group">
-									<input class="input" type="email" name="email" id="aEmail" placeholder="Email" oninput="validateAEmail()">
+									<input class="input" type="email" name="email" id="aEmail" placeholder="Email"
+										oninput="validateAEmail()">
 									<span id="aEmailError" style="color: red;"></span>
 								</div>
 								<div class="form-group">
-									<input class="input" type="text" name="address" id="address" placeholder="Address" oninput="validateAddress()">
+									<input class="input" type="text" name="address" id="address" placeholder="Address"
+										oninput="validateAddress()">
 									<span id="addressError" style="color: red;"></span>
 								</div>
-								
+
 								<div class="form-group">
-									<input class="input" type="text" name="city" id="city" placeholder="City" oninput="validateCityName()">
+									<input class="input" type="text" name="city" id="city" placeholder="City"
+										oninput="validateCityName()">
 									<span id="cityNameError" style="color: red;"></span>
 								</div>
 								<div class="form-group">
-									<input class="input" type="text" name="country" id="countryName" placeholder="Country" oninput="validateCountryName()">
+									<input class="input" type="text" name="country" id="countryName"
+										placeholder="Country" oninput="validateCountryName()">
 									<span id="countryNameError" style="color: red;"></span>
 								</div>
 								<div class="form-group">
-									<input class="input" type="text" name="pin" id="pin" placeholder="PIN Code" oninput="validatePinCode()">
+									<input class="input" type="text" name="pin" id="pin" placeholder="PIN Code"
+										oninput="validatePinCode()">
 									<span id="pinError" style="color: red;"></span>
 								</div>
 								<div class="form-group">
-									<input class="input" type="tel" name="tel" id="aNumber" placeholder="Telephone" oninput="validateAMobile()">
+									<input class="input" type="tel" name="tel" id="aNumber" placeholder="Telephone"
+										oninput="validateAMobile()">
 									<span id="aNumberError" style="color: red;"></span>
 								</div>
-								<input type="submit" Id="aSubmitButton" name="aSubmitButton"  value="Add Address"
+								<input type="submit" Id="aSubmitButton" name="aSubmitButton" value="Add Address"
 									class="btn btn-block btn-primary">
 							</form>
 						</div>
@@ -154,7 +147,21 @@
 											</strong></div>
 									</div>
 						</div>
-						<div class="wallet-method" style="display:flex">
+						<div style="display: flex; justify-content: center; align-items: center;gap:10px">
+							<select class="w-50 mx-auto my-3 form-control" name="coupon" onchange="applyCoupon(this.value)">
+							  <option value="">Select Coupon</option>
+							  <% for (let i=0; i < coupon.length; i++) { %>
+								<option value="<%= coupon[i]._id %>">
+								  <%= coupon[i].code %>
+								</option>
+							  <% } %>
+							</select>
+							<button class="btn btn-danger" id="couponCancelbutton" onclick="cancelSelection()"
+							  style="display: none; margin: auto;">Cancel</button>
+						</div>
+
+
+						<div class="wallet-method" style="display:flex;margin-top: 10px;">
 
 							<input type="checkbox" name="wallet" id="wallet-0" style="margin:0px">
 							<label for="wallet-0" style="margin-bottom:0px">
@@ -193,13 +200,7 @@
 		</div>
 		<!-- /SECTION -->
 
-		<!-- jQuery Plugins -->
-		<!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
-			integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
-			crossorigin="anonymous"></script>
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
-			integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
-			crossorigin="anonymous"></script> -->
+
 		<script src="/main/js/jquery.min.js"></script>
 		<script src="/main/js/bootstrap.min.js"></script>
 		<script src="/main/js/slick.min.js"></script>
@@ -227,9 +228,50 @@
 					totalPriceLabel.innerText = 'Pay <%= totalPrice %>';
 				}
 			});
-
+			function cancelSelection() {
+				document.querySelector("select[name='coupon']").value = "";
+				try {
+					fetch('/cancelSelection', {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ selectedCouponId: selectedCouponId }),
+					})
+						.then((response) => response.json())
+						.then((data) => {
+							let totalPrice = parseFloat('<%= totalPrice %>');
+							totalPriceLabel.innerText = 'Pay ' + totalPrice.toFixed(2);
+						})
+						.catch((error) => {
+							console.error(error);
+						});
+				} catch (error) {
+					console.error(error);
+				}
+			}
+			function applyCoupon(couponId) {
+				try {
+					selectedCouponId=couponId;
+					document.querySelector("#couponCancelbutton").style.display = "block";
+					fetch('/applyCoupon', {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ couponId: couponId }),
+					})
+						.then((response) => response.json())
+						.then((data) => {
+							let totalPrice = parseFloat('<%= totalPrice %>');
+							totalPrice=totalPrice-totalPrice*data*.01
+							totalPriceLabel.innerText = 'Pay ' + totalPrice.toFixed(2);
+						})
+						.catch((error) => {
+							console.error(error);
+						});
+				} catch (error) {
+					console.error(error);
+				}
+			}
 			function submitOrder(event, userId, totalPrice) {
-				
+
 				const walletCheckbox = document.getElementById('wallet-0');
 				const walletAmount = parseFloat('<%= userData.wallet %>');
 				var walletFlag = 0
@@ -253,26 +295,30 @@
 						break;
 					}
 				}
-				if (selectedPayment == "payment-1" || selectedPayment == "payment-2") {
-					const selectedAddressRadio = document.querySelector('input[name="selectedAddress"]:checked');
-					if (selectedAddressRadio) {
-						const addressId = selectedAddressRadio.value;
-						const paymentMethod = selectedPayment.replace('payment-', '');
+				const selectedAddressRadio = document.querySelector('input[name="selectedAddress"]:checked');
+				if (selectedAddressRadio) {
+					const addressId = selectedAddressRadio.value;
+					const paymentMethod = selectedPayment.replace('payment-', '');
 
-						fetch("/createRP", {
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json"
-							},
-							body: JSON.stringify({
-								userId: userId,
-								wallet: walletCheckbox.checked
-							})
+					fetch("/createRP", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({
+							userId: userId,
+							wallet: walletCheckbox.checked,
+							paymentMethod: paymentMethod
 						})
-							.then(response => response.json())
+					})
+						.then(response => response.json())
 
-							.then(data => {
-								rpOrderID = data.rpOrderID
+						.then(data => {
+							rpOrderID = data.rpOrderId
+							if (rpOrderID == null) {
+								alert("Some Items are out of stock!")
+
+							} else if (selectedPayment == "payment-1" || selectedPayment == "payment-2") {
 								const url = `http://localhost:3000/placeOrder?addressId=${addressId}&payment=${paymentMethod}&wallet=${walletFlag}`
 								let options = {
 									"key": "rzp_test_Z6ogCp3lsMS6mX",
@@ -286,24 +332,19 @@
 								}
 								let rzp1 = new Razorpay(options);
 								rzp1.open();
-							})
-							.catch(error => {
-								console.log(error);
-							});
-					} else {
-						console.log('No address selected');
-					}
-				} else if (selectedPayment == "payment-0") {
-					const selectedAddressRadio = document.querySelector('input[name="selectedAddress"]:checked');
-					if (selectedAddressRadio) {
-						const addressId = selectedAddressRadio.value;
-						const paymentMethod = selectedPayment.replace('payment-', '');
-						const url = `/placeOrder?addressId=${addressId}&payment=${paymentMethod}&wallet=${walletFlag}`;
-						window.location.href = url;
-					} else {
-						console.log('No address selected');
-					}
+							} else if (selectedPayment == "payment-0") {
+								const addressId = selectedAddressRadio.value;
+								const paymentMethod = selectedPayment.replace('payment-', '');
+								const url = `/placeOrder?addressId=${addressId}&payment=${paymentMethod}&wallet=${walletFlag}`;
+								window.location.href = url;
 
+							}
+						})
+						.catch(error => {
+							console.log(error);
+						});
+				} else {
+					alert('No address selected');
 				}
 
 			}

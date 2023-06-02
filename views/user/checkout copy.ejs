@@ -252,8 +252,7 @@
 						break;
 					}
 				}
-///////////////////////////////////////////////////
-						console.log("Calling API")
+
 						fetch("/checkOrder", {
 							method: "POST",
 							headers: {
@@ -266,12 +265,11 @@
 							.then(response => response.json())
 
 							.then(data => {
-								console.log("Place Order Data check:",data)
 							})
 							.catch(error => {
 								console.log(error);
 							});
-						console.log("Calling API Finished")
+
 
 
 				if (selectedPayment == "payment-1" || selectedPayment == "payment-2") {

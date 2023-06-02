@@ -65,16 +65,17 @@
                 <br>
                 <div class="d-flex justify-content-between align-items-center">
                     <button class="createButton"><a href="/admin/prodCreate">Create Product</a></button>
-                    <form action="/admin/searchProduct" method="post">
+                    <form>
                         <div class="d-flex justify-content-end">
-                            <input class="col-6 form-control me-2 w-50" id="search" name="search" type="text"
-                                placeholder="Product Name" aria-label="Search">
-                            <button type="submit">SEARCH</button>
+                            <input class="col-sm-3 col-md-9 form-control me-2 " id="search" name="search" type="text"
+                                placeholder="Product Name" aria-label="Search" value="<%= search || "" %>">
+                            <button type="submit"
+                                onclick="event.preventDefault(); searchAndPagination('search')">SEARCH</button>
                         </div>
                     </form>
                 </div>
                 <br>
-                
+
                 <table id='myTable'>
                     <thead>
                         <tr>
@@ -92,7 +93,7 @@
 
                         </tr>
                     </thead>
-                  
+
                     <tbody>
                         <% data.forEach(function(x,i) { %>
                             <tr>
@@ -134,12 +135,12 @@
                                     <button class="buttons my-2"><a
                                             href="/admin/productEdit/<%= x._id %>">EDIT</a></button>
 
-                                    <%if(x.isDeleted===true){ %>
+                                    <%if(x.isDeleted===false){ %>
                                         <button class="buttons my-2"><a
-                                                href="/admin/productList/<%= x._id %>">LIST</a></button>
+                                                href="/admin/productUnlist/<%= x._id %>">UNLIST</a></button>
                                         <% }else{%>
                                             <button class="buttons my-2"><a
-                                                    href="/admin/productUnlist/<%= x._id %>">UNLIST</a></button>
+                                                    href="/admin/productList/<%= x._id %>">LIST</a></button>
                                             <%}%>
                                 </td>
                             </tr>
@@ -149,14 +150,37 @@
                 <h2 class="text-danger text-center">
                     <%= text %>
                 </h2>
+                <div class="store-filter clearfix">
+                    <div class="store-pagination" style="text-align: center;">
+                        <ul class="pagination-list"
+                            style="display: inline-block; list-style-type: none; margin: 0; padding: 0;">
+                            <% for (let i=1; i <=totalPages; i++) { %>
+                                <li <% if (i===page) { %>class="active"<% } %> style="display: inline-block; margin: 0
+                                        5px;">
+                                        <button onclick="searchAndPagination('<%= i %>')"
+                                            style="text-decoration: none; padding: 5px 10px; border: 1px solid #ccc; <% if (i===page) { %>background-color: #ccc; color: white;<% } %>">
+                                            <%= i %>
+                                        </button>
+                                </li>
+                                <% } %>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-  
 
 
 
 
+    <script>
+        function searchAndPagination(page) {
+            const searchValue = document.getElementById("search").value
+            const url = `/admin/productlist?page=${page}&search=${searchValue}`;
+            window.location.href = url;
+
+        }
+    </script>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

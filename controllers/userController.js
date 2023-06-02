@@ -10,17 +10,16 @@ const Banner = require('../models/bannerModel');
 const Wishlist = require("../models/wishlistModel");
 const Coupon = require("../models/couponModel");
 const Razorpay = require("razorpay");
-
-
 const { ObjectId } = require("mongodb");
+const { truncateSync } = require('fs');
 
 const homeload = async (req, res) => {
   try {
     const category = await Category.find({ isDeleted: false });
     const bannerData = await Banner.find();
-    const lastAddedProducts = await Product.find({ isDeleted: false })
-      .sort({ _id: -1 })
-      .limit(4);
+    const lastAddedProducts = await Product.find({ isDeleted: false, isCategoryDeleted: false })
+    .sort({ _id: -1 })
+    .limit(4);  
     let userData = null;
     if (req.session.user) {
       const userId = req.session.user;
@@ -33,7 +32,6 @@ const homeload = async (req, res) => {
     console.log(error.message);
   }
 };
-
 
 const loginload = async (req, res) => {
   try {
@@ -304,6 +302,7 @@ const loadMyAccount = async (req, res) => {
 };
 
 const categoryDetail = async (req, res) => {
+  const limitVal=2
   if (req.params.id) {
     try {
       const categoryId = new ObjectId(req.params.id);
@@ -321,15 +320,16 @@ const categoryDetail = async (req, res) => {
         }, {
           $match: {
             isDeleted: false,
-            "category._id": categoryId
+            isCategoryDeleted:false,
+            "category._id": categoryId,
+            stock: { $ne: 0 }
           }
         }
       ])
       const colorOption = [...new Set(entireProductData.map(obj => obj.color))];
       const brandOption = [...new Set(entireProductData.map(obj => obj.brand))];
       const sizeOption = [...new Set(entireProductData.map(obj => obj.size))];
-
-      const productData = await Product.aggregate([
+      let y=[
         {
           $lookup: {
             from: "categories",
@@ -343,14 +343,15 @@ const categoryDetail = async (req, res) => {
         }, {
           $match: {
             isDeleted: false,
-            "category._id": categoryId
+            isCategoryDeleted: false,
+            "category._id": categoryId,
+            stock: { $ne: 0 }
           }
-        },
-        {
-          $limit: 2
         }
-      ]);
-
+      ]
+      const AllPageProductData = await Product.aggregate(y)
+      const productData=await Product.aggregate(y).skip(0).limit(limitVal);
+      const totalPages=Math.ceil(AllPageProductData.length/limitVal)
       if (req.session.user) {
         userData = req.session.user;
         User.findOne({ _id: userData }).then((user) => {
@@ -365,11 +366,13 @@ const categoryDetail = async (req, res) => {
             sizeSelected: [],
             categoryId: categoryId,
             page: 1,
-            sort: 0
+            sort: 0,
+            totalPages:totalPages,
+            limitVal:limitVal
           });
         });
       } else {
-        res.render("productList", { data: productData, sort: 0, colorSelected: [], brandSelected: [], sizeSelected: [], brandOption: brandOption, sizeOption: sizeOption, colorOption: colorOption, categoryId: categoryId, page: 1, sort: 0 });
+        res.render("productList", { data: productData, sort: 0, colorSelected: [], brandSelected: [], sizeSelected: [], brandOption: brandOption, sizeOption: sizeOption, colorOption: colorOption, categoryId: categoryId, page: 1, sort: 0,totalPages:totalPages,limitVal:limitVal });
       }
     } catch (error) {
       console.log(error.message);
@@ -394,7 +397,9 @@ const sortedProductList = async (req, res) => {
       }, {
         $match: {
           isDeleted: false,
-          "category._id": categoryId
+          isCategoryDeleted:false,
+          "category._id": categoryId,
+          stock: { $ne: 0 }
         }
       }
     ]);
@@ -409,10 +414,12 @@ const sortedProductList = async (req, res) => {
     const size = req.query.size ? req.query.size.split(",") : []
     const page = parseInt(req.query.page, 10) - 1
     const limitVal = parseInt(req.query.limit, 10)
-
+    
     let query = {
       isDeleted: false,
+      isCategoryDeleted:false,
       "category._id": categoryId,
+      stock: { $ne: 0 }
     }
     if (brand.length > 0) {
       query.brand = { $in: brand }
@@ -450,18 +457,20 @@ const sortedProductList = async (req, res) => {
     if (sortValue != 0) {
       y.push(z)
     }
-    const sortedProductData = await Product.aggregate(y).skip(page).limit(limitVal)
+    const sortedProductData = await Product.aggregate(y).skip(page*limitVal).limit(limitVal)
+    const categoryProducts=await Product.aggregate(y)
+    const totalPages=Math.ceil(categoryProducts.length/limitVal)
     if (req.session.user) {
       userData = req.session.user;
       User.findOne({ _id: userData }).then((user) => {
         res.render("productList", {
           userData: user,
           data: sortedProductData,
-          sort: sortValue, colorSelected: color, brandSelected: brand, sizeSelected: size, brandOption: brandOption, sizeOption: sizeOption, colorOption: colorOption, categoryId: categoryId, page: page + 1
+          sort: sortValue, colorSelected: color, brandSelected: brand, sizeSelected: size, brandOption: brandOption, sizeOption: sizeOption, colorOption: colorOption, categoryId: categoryId, page: page + 1,totalPages:totalPages,limitVal:limitVal,
         });
       });
     } else {
-      res.render("productList", { data: sortedProductData, sort: sortValue, colorSelected: color, brandSelected: brand, sizeSelected: size, brandOption: brandOption, sizeOption: sizeOption, colorOption: colorOption, categoryId: categoryId, page: page + 1 });
+      res.render("productList", { data: sortedProductData, sort: sortValue, colorSelected: color, brandSelected: brand, sizeSelected: size, brandOption: brandOption, sizeOption: sizeOption, colorOption: colorOption, categoryId: categoryId, page: page + 1,totalPages:totalPages,limitVal:limitVal });
     }
 
   } catch (error) {
@@ -724,11 +733,7 @@ const applyCoupon = async (req, res) => {
   const couponDoc = await Coupon.findById({ _id: couponId })
   await Coupon.findByIdAndUpdate(couponId, { $push: { usedBy: userId } })
   const percentage = couponDoc.percentage;
-  const userCart = await Cart.find({ userId: userId })
-  const totalPrice = userCart[0].totalPrice;
-  const updatedTotalPrice = Math.round(totalPrice - (totalPrice * percentage / 100))
-  await Cart.findOneAndUpdate({ userId: userId }, { $set: { totalPrice: updatedTotalPrice } })
-  res.json(updatedTotalPrice)
+  res.json(percentage)
 }
 
 const cancelSelection = async (req, res) => {
@@ -925,6 +930,11 @@ const loadCheckOut = async (req, res) => {
   let totalPrice=0
   let userId = new ObjectId(req.session.user)
   const user = await User.findOne({ _id: userId })
+  const today = new Date();
+  const coupon = await Coupon.find({
+    expiryDate: { $gte: today },
+    usedBy: { $nin: [userId] }
+  });
   const cartData = await Cart.aggregate([
     {
       $match: {
@@ -960,7 +970,7 @@ const loadCheckOut = async (req, res) => {
   if (cartData.length > 0) {
         for(let i=0;i<cartData.length;i++)
         {totalPrice = totalPrice+(cartData[i].item.product.price*cartData[i].item.quantity)}
-    res.render("checkout", { userData: user, items: cartData, totalPrice });
+    res.render("checkout", { userData: user, items: cartData, totalPrice,coupon });
   } else {
     totalPrice = 0
     res.redirect("/cart")
@@ -1265,24 +1275,76 @@ const handleLogout = async (req, res) => {
 const createRP = async (req, res) => {
   const userId = req.body.userId.replace(/\s/g, "")
   const wallet = req.body.wallet
-  const cartData = Cart.findOne({ userId: new ObjectId(userId) })
-  const userData = await User.findById(userId)
-  let instance = new Razorpay({ key_id: 'rzp_test_Z6ogCp3lsMS6mX', key_secret: "GfeGBYD3Jojxqd7vdqZoRzzP" })
-  if (wallet) {
-    var amount = cartData.totalPrice - userData.wallet
-  } else {
-    var amount = cartData.totalPrice
+  const paymentMethod=req.body.paymentMethod
+  const cartData = await Cart.aggregate([
+    {
+      $match: {
+        "userId": new ObjectId(userId)
+      }
+    },
+    {
+      $unwind: "$item",
+    },
+    {
+      $lookup: {
+        from: "products",
+        localField: "item.product",
+        foreignField: "_id",
+        as: "item.product",
+      },
+    },
+    {
+      $unwind: "$item.product",
+    },
+    {
+      $lookup: {
+        from: "categories",
+        localField: "item.product.category",
+        foreignField: "_id",
+        as: "item.product.category",
+      },
+    },
+    {
+      $unwind: "$item.product.category",
+    },
+  ]);
+  let ValidOrder=true
+  for(j=0;j<cartData.length;j++)
+  {
+    if(cartData[j].item.product.isDeleted===true || cartData[j].item.product.isCategoryDeleted===true || cartData[j].item.product.stock <cartData[j].item.quantity)
+    {
+      ValidOrder=false
+    }
   }
-  var amount = 100
-  let options = {
-    amount: amount,
-    currency: "INR",
-    receipt: "order_rcptid_11"
-  };
-  instance.orders.create(options, function (err, order) {
-    res.json({ rpOrderId: order.id });
+  if(ValidOrder===false)
+  {
+    res.json({ rpOrderId: null });
+  }else{
+    const userData = await User.findById(userId)
+    if(paymentMethod==0)
+    {
+      res.json({ rpOrderId: 0 });
+    }else{
+      let instance = new Razorpay({ key_id: 'rzp_test_Z6ogCp3lsMS6mX', key_secret: "GfeGBYD3Jojxqd7vdqZoRzzP" })
+      let amount
+      if (wallet) {
+        amount = cartData[0].totalPrice - userData.wallet
+      } else {
+        amount = cartData[0].totalPrice
+      }
+      // let amount = 100
+      let options = {
+        amount: amount,
+        currency: "INR",
+        receipt: "order_rcptid_11"
+      };
+      instance.orders.create(options, function (err, order) {
+        res.json({ rpOrderId: order.id });
+      });
+    }
 
-  });
+  }
+  
 }
 
 module.exports = {

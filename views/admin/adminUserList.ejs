@@ -68,11 +68,13 @@
                 <br>
                 <form>
                     <div class="d-flex justify-content-end">
-                        <input class="col-6 form-control me-2 w-25" id="search" name="search" type="text" placeholder="Username" aria-label="Search">
-                        <button type="submit" onclick="event.preventDefault(); searchAndPagination('search')">SEARCH</button>
+                        <input class="col-sm-3  form-control me-2 w-25 " id="search" name="search" type="text"
+                            placeholder="Username" aria-label="Search" value="<%= search || "" %>">
+                        <button type="submit"
+                            onclick="event.preventDefault(); searchAndPagination('search')">SEARCH</button>
                     </div>
                 </form>
-                
+
 
                 <br>
 
@@ -125,16 +127,18 @@
                 </h2>
                 <div class="store-filter clearfix">
                     <div class="store-pagination" style="text-align: center;">
-                        <ul class="pagination-list" style="display: inline-block; list-style-type: none; margin: 0; padding: 0;">
-                            <% for (let i=1; i <= totalPages; i++) { %>
-                                <li <% if (i===page) { %>class="active"<% } %> style="display: inline-block; margin: 0 5px;">
-                                    <button onclick="searchAndPagination('<%= i %>')"
-                                        style="text-decoration: none; padding: 5px 10px; border: 1px solid #ccc; <% if (i===page) { %>background-color: #ccc; color: white;<% } %>">
-                                        <%= i %>
-                                    </button>
+                        <ul class="pagination-list"
+                            style="display: inline-block; list-style-type: none; margin: 0; padding: 0;">
+                            <% for (let i=1; i <=totalPages; i++) { %>
+                                <li <% if (i===page) { %>class="active"<% } %> style="display: inline-block; margin: 0
+                                        5px;">
+                                        <button onclick="searchAndPagination('<%= i %>')"
+                                            style="text-decoration: none; padding: 5px 10px; border: 1px solid #ccc; <% if (i===page) { %>background-color: #ccc; color: white;<% } %>">
+                                            <%= i %>
+                                        </button>
                                 </li>
-                            <% } %>
-                        </ul>   
+                                <% } %>
+                        </ul>
                     </div>
                 </div>
                 <br>
@@ -142,32 +146,13 @@
         </div>
     </div>
     <script>
-        function searchAndPagination(pageNum) {
+
+        function searchAndPagination(page) {
             const searchValue = document.getElementById("search").value
-            fetch("/admin/searchAndPagination", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    searchValue,
-                    pageNum
-                })
-            })
-                .then(response => {
-                })
-                .then(data => {
-                    location.reload()
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+            const url = `/admin/userlist?page=${page}&search=${searchValue}`;
+            window.location.href = url;
+
         }
-
-
-
-
-
 
         function BlockUnblock(id, type) {
             fetch("/admin/blockUnblockUser", {
