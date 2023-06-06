@@ -12,7 +12,7 @@ const productSchema = new Schema({
     required: true,
   },
   imageUrl: {
-    type: String,
+    type: Array,
     required: true,
   },
   category: {
@@ -32,17 +32,29 @@ const productSchema = new Schema({
     type: String,
     required: false,
   },
-  material: {
-    type: String,
-    required: false,
-  },
   color: {
     type: String,
     required: false,
   },
   isDeleted: {
     type: Boolean,
-    required: false,
+    default: false,
+  },
+  isCategoryDeleted: {
+    type: Boolean,
+    default: false,
+  },
+  stock: {
+    type: Number,
+    required: true,
+  },
+  offerPrice: {
+    type: Number,
+  },
+  offerPercentage: {
+    type: Number,
+    default:0,
   },
 });
-module.exports = mongoose.model("Product", productSchema);
+module.exports = mongoose.model("Product", productSchema)
+;

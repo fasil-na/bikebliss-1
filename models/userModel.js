@@ -19,7 +19,17 @@ const userSchema = new mongoose.Schema({
     },
     blockStatus: {
         type: Boolean,
-    }
+    },
+    address:{
+        type:Array,
+      },
+      wallet:{
+        type:Number,
+        default:0,
+      },
+      referral:{
+        type:String,
+      }
 })
 
 module.exports = mongoose.model("User", userSchema);

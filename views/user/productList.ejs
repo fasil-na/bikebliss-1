@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title>product list</title>
+	<link rel="icon" href="/images/logo.png">
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="/main/css/bootstrap.min.css" />
+
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="/main/css/slick.css" />
+	<link type="text/css" rel="stylesheet" href="/main/css/slick-theme.css" />
+
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="/main/css/nouislider.min.css" />
+
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="/main/css/font-awesome.min.css">
+
+	<!-- Custom stlylesheet -->
+	<link type="text/css" rel="stylesheet" href="/main/css/style.css" />
+
+</head>
+
+<body>
+	<!-- HEADER -->
+	<% if(typeof userData !="undefined" ){ %>
+		<%-include('userloged') %>
+			<%}else{%>
+				<%- include('usernotloged') %>
+					<%}%>
+						<!-- /HEADER -->
+
+						<!-- SECTION -->
+						<div class="section">
+							<div class="container">
+								<div class="row">
+									<div id="aside" class="col-sm-3">
+										<div class="aside">
+											<h3 class="aside-title">Brand</h3>
+											<div class="checkbox-filter">
+												<% brandOption.forEach((j)=> { %>
+													<div class="input-checkbox">
+														<input type="checkbox" id="brand-<%= j %>" <% if
+															(brandSelected.includes(j)) { %>checked<% } %>>
+															<label for="brand-<%= j %>">
+																<span></span>
+																<%= j %>
+															</label>
+													</div>
+													<% }); %>
+											</div>
+
+											<div class="aside">
+												<h3 class="aside-title">Size</h3>
+												<div class="checkbox-filter">
+													<% sizeOption.forEach((j)=> { %>
+														<div class="input-checkbox">
+															<input type="checkbox" id="size-<%= j %>" <% if
+																(sizeSelected.includes(j)) { %>checked<% } %>>
+																<label for="size-<%= j %>">
+																	<span></span>
+																	<%= j %>
+																</label>
+														</div>
+														<% }); %>
+												</div>
+											</div>
+
+											<div class="aside">
+												<h3 class="aside-title">Color</h3>
+												<div class="checkbox-filter">
+													<% colorOption.forEach((j)=> { %>
+														<div class="input-checkbox">
+															<input type="checkbox" id="color-<%= j %>" <% if
+																(colorSelected.includes(j)) { %>checked<% } %>>
+																<label for="color-<%= j %>">
+																	<span></span>
+																	<%= j %>
+																</label>
+														</div>
+														<% }); %>
+												</div>
+											</div>
+											<div>
+												<button type="submit"
+													onclick="filtering('<%= categoryId %>', 1, 2)">Apply</button>
+
+
+											</div>
+										</div>
+									</div>
+
+									<div id="store" class="col-sm-9">
+										<div class="row">
+											<div class="store-filter clearfix">
+												<div class="store-sort">
+													<label>
+														Sort By Price:
+														<select class="input-select" id="optionSelect"
+															onchange="filtering('<%= categoryId %>',1,2)">
+															<option value="0" <%=sort===0 ? "selected" : "" %>></option>
+															<option value="1" <%=sort===1 ? "selected" : "" %>>Low to
+																high
+															</option>
+															<option value="-1" <%=sort===-1 ? "selected" : "" %>>High to
+																low
+															</option>
+														</select>
+													</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<% data.forEach(function(x) { %>
+												<div class="col-md-4 col-xs-6">
+													<div class="product"
+														onclick="window.location.href='/prodDetails/<%= x._id %>'">
+
+														<div class="product-img">
+															<img src="/images/uploads/<%= x.imageUrl[0] %>" alt="">
+															<div class="product-label">
+																<% if(x.offerPercentage!=0) { %>
+																	<span class="sale">-<%= x.offerPercentage %> %
+																	</span>
+																	<% }; %>
+															</div>
+
+														</div>
+
+														<div class="product-body">
+															<p class="product-category">
+																<%= x.category.category %>
+															</p>
+															<h3 class="product-name"><a href="#">
+																	<%= x.productName %>
+																</a></h3>
+															<h4 class="product-price">
+																<%= x.price %> ₹
+															</h4>
+															<% if ( x.offerPercentage!=0) { %>
+																<span class="product-available"><del>
+																		<%=x.offerPrice%>
+																	</del> ₹</span>
+
+																<% } %>
+														</div>
+													</div>
+												</div>
+												<% }); %>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="store-filter text-center">
+										<ul class="store-pagination d-flex justify-content-center">
+											<% for (let i=1; i <=totalPages; i++) { %>
+												<li <% if (i===page) { %>class="active"<% } %>><a href="#"
+															onclick="filtering('<%= categoryId %>','<%= i %>','<%= limitVal %>')">
+															<%= i %>
+														</a></li>
+												<% } %>
+										</ul>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+						<!-- /SECTION -->
+
+						<script src="/main/js/jquery.min.js"></script>
+						<script src="/main/js/bootstrap.min.js"></script>
+						<script src="/main/js/slick.min.js"></script>
+						<script src="/main/js/nouislider.min.js"></script>
+						<script src="/main/js/jquery.zoom.min.js"></script>
+						<script src="/main/js/main.js"></script>
+
+						<script>
+							function filtering(id, page, limit) {
+								const checkboxes = document.querySelectorAll('.input-checkbox input[type="checkbox"]');
+								const selectElement = document.getElementById('optionSelect');
+								const selectedValue = selectElement.value;
+
+
+
+								const selectedCheckobj = {};
+
+								checkboxes.forEach((checkbox) => {
+
+									if (checkbox.checked) {
+										const checkboxId = checkbox.id
+										let parts = checkboxId.split("-")
+										let key = parts[0];
+										let value = parts[1];
+
+										if (selectedCheckobj.hasOwnProperty(key)) {
+											selectedCheckobj[key].push(value)
+										} else {
+											selectedCheckobj[key] = [value]
+										}
+
+									}
+								});
+								let str = `/sortfilter?id=${id}&value=` + encodeURIComponent(selectedValue)
+								if (selectedCheckobj.brand) {
+									str += "&brand=" + selectedCheckobj.brand.join(",")
+								}
+								if (selectedCheckobj.size) {
+									str += "&size=" + selectedCheckobj.size.join(",")
+								}
+								if (selectedCheckobj.color) {
+									str += "&color=" + selectedCheckobj.color.join(",")
+								}
+								str += `&page=` + page + `&limit=` + limit
+								window.location.href = str;
+							}
+						</script>
+
+
+</body>
+
+</html>

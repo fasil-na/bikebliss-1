@@ -189,6 +189,137 @@ textarea.input {
   height: 40px;
 }
 
+.nav-item {
+  padding: 1em !important;
+}
+
+/* home page style */
+
+
+.navtogglericon {
+  display: none;
+}
+
+.navbar-nav1 {
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+}
+
+.navtogglericon{
+  float: right;
+  padding-top: 0.4em;
+  font-size: 1.5em;
+}
+
+
+/* carosual */
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  /* Adjust the height as needed */
+  overflow: hidden;
+}
+
+.carousel-inner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-item {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-item.active {
+  opacity: 1;
+}
+
+.caption-container{
+  text-shadow: 1px 1px lightsteelblue;
+  color: white !important;
+}
+        
+
+.carousel-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  color: #fff;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.carousel-control-prev {
+  left: 10px;
+}
+
+.carousel-control-next {
+  right: 10px;
+}
+
+.carousel-button-style{
+ font-size: 35px;
+ z-index: 100;
+ width: 2em;
+ height: 2em;
+ opacity: 0.3;
+}
+
+/* carosual */
+
+@media (max-width: 768px) {
+
+  /* Your CSS rules for screens with a minimum width of 768 pixels */
+  .navbar-nav1 {
+    flex-direction: column !important;
+    align-items: flex-end;
+  }
+  /* .login-style {
+      float: right;
+      margin-left: auto;
+    } */
+
+  .navtogglericon {
+    display: block;
+  }
+}
+@media (min-width: 768px) {
+  /* Your CSS rules for screens with a minimum width of 768 pixels */
+  .navbar-collapse {
+      display: block !important;
+    }
+}
+
+.login-style{
+  float: right;
+  margin-left: auto;
+}
+
+.nav-position-right{
+  float:right;
+}
+
 /*-- checkbox & radio input --*/
 
 .input-radio, .input-checkbox {
@@ -1016,7 +1147,6 @@ textarea.input {
 }
 
 .product .add-to-cart {
-  position: absolute;
   left: 1px;
   right: 1px;
   bottom: 1px;
@@ -1049,7 +1179,9 @@ textarea.input {
   border-radius: 40px;
   -webkit-transition: 0.2s all;
   transition: 0.2s all;
+  
 }
+
 
 .product .add-to-cart .add-to-cart-btn>i {
   position: absolute;
@@ -1543,6 +1675,8 @@ textarea.input {
   border-radius: 40px;
   -webkit-transition: 0.2s all;
   transition: 0.2s all;
+  min-width: 15em;
+  margin-bottom: 0.5em;
 }
 
 .product-details .add-to-cart .add-to-cart-btn>i {
@@ -2189,3 +2323,59 @@ textarea.input {
     margin-top: 10px;
   }
 }
+
+.address-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.address-card {
+  border: 1px solid #ccc;
+  padding: 20px;
+  width: 300px;
+}
+
+.address-card input[type="radio"] {
+  margin-right: 10px;
+}
+
+.address-card p {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.tableHeight{
+  min-height: 80px;
+}
+.bannerTitle {
+  font-size: 8em; 
+  color:#f3ffe3;
+  text-shadow: 3px 3px rgb(0, 0, 0);
+}
+
+ .bannerDescription {
+  font-size: 2em; 
+  color:#f3ffe3;
+  text-shadow: 3px 3px rgb(0, 0, 0);
+}
+
+.coupon-label {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.coupon-input {
+  width: 200px;
+  height: 30px;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+
+
+

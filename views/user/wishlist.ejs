@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title>wishlist</title>
+	<link rel="icon"
+        href="/images/logo.png">
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="/main/css/bootstrap.min.css" />
+
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="/main/css/slick.css" />
+	<link type="text/css" rel="stylesheet" href="/main/css/slick-theme.css" />
+
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="/main/css/nouislider.min.css" />
+
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="/main/css/font-awesome.min.css">
+
+	<!-- Custom stlylesheet -->
+	<link type="text/css" rel="stylesheet" href="/main/css/style.css" />
+
+</head>
+
+<body>
+	<!-- HEADER -->
+	<!-- HEADER -->
+
+	<%-include('userloged') %>
+
+		<!-- /HEADER -->
+
+
+		<!-- BREADCRUMB -->
+		<div id="breadcrumb" class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<div class="col-md-12">
+						<h3 class="breadcrumb-header">Your Wishlist</h3>
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /BREADCRUMB -->
+
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!--================Wishlist Area =================-->
+					<% if(items.length>0) { %>
+					<section class="cart_area padding_top">
+						<div class="container">
+							<div class="cart_inner">
+								<div class="table-responsive">
+									<table class="table">
+										<thead>
+											<tr>
+												<th scope="col">Product</th>
+												<th scope="col">Name</th>
+												<th scope="col">Description</th>
+												<th scope="col">Brand</th>
+												<th scope="col">Color</th>
+												<th scope="col">Size</th>
+												<th scope="col">Price</th>
+											</tr>
+										</thead>
+										<tbody>
+											<% items.forEach((i)=> { %>
+												<tr>
+													<td style="width: 200px;">
+														<div class="media">
+															<div class="d-flex">
+																<img class="img-fluid"
+																	style="height: 100px;width: 100px;"
+																	src="/images/uploads/<%= i.item.product.imageUrl[0] %>"
+																	alt="<%= i.item.product.productName %>" />
+															</div>
+															<div class="media-body">
+															</div>
+														</div>
+													</td>
+													<td>
+														<h5 style="font-weight: bolder;">
+															<%= i.item.product.productName %>
+														</h5>
+													</td>
+													<td>
+														<h5 style="font-weight: bolder;">
+															<%= i.item.product.description %>
+														</h5>
+													</td>
+													<td>
+														<h5 style="font-weight: bolder;">
+															<%= i.item.product.brand %>
+														</h5>
+													</td>
+													<td>
+														<h5 style="font-weight: bolder;">
+															<%= i.item.product.color %>
+														</h5>
+													</td>
+													<td>
+														<h5 style="font-weight: bolder;">
+															<%= i.item.product.size %>
+														</h5>
+													</td>
+													<td>
+														<h5 style="font-weight: bolder;"
+															id="total-price-<%= i.item._id %>">
+															<%= i.item.product.price %>₹
+														</h5>
+													</td>
+													<td><button class="btn btn-danger"
+															onclick="removeWishlistItem('<%= i.item.product._id %>')">Remove
+															From Wishlist</button></td>
+															<td><button class="btn btn-primary"><a href="/addToCartFromWishlist/<%= i.item.product._id %>"> Add to cart
+															</a></button></td>				
+												</tr>
+												<% }); %>
+										</tbody>
+									</table>
+									<div class="checkout_btn_inner float-right">
+										<a class="btn btn-primary" href="/">Continue Shopping</a>
+									</div>
+								</div>
+							</div>
+					</section>
+					<% }else{; %>
+						<h4 class="text-center text-danger">Wishlistrs is Empty !</h4>
+
+											<div class="checkout_btn_inner d-flex justify-content-center">
+												<a class="btn btn-primary" href="/">Continue Shopping</a>
+											</div>
+											
+												<br>
+												<br>
+
+											</div>
+
+											<% } %>
+					<!--================End Wishlist Area =================-->
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+		<script src="/main/js/jquery.min.js"></script>
+		<script src="/main/js/bootstrap.min.js"></script>
+		<script src="/main/js/slick.min.js"></script>
+		<script src="/main/js/nouislider.min.js"></script>
+		<script src="/main/js/jquery.zoom.min.js"></script>
+		<script src="/main/js/main.js"></script>
+
+		<script>
+
+			async function removeWishlistItem(itemId) {
+				try {
+					const response = await fetch("/removeWishlistItem", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ itemId: itemId }),
+					})
+						.then(response => {
+							location.reload();
+						})
+						.catch(error => {
+							console.error(error);
+						});
+				} catch (error) {
+					console.error(error);
+				}
+			}
+		</script>
+
+</body>
+
+</html>

@@ -5,53 +5,88 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>category create</title>
+    <link rel="icon"
+        href="/images/uploads/1.jpg">
     <link rel="stylesheet" href="/stylesheets/adminHomestyle.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="left col-sm-2">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand text-primary" href="#">BIKEBLISS.COM</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <h2>Welcome</h2>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarText">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/dashboard">DASHBOARD</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/userlist">USERS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/categorylist">CATEGORIES</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/productlist">PRODUCTS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/bannerlist">BANNERS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/offerlist">OFFERS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/couponlist">COUPONS</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/adminLogout">
+                            <i class="fas fa-sign-out-alt"></i> LOGOUT
+                        </a>
+                    </li>
+                </ul>
 
-
-                <div class="col-md-5 mx-auto">
-                    <div class="head">
-                        <img
-                            src="https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg">
-
-                    </div>
-                </div>
-                <br>
-                <button class="menubutton my-2"><a href="/admin/dashboard">Dashboard</a></button>
-                <button class="menubutton my-2"><a href="/admin/userlist">Users</a></button>
-                <button class="menubutton my-2"><a href="/admin/categorylist">Category</a></button>
-                <button class="menubutton my-2"><a href="/admin/productlist">Product</a></button>
-                <button class="menubutton my-2"><a href="/adminLogout">Logout</a></button>
             </div>
-            <div class="col-sm-10 right">
+        </div>
+    </nav>
+    <div class="container-fluid mt-5">
+        <div class="row">
+
+            <div class="col-sm-12 right">
                 <div class="fline">
                     <h2 class="w-50 mx-auto my-2">Create Category</h2>
                 </div>
 
                 <form action="/admin/addCategory" method="post" enctype="multipart/form-data">
-                    <input class="w-50 mx-auto my-3 form-control" type="text" placeholder="Category Name" name="name">
-                    <input class="w-50 mx-auto my-3 form-control" type="file" name="image">
-                    <button class="w-50 login mx-auto my-3 form-control" type="submit">ADD</button>
-                    <p>
-
-                    </p>
+                    <input class="w-50 mx-auto my-3 form-control" type="text" placeholder="Category Name" name="name" id="name" oninput="validateCategoryName()">
+                    <span class="text-danger d-flex justify-content-center align-items-center" id="nameError"></span>
+                    <div class="text-center">
+                        <img id="imagePreview" src="#" alt="Selected Image" style="display: none; max-width: 10%; height: auto; margin: 10px auto;">
+                    </div>
+                    <input class="w-50 mx-auto my-3 form-control" type="file" name="image" required onchange="previewImage(event)">
+                    <button class="w-50 login mx-auto my-3 form-control" id="submitButton" disabled type="submit">ADD</button>
                 </form>
+                <p class="text-danger mx-auto text-center"><%= message %></p>
+                
 
 
             </div>
         </div>
 
     </div>
+
+    <script src="/javascripts/validation Catcreate.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
         crossorigin="anonymous"></script>
@@ -61,6 +96,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+    <script>
+        function previewImage(event) {
+            var input = event.target;
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var imagePreview = document.getElementById('imagePreview');
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+    </script>
+
 </body>
 
 </html>

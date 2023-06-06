@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title>orders</title>
+	<link rel="icon"
+	href="/images/logo.png">
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="/main/css/bootstrap.min.css" />
+
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="/main/css/slick.css" />
+	<link type="text/css" rel="stylesheet" href="/main/css/slick-theme.css" />
+
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="/main/css/nouislider.min.css" />
+
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="/main/css/font-awesome.min.css">
+
+	<!-- Custom stlylesheet -->
+	<link type="text/css" rel="stylesheet" href="/main/css/style.css" />
+
+</head>
+
+<body>
+	<!-- HEADER -->
+
+	<%-include('userloged') %>
+
+
+		<!-- /HEADER -->
+		<div id="breadcrumb" class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<div class="col-md-12">
+						<h3 class="breadcrumb-header">Your Orders</h3>
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /BREADCRUMB -->
+
+
+		<!--================order area =================-->
+		<section class="cart_area padding_top">
+			<div class="container">
+				<div class="cart_inner">
+					<div class="table-responsive">
+						<table class="table">
+							<thead>
+							  <tr>
+								<th scope="col">Order ID</th>
+								<th scope="col">Address</th>
+								<th scope="col">Product Name</th>
+								<th scope="col">Product Price</th>
+								<th scope="col">Product Quantity</th>
+								<th scope="col">Order Date</th>
+								<th scope="col">Delivery Date</th>
+								<th scope="col">Total Price</th>
+								<th scope="col">Payment Type</th>
+								<th scope="col">Status</th>
+							  </tr>
+							</thead>
+							<tbody>
+							  <% orderData.forEach((i) => { %>
+								<tr>
+								  <td>
+									<h5><%= i._id %></h5>
+								  </td>
+								  <td>
+									<% let printedAddress = {}; %>
+									<% i.address.forEach((address) => { %>
+									  <% const addressKey = `${address.address}-${address.city}-${address.country}-${address.pin}-${address.tel}`; %>
+									  <% if (!printedAddress[addressKey]) { %>
+										<p><%= address.address %>, <%= address.city %>, <%= address.country %>, <%= address.pin %>, <%= address.tel %></p>
+										<% printedAddress[addressKey] = true; %>
+									  <% } %>
+									<% }) %>
+								  </td>
+								  <td>
+									<% i.productDetails.forEach((j) => { %>
+									  <div class="tableHeight"><%= j.productName %></div>
+									<% }); %>
+								  </td>
+								  <td>
+									<% i.item.forEach((j) => { %>
+									  <div class="tableHeight"><%= j.price %> ₹</div>
+									<% }); %>
+								  </td>
+								  <td>
+									<% i.item.forEach((j) => { %>
+									  <div class="tableHeight"><%= j.quantity %></div>
+									<% }); %>
+								  </td>
+								  <td><%= i.orderDate %></td>
+								  <td><%= i.deliveryDate %></td>
+								  <td>
+									<h5 style="font-weight: bolder;"><%= i.totalPrice %>₹</h5>
+								  </td>
+								  <td><%= i.paymentType %></td>
+								  <td><%= i.status %></td>
+								  <td>
+									<% if (i.status === 'Placed' || i.status === 'Shipping' || i.status === 'Dispatched') { %>
+									  <button class="btn btn-danger" onclick="cancelOrder('<%= i._id %>')">Cancel</button>
+									<% } %>
+								  </td>
+								</tr>
+							  <% }); %>
+							</tbody>
+						  </table>
+						  
+					</div>
+				</div>
+		</section>
+		<!--================End order Area =================-->
+
+
+
+
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+		<script src="/main/js/jquery.min.js"></script>
+		<script src="/main/js/bootstrap.min.js"></script>
+		<script src="/main/js/slick.min.js"></script>
+		<script src="/main/js/nouislider.min.js"></script>
+		<script src="/main/js/jquery.zoom.min.js"></script>
+		<script src="/main/js/main.js"></script>
+
+		<script>
+		function cancelOrder(orderId) {
+			fetch(`/cancelOrder?orderId=${orderId}`, {
+			  method: "post",
+			  headers: {
+				"Content-Type": "application/json",
+			  },
+			})
+			  .then((response) => {
+				if (response.ok) {
+				 location.reload()
+				} else {
+				  
+				}
+			  })
+			  .catch((error) => {
+				
+			  });
+		  }
+		</script>
+		  
+</body>
+
+</html>

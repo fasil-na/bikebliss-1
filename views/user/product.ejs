@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title>product detail</title>
+	<link rel="icon"
+	href="/images/logo.png">
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="/main/css/bootstrap.min.css" />
+
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="/main/css/slick.css" />
+	<link type="text/css" rel="stylesheet" href="/main/css/slick-theme.css" />
+
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="/main/css/nouislider.min.css" />
+
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="/main/css/font-awesome.min.css">
+
+	<!-- Custom stlylesheet -->
+	<link type="text/css" rel="stylesheet" href="/main/css/style.css" />
+
+</head>
+
+<body>
+	<!-- HEADER -->
+	<% if(typeof userData !="undefined" ){ %>
+		<%-include('userloged') %>
+			<%}else{%>
+				<%- include('usernotloged') %>
+					<%}%>
+						<!-- /HEADER -->
+
+						<!-- NAVIGATION -->
+						<nav id="navigation">
+							<!-- container -->
+							<div class="container">
+								<!-- responsive-nav -->
+								<div id="responsive-nav">
+									<!-- NAV -->
+									<!-- <ul class="main-nav nav navbar-nav">
+					<li class="active"><a href="#">Home</a></li>
+					<li><a href="#">Hot Deals</a></li>
+					<li><a href="#">Categories</a></li>
+					<li><a href="#">Laptops</a></li>
+					<li><a href="#">Smartphones</a></li>
+					<li><a href="#">Cameras</a></li>
+					<li><a href="#">Accessories</a></li>
+				</ul> -->
+									<!-- /NAV -->
+								</div>
+								<!-- /responsive-nav -->
+							</div>
+							<!-- /container -->
+						</nav>
+						<!-- /NAVIGATION -->
+
+						<!-- BREADCRUMB -->
+						<div id="breadcrumb" class="section">
+							<!-- container -->
+							<div class="container">
+								<!-- row -->
+								<div class="row">
+									<div class="col-md-12">
+										<!-- <ul class="breadcrumb-tree">
+						<li><a href="#">Home</a></li>
+						<li><a href="#">All Categories</a></li>
+						<li><a href="#">Accessories</a></li>
+						<li><a href="#">Headphones</a></li>
+						<li class="active">
+							<%=data.productName%>
+						</li>
+					</ul> -->
+									</div>
+								</div>
+								<!-- /row -->
+							</div>
+							<!-- /container -->
+						</div>
+						<!-- /BREADCRUMB -->
+
+						<!-- SECTION -->
+						<div class="section">
+							<!-- container -->
+							<div class="container">
+								<!-- row -->
+								<div class="row">
+									<!-- Product main img -->
+									<div class="col-md-5 col-md-push-2">
+										<div id="product-main-img">
+											<% if (data.length> 0 && data[0].imageUrl &&
+												Array.isArray(data[0].imageUrl)) { %>
+												<% data[0].imageUrl.forEach(function(image) { %>
+													<div class="product-preview">
+														<img src="/images/uploads/<%= image %>" alt="">
+													</div>
+													<% }); %>
+														<% } %>
+										</div>
+									</div>
+									<!-- /Product main img -->
+
+									<!-- Product thumb imgs -->
+									<div class="col-md-2  col-md-pull-5">
+										<div id="product-imgs">
+											<% if (data.length> 0 && data[0].imageUrl &&
+												Array.isArray(data[0].imageUrl)) { %>
+												<% data[0].imageUrl.forEach(function(image) { %>
+													<div class="product-preview">
+														<img src="/images/uploads/<%= image %>" alt="">
+													</div>
+													<% }); %>
+														<% } %>
+
+										</div>
+									</div>
+									<!-- /Product thumb imgs -->
+
+									<!-- Product details -->
+									<div class="col-md-5">
+										<div class="product-details">
+											<h2 class="product-name">
+												<%=data[0].productName%>
+											</h2>
+										
+											<div>
+												<h3 class="product-price">
+													<%=data[0].price%> ₹
+												</h3>
+												<% if (data[0].offerPercentage!=0) { %>
+												<span class="product-available"><del><%=data[0].offerPrice%></del> ₹</span>
+												<span class="product-available"><%=data[0].offerPercentage%> %</span>
+												<% } %>
+											</div>
+											<p>
+												<%=data[0].description%>
+											</p>
+
+											<div class="product-options">
+												<p>category: <%= data[0].categoryDetails.category %>
+												</p>
+
+												<p>Brand : <%=data[0].brand%>
+												</p>
+												<p>Size : <%=data[0].size%>
+												</p>
+												<p>Color : <%=data[0].color%>
+												</p>
+											</div>
+
+											<div class="add-to-cart">
+
+												<div class="">
+													<p>
+														<%= data._id %>
+													</p>
+
+													<button class="add-to-cart-btn "><a
+															href="/addToCart/<%= data[0]._id %>"><i
+																class="fa fa-shopping-cart"></i>add to cart</a></button>
+													<button class="add-to-cart-btn"><a
+															href="/addToWishlist/<%= data[0]._id %>"><i
+															class="fa fa-heart-o"></i> add to
+														wishlist</a></button>
+
+												</div>
+											</div>
+
+											<p class="text-success"><%= text %></p>
+
+										</div>
+									</div>
+									<!-- /Product details -->
+
+								</div>
+								<!-- /row -->
+							</div>
+							<!-- /container -->
+						</div>
+						<!-- /SECTION -->
+
+						<script src="/main/js/jquery.min.js"></script>
+						<script src="/main/js/bootstrap.min.js"></script>
+						<script src="/main/js/slick.min.js"></script>
+						<script src="/main/js/nouislider.min.js"></script>
+						<script src="/main/js/jquery.zoom.min.js"></script>
+						<script src="/main/js/main.js"></script>
+
+</body>
+
+</html>
