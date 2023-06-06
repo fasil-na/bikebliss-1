@@ -64,6 +64,7 @@
 				<!-- row -->
 				<div class="row">
 					<!--================Wishlist Area =================-->
+					<% if(items.length>0) { %>
 					<section class="cart_area padding_top">
 						<div class="container">
 							<div class="cart_inner">
@@ -141,6 +142,19 @@
 								</div>
 							</div>
 					</section>
+					<% }else{; %>
+						<h4 class="text-center text-danger">Wishlistrs is Empty !</h4>
+
+											<div class="checkout_btn_inner d-flex justify-content-center">
+												<a class="btn btn-primary" href="/">Continue Shopping</a>
+											</div>
+											
+												<br>
+												<br>
+
+											</div>
+
+											<% } %>
 					<!--================End Wishlist Area =================-->
 				</div>
 				<!-- /row -->

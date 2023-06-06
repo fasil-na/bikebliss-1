@@ -22,7 +22,6 @@ const createBanner = async (req, res) => {
 }
 
 const addNewBanner = async (req, res) => {
-
   const bannerTitle = req.body.title;
   const bannerDescription = req.body.description;
   const image = req.file;

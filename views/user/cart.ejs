@@ -8,8 +8,7 @@
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
 	<title>cart</title>
-	<link rel="icon"
-        href="/images/logo.png">
+	<link rel="icon" href="/images/logo.png">
 
 	<!-- Google font -->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
@@ -84,94 +83,96 @@
 				<div class="row">
 
 					<!--================Cart Area =================-->
-					<section class="cart_area padding_top">
-						<div class="container">
-							<div class="cart_inner">
-								<div class="table-responsive">
-									<table class="table">
-										<thead>
-											<tr>
-												<th scope="col">Product</th>
-												<th scope="col">Name</th>
-												<th scope="col">Price</th>
-												<th scope="col">Quantity</th>
-												<th scope="col">Total</th>
-												<th scope="col"></th>
-											</tr>
-										</thead>
-										<tbody>
-
-											<% items.forEach((i)=> { %>
-
+					<% if(items.length>0) { %>
+						<section class="cart_area padding_top">
+							<div class="container">
+								<div class="cart_inner">
+									<div class="table-responsive">
+										<table class="table">
+											<thead>
 												<tr>
-													<td style="width: 200px;">
-														<div class="media">
-															<div class="d-flex">
-																<img class="img-fluid"
-																	style="height: 100px;width: 100px;"
-																	src="/images/uploads/<%= i.item.product.imageUrl[0] %>"
-																	alt="<%= i.item.product.productName %>" />
-
-															</div>
-															<div class="media-body">
-															</div>
-														</div>
-													</td>
-													<td>
-														<h5 style="font-weight: bolder;
-												">
-															<%= i.item.product.productName %>
-														</h5>
-													</td>
-													<td>
-														<h5 style="font-weight: bolder;"
-															id="total-price-<%= i.item._id %>">
-															<%= i.item.product.price.toFixed(2) %> ₹
-														</h5>
-
-													</td>
-													<td>
-														<div class="product_count">
-															<button class="quantity__minus btn" min="1"
-																data-id="<%=i.item._id%>" data-index=""
-																onclick="decrementOrIncrementCart('<%= i._id %>','<%= i.item._id %>',-1)">-</button>
-															<input min="1" max="10" class="input-number"
-																style="width: 30px; text-align: center;" type="text"
-																value="<%= i.item.quantity %>" readonly>
-															<button class="quantity__plus btn" data-id="<%=i.item._id%>"
-																data-index=""
-																onclick="decrementOrIncrementCart('<%= i._id %>','<%= i.item._id %>',1)">
-																+</button>
-
-															<button style="background-color: white;"
-																class="remove-item-btn btn "
-																data-item-id="<%=i.item._id%>"><i
-																	class="fa-sharp fa-solid fa-circle-xmark"></i></button>
-														</div>
-													</td>
-													<td>
-														<p style="font-weight: bolder;"> <span
-																id="price-<%= i.item._id %>">
-																<%= (i.item.product.price * i.item.quantity).toFixed(2) %> ₹
-															</span></p>
-													</td>
-													<td><button class="btn btn-danger"
-															onclick="removeCartItem('<%= i._id %>','<%= i.item._id %>')">Remove
-															From Cart</button></td>
+													<th scope="col">Product</th>
+													<th scope="col">Name</th>
+													<th scope="col">Price</th>
+													<th scope="col">Quantity</th>
+													<th scope="col">Total</th>
+													<th scope="col"></th>
 												</tr>
-												<% }); %>
-													
+											</thead>
+											<tbody>
+
+												<% items.forEach((i)=> { %>
+
+													<tr>
+														<td style="width: 200px;">
+															<div class="media">
+																<div class="d-flex">
+																	<img class="img-fluid"
+																		style="height: 100px;width: 100px;"
+																		src="/images/uploads/<%= i.item.product.imageUrl[0] %>"
+																		alt="<%= i.item.product.productName %>" />
+
+																</div>
+																<div class="media-body">
+																</div>
+															</div>
+														</td>
 														<td>
-															
+															<h5 style="font-weight: bolder;">
+																<%= i.item.product.productName %>
+															</h5>
+														</td>
+														<td>
+															<h5 style="font-weight: bolder;"
+																id="total-price-<%= i.item._id %>">
+																<%= i.item.product.price.toFixed(2) %> ₹
+															</h5>
+
+														</td>
+														<td>
+															<div class="product_count">
+																<button class="quantity__minus btn" min="1"
+																	data-id="<%=i.item._id%>" data-index=""
+																	onclick="decrementOrIncrementCart('<%= i._id %>','<%= i.item._id %>',-1)">-</button>
+																<input min="1" max="10" class="input-number"
+																	style="width: 30px; text-align: center;" type="text"
+																	value="<%= i.item.quantity %>" readonly>
+																<button class="quantity__plus btn"
+																	data-id="<%=i.item._id%>" data-index=""
+																	onclick="decrementOrIncrementCart('<%= i._id %>','<%= i.item._id %>',1)">
+																	+</button>
+
+																<button style="background-color: white;"
+																	class="remove-item-btn btn "
+																	data-item-id="<%=i.item._id%>"><i
+																		class="fa-sharp fa-solid fa-circle-xmark"></i></button>
+															</div>
+														</td>
+														<td>
+															<p style="font-weight: bolder;"> <span
+																	id="price-<%= i.item._id %>">
+																	<%= (i.item.product.price *
+																		i.item.quantity).toFixed(2) %> ₹
+																</span></p>
+														</td>
+														<td><button class="btn btn-danger"
+																onclick="removeCartItem('<%= i._id %>','<%= i.item._id %>')">Remove
+																From Cart</button></td>
+													</tr>
+													<% }); %>
+
+														<td>
+
 														</td>
 
 														<td></td>
 														<td>
 														<td>
-															<h5 style="font-weight: bolder;padding-top: 0.2em;">Total Amount =
+															<h5 style="font-weight: bolder;padding-top: 0.2em;">Total
+																Amount =
 														</td>
 														</td>
-														
+
 														<td>
 
 															<span style="font-weight: bolder;" id="total-price">
@@ -180,24 +181,41 @@
 															</span></h5>
 
 														</td>
-													</tr>
+														</tr>
 
 
-										</tbody>
-									</table>
-									<div class="checkout_btn_inner float-right">
-										<a class="btn btn-primary" href="/">Continue Shopping</a>
-							
-										<a class="btn btn-warning mt-5" href="/checkout">Proceed to checkout</a>
-										<br>
-										<br>
+											</tbody>
+										</table>
+										<div class="checkout_btn_inner float-right">
+											<a class="btn btn-primary" href="/">Continue Shopping</a>
+
+											<a class="btn btn-warning mt-5" href="/checkout">Proceed to
+												checkout</a>
+											<br>
+											<br>
+
+										</div>
+
+										<% }else{ %>
+											<h4 class="text-center text-danger">Cart is Empty !</h4>
+
+											<div class="checkout_btn_inner d-flex justify-content-center">
+												<a class="btn btn-primary" href="/">Continue Shopping</a>
+											</div>
+											
+												<br>
+												<br>
+
+											</div>
+
+											<% } %>
+
+												
 
 									</div>
-
 								</div>
-							</div>
-					</section>
-					<!--================End Cart Area =================-->
+						</section>
+						<!--================End Cart Area =================-->
 
 
 
@@ -267,11 +285,10 @@
 					console.error(error);
 				}
 			}
-			
-			
+
+
 		</script>
 
 </body>
 
 </html>
-

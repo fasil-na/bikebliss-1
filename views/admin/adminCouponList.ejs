@@ -6,8 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>coupon list</title>
-    <link rel="icon"
-        href="/images/uploads/1.jpg">
+    <link rel="icon" href="/images/uploads/1.jpg">
     <link rel="stylesheet" href="/stylesheets/adminHomestyle.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
@@ -17,7 +16,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand text-primary" href="#">BIKEBLISS.COM</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
@@ -62,60 +61,61 @@
     </nav>
 
 
-    <div class="container-fluid">
+    <div class="container-fluid mt-5">
         <div class="row">
 
             <div class="col-sm-12 right">
                 <br>
                 <div class="d-flex ">
-                    <button class="createButton mx-2"><a href="/admin/couponCreate">Create Coupon</a></button>
+                    <button class="createButton mx-3"><a href="/admin/couponCreate">Create Coupon</a></button>
                 </div>
 
                 <br>
-
-                <table id='myTable'>
-                    <thead>
-                        <tr>
-                            <th>SL.NO</th>
-                            <th>COUPON CODE</th>
-                            <th>COUPON PERCENTAGE</th>
-                            <th>EXPIRY DATE</th>
-                            <th>STATUS</th>
-                            <th>ACTION</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% data.forEach(function(x,i) { %>
+                <div class="table-container">
+                    <table id='myTable'>
+                        <thead class="sticky-header">
                             <tr>
-                                <td style="width: 10px;">
-                                    <%= i+1 %>
-                                </td>
-                                <td>
-                                    <%= x.code %>
-                                </td>
-                                <td>
-                                    <%= x.percentage %>
-                                </td>
-                                <td>
-   
-                                        <%= x.expiryDate.toISOString().split('T')[0] %>     
-                                </td>
-                                <td>
-                                    <%= x.status %>
-                                </td>
-                                <td>
-                                    <button class="buttons my-2"><a
-                                            href="/admin/couponDelete/<%= x._id %>">DELETE</a></button>
-                                </td>
+                                <th>SL.NO</th>
+                                <th>COUPON CODE</th>
+                                <th>COUPON PERCENTAGE</th>
+                                <th>EXPIRY DATE</th>
+                                <th>STATUS</th>
+                                <th>ACTION</th>
                             </tr>
-                            <% }); %>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <% data.forEach(function(x,i) { %>
+                                <tr>
+                                    <td style="width: 10px;">
+                                        <%= i+1 %>
+                                    </td>
+                                    <td>
+                                        <%= x.code %>
+                                    </td>
+                                    <td>
+                                        <%= x.percentage %>
+                                    </td>
+                                    <td>
 
-
+                                        <%= x.expiryDate.toISOString().split('T')[0] %>
+                                    </td>
+                                    <td>
+                                        <%= x.status %>
+                                    </td>
+                                    <td>
+                                        <button class="buttons my-2"><a
+                                                href="/admin/couponDelete/<%= x._id %>">DELETE</a></button>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+                <h1 class="text-center text-danger">
+                    <%=text%>
+                </h1>
             </div>
         </div>
-
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"

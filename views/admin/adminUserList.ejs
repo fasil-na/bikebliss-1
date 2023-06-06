@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand text-primary" href="#">BIKEBLISS.COM</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
@@ -61,13 +61,13 @@
     </nav>
 
 
-    <div class="container-fluid">
+    <div class="container-fluid mt-5">
         <div class="row">
 
             <div class="col-sm-12 right">
                 <br>
                 <form>
-                    <div class="d-flex justify-content-end">
+                    <div class="d-flex justify-content-end mx-3">
                         <input class="col-sm-3  form-control me-2 w-25 " id="search" name="search" type="text"
                             placeholder="Username" aria-label="Search" value="<%= search || "" %>">
                         <button type="submit"
@@ -77,51 +77,52 @@
 
 
                 <br>
-
-                <table id='myTable'>
-                    <thead>
-                        <tr>
-
-                            <th>ID</th>
-                            <th>NAME</th>
-                            <th>EMAIL ID</th>
-                            <th>MOBILE NUMBER</th>
-                            <th>ORDERS</th>
-                            <th>ACTION</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% data.forEach(function(x,i) { %>
+                <div class="table-container">
+                    <table id='myTable'>
+                        <thead class="sticky-header">
                             <tr>
-                                <td>
-                                    <%= x._id %>
-                                </td>
-                                <td>
-                                    <%= x.name %>
-                                </td>
-                                <td>
-                                    <%= x.email %>
-                                </td>
-                                <td>
-                                    <%= x.number %>
-                                </td>
-                                <td>
-                                    <button onclick="orderList('<%=x._id%>')"
-                                        class="btn btn-primary userListButton">Orders</button>
-                                </td>
-                                <td>
-                                    <%if(x.blockStatus){ %>
-                                        <button onclick="BlockUnblock('<%=x._id%>', 'unBlock')"
-                                            class="btn btn-success userListButton">Unblock</button>
-                                        <% }else{%>
-                                            <button onclick="BlockUnblock('<%=x._id%>', 'block')"
-                                                class="btn btn-danger userListButton">Block</button>
-                                            <%}%>
-                                </td>
+
+                                <th>ID</th>
+                                <th>NAME</th>
+                                <th>EMAIL ID</th>
+                                <th>MOBILE NUMBER</th>
+                                <th>ORDERS</th>
+                                <th>ACTION</th>
                             </tr>
-                            <% }); %>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <% data.forEach(function(x,i) { %>
+                                <tr>
+                                    <td>
+                                        <%= x._id %>
+                                    </td>
+                                    <td>
+                                        <%= x.name %>
+                                    </td>
+                                    <td>
+                                        <%= x.email %>
+                                    </td>
+                                    <td>
+                                        <%= x.number %>
+                                    </td>
+                                    <td>
+                                        <button onclick="orderList('<%=x._id%>')"
+                                            class="btn btn-primary userListButton">Orders</button>
+                                    </td>
+                                    <td>
+                                        <%if(x.blockStatus){ %>
+                                            <button onclick="BlockUnblock('<%=x._id%>', 'unBlock')"
+                                                class="btn btn-success userListButton">Unblock</button>
+                                            <% }else{%>
+                                                <button onclick="BlockUnblock('<%=x._id%>', 'block')"
+                                                    class="btn btn-danger userListButton">Block</button>
+                                                <%}%>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                        </tbody>
+                    </table>
+                </div>
                 <h2 class="text-danger text-center">
                     <%= text %>
                 </h2>
@@ -130,7 +131,8 @@
                         <ul class="pagination-list"
                             style="display: inline-block; list-style-type: none; margin: 0; padding: 0;">
                             <% for (let i=1; i <=totalPages; i++) { %>
-                                <li <% if (i===page) { %>class="active"<% } %> style="display: inline-block; margin: 0
+                                <li <% if (i===page) { %>class="active"<% } %> style="display: inline-block; margin:
+                                        0
                                         5px;">
                                         <button onclick="searchAndPagination('<%= i %>')"
                                             style="text-decoration: none; padding: 5px 10px; border: 1px solid #ccc; <% if (i===page) { %>background-color: #ccc; color: white;<% } %>">

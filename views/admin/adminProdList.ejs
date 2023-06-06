@@ -14,10 +14,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Add this before the closing </body> tag -->
+    <script src="https://unpkg.com/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand text-primary" href="#">BIKEBLISS.COM</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
@@ -59,14 +63,14 @@
             </div>
         </div>
     </nav>
-    <div class="container-fluid">
+    <div class="container-fluid mt-5">
         <div class="row">
             <div class="col-sm-12 right">
                 <br>
                 <div class="d-flex justify-content-between align-items-center">
-                    <button class="createButton"><a href="/admin/prodCreate">Create Product</a></button>
+                    <button class="createButton mx-3"><a href="/admin/prodCreate">Create Product</a></button>
                     <form>
-                        <div class="d-flex justify-content-end">
+                        <div class="d-flex justify-content-end mx-3">
                             <input class="col-sm-3 col-md-9 form-control me-2 " id="search" name="search" type="text"
                                 placeholder="Product Name" aria-label="Search" value="<%= search || "" %>">
                             <button type="submit"
@@ -75,78 +79,98 @@
                     </form>
                 </div>
                 <br>
-
-                <table id='myTable'>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>NAME</th>
-                            <th>IMAGE</th>
-                            <th>DESCRIPTION</th>
-                            <th>PRICE</th>
-                            <th>COLOR</th>
-                            <th>SIZE</th>
-                            <th>CATEGORY</th>
-                            <th>BRAND</th>
-                            <th>STOCK</th>
-                            <th>ACTION</th>
-
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <% data.forEach(function(x,i) { %>
+                <div class="table-container">
+                    <table id='myTable '>
+                        <thead class="sticky-header">
                             <tr>
+                                <th>ID</th>
+                                <th>NAME</th>
+                                <th>IMAGE</th>
+                                <th>DESCRIPTION</th>
+                                <th>PRICE</th>
+                                <th>COLOR</th>
+                                <th>SIZE</th>
+                                <th>CATEGORY</th>
+                                <th>BRAND</th>
+                                <th>STOCK</th>
+                                <th>ACTION</th>
 
-                                <td>
-                                    <%= x._id %>
-                                </td>
-                                <td id="name<%= i %>">
-                                    <%= x.productName %>
-                                </td>
-
-                                <td>
-                                    <img src="/images/uploads/<%= x.imageUrl[0] %>" class="card-img-top w-50"
-                                        id="card_image<%= i %>" alt="Product Image">
-                                </td>
-                                <td id="description<%= i %>">
-                                    <%= x.description %>
-                                </td>
-                                <td id="price<%= i %>">
-                                    <%= x.price %>₹
-                                </td>
-
-                                <td id="color<%= i %>">
-                                    <%= x.color %>
-                                </td>
-                                <td id="size<%= i %>">
-                                    <%= x.size %>
-                                </td>
-                                <td id="category<%= i %>">
-                                    <%= x.category.category %>
-                                </td>
-                                <td id="brand<%= i %>">
-                                    <%= x.brand %>
-                                </td>
-                                <td id="stock<%= i %>">
-                                    <%= x.stock %>
-                                </td>
-                                <td style="width: 10px;">
-                                    <button class="buttons my-2"><a
-                                            href="/admin/productEdit/<%= x._id %>">EDIT</a></button>
-
-                                    <%if(x.isDeleted===false){ %>
-                                        <button class="buttons my-2"><a
-                                                href="/admin/productUnlist/<%= x._id %>">UNLIST</a></button>
-                                        <% }else{%>
-                                            <button class="buttons my-2"><a
-                                                    href="/admin/productList/<%= x._id %>">LIST</a></button>
-                                            <%}%>
-                                </td>
                             </tr>
-                            <% }); %>
-                    </tbody>
-                </table>
+                        </thead>
+
+                        <tbody>
+                            <% data.forEach(function(x,i) { %>
+                                <tr>
+
+                                    <td>
+                                        <%= x._id %>
+                                    </td>
+                                    <td id="name<%= i %>">
+                                        <%= x.productName %>
+                                    </td>
+
+                                    <td>
+                                        <img src="/images/uploads/<%= x.imageUrl[0] %>" class="card-img-top w-50"
+                                            id="card_image<%= i %>" alt="Product Image">
+                                    </td>
+                                    <style>
+                                        .table-cell {
+                                            max-width: 300px;
+                                            white-space: nowrap;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                        }
+                                    </style>
+                                    <td id="description<%= i %>" class="table-cell" data-bs-toggle="tooltip"
+                                        data-bs-placement="top" title="<%= x.description %>">
+                                        <%= x.description %>
+                                    </td>
+                                    <script>
+                                        window.addEventListener('load', function () {
+                                            // Initialize Bootstrap tooltips
+                                            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                                            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                                                return new bootstrap.Tooltip(tooltipTriggerEl);
+                                            });
+                                        });
+                                    </script>
+
+                                    <td id="price<%= i %>">
+                                        <%= x.price %>₹
+                                    </td>
+
+                                    <td id="color<%= i %>">
+                                        <%= x.color %>
+                                    </td>
+                                    <td id="size<%= i %>">
+                                        <%= x.size %>
+                                    </td>
+                                    <td id="category<%= i %>">
+                                        <%= x.category.category %>
+                                    </td>
+                                    <td id="brand<%= i %>">
+                                        <%= x.brand %>
+                                    </td>
+                                    <td id="stock<%= i %>">
+                                        <%= x.stock %>
+                                    </td>
+                                    <td style="width: 10px;">
+                                        <button class="buttons my-2"><a
+                                                href="/admin/productEdit/<%= x._id %>">EDIT</a></button>
+
+                                        <%if(x.isDeleted===false){ %>
+                                            <button class="buttons my-2"><a
+                                                    href="/admin/productUnlist/<%= x._id %>">UNLIST</a></button>
+                                            <% }else{%>
+                                                <button class="buttons my-2"><a
+                                                        href="/admin/productList/<%= x._id %>">LIST</a></button>
+                                                <%}%>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                        </tbody>
+                    </table>
+                </div>
                 <h2 class="text-danger text-center">
                     <%= text %>
                 </h2>

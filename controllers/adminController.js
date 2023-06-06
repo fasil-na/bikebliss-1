@@ -7,6 +7,7 @@ const ejs = require("ejs");
 const fs = require("fs");
 const path = require("path");
 const puppeteer = require('puppeteer');
+
 const loginload = async (req, res) => {
     try {
         res.render("adminlogin", { title: "Admin Login", footer: "" });
@@ -24,9 +25,7 @@ const homeload = async (req, res) => {
         if (req.body.email == credential.email && req.body.password == credential.password) {
             req.session.admin = req.body.email;
             const userdata = await User.find();
-
             const orderNumber = await Order.find();
-
             const sumResult = await Order.aggregate([
                 {
                     $group: {
@@ -35,7 +34,6 @@ const homeload = async (req, res) => {
                     }
                 }
             ]);
-
             const currentDate = new Date();
             const dateBefore7Days = new Date(currentDate.getTime() - (7 * 24 * 60 * 60 * 1000));
             const weeklyEarnings = await Order.aggregate([
@@ -54,13 +52,11 @@ const homeload = async (req, res) => {
                     }
                 }
             ])
-
             res.render("adminHome", { data: userdata, totalPriceSum: sumResult, weeklyEarnings: weeklyEarnings, orderNumber: orderNumber });
         }
         else {
             res.render("adminLogin", { title: "Admin Login Page", footer: "Invalid username or password" });
         }
-
     } catch (error) {
         console.log(error.message);
     }
@@ -68,11 +64,8 @@ const homeload = async (req, res) => {
 
 const dashboardload = async (req, res) => {
     try {
-
         const userdata = await User.find();
-
         const orderNumber = await Order.find();
-
         const sumResult = await Order.aggregate([
             {
                 $group: {
@@ -130,17 +123,14 @@ const fetchlineChartData = async (req, res) => {
                 }
             }
         ]);
-
         res.json({ result: processedData });
     } catch (error) {
         res.status(500).json({ error: 'An error occurred' });
     }
 };
 
-
 const fetchbarChartData = async (req, res) => {
     try {
-
         const processedData = await Order.aggregate([
             {
                 $group: {
@@ -163,7 +153,6 @@ const fetchbarChartData = async (req, res) => {
                 }
             }
         ]);
-
         res.json({ result: processedData });
     } catch (error) {
         res.status(500).json({ error: 'An error occurred' });
@@ -172,8 +161,6 @@ const fetchbarChartData = async (req, res) => {
 
 const fetchpieChartData = async (req, res) => {
     try {
-
-
         const processedData = await Order.aggregate([
             {
                 $group: {
@@ -190,9 +177,7 @@ const fetchpieChartData = async (req, res) => {
 
 const exportPdfDailySales = async (req, res) => {
     try {
-
         const today = new Date().toISOString().split('T')[0];
-
         const todaysOrders = await Order.aggregate([
             {
                 $match: {
@@ -219,25 +204,18 @@ const exportPdfDailySales = async (req, res) => {
                 }
             },
         ]);
-
         const orderData = {
             todaysOrders: todaysOrders
         }
-
         const filePathName = path.resolve(__dirname, "../views/admin/htmlToPdf.ejs")
         const htmlString = fs.readFileSync(filePathName).toString();
         const ejsData = ejs.render(htmlString, orderData)
-
         await createDailySalesPdf(ejsData);
-
         const pdfFilePath = 'DailySalesReport.pdf';
         const pdfData = fs.readFileSync(pdfFilePath);
-
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'attachment; filename="DailySalesReport.pdf"');
-
         res.send(pdfData);
-
     } catch (error) {
         console.log(error.message);
     }
@@ -254,16 +232,13 @@ const createDailySalesPdf = async (html) => {
 
 const exportPdfWeeklySales = async (req, res) => {
     try {
-
         const today = new Date();
         const startOfWeek = new Date(today);
         startOfWeek.setDate(today.getDate() - today.getDay());
         startOfWeek.setHours(0, 0, 0, 0);
-
         const endOfWeek = new Date(today);
         endOfWeek.setDate(today.getDate() - today.getDay() + 6);
         endOfWeek.setHours(23, 59, 59, 999);
-
         const todaysOrders = await Order.aggregate([
             {
                 $match: {
@@ -290,31 +265,22 @@ const exportPdfWeeklySales = async (req, res) => {
                 }
             },
         ]);
-
         const orderData = {
             todaysOrders: todaysOrders
         }
-
         const filePathName = path.resolve(__dirname, "../views/admin/htmlToPdf.ejs")
         const htmlString = fs.readFileSync(filePathName).toString();
-
         const ejsData = ejs.render(htmlString, orderData)
-
         await createWeeklySalesPdf(ejsData);
-
         const pdfFilePath = 'WeeklySalesReport.pdf';
         const pdfData = fs.readFileSync(pdfFilePath);
-
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'attachment; filename="WeeklySalesReport.pdf"');
-
         res.send(pdfData);
-
     } catch (error) {
         console.log(error.message);
     }
 };
-
 
 const createWeeklySalesPdf = async (html) => {
     const browser = await puppeteer.launch();
@@ -326,16 +292,12 @@ const createWeeklySalesPdf = async (html) => {
 
 const exportPdfYearlySales = async (req, res) => {
     try {
-
         const today = new Date();
         const year = today.getFullYear();
-
         const startOfYear = new Date(year, 0, 1);
         startOfYear.setHours(0, 0, 0, 0);
-
         const endOfYear = new Date(year, 11, 31);
         endOfYear.setHours(23, 59, 59, 999);
-
         const todaysOrders = await Order.aggregate([
             {
                 $match: {
@@ -362,32 +324,22 @@ const exportPdfYearlySales = async (req, res) => {
                 }
             },
         ]);
-
         const orderData = {
             todaysOrders: todaysOrders
         }
-
-
         const filePathName = path.resolve(__dirname, "../views/admin/htmlToPdf.ejs")
         const htmlString = fs.readFileSync(filePathName).toString();
-
         const ejsData = ejs.render(htmlString, orderData)
-
         await createYearlySalesPdf(ejsData);
-
         const pdfFilePath = 'YearlySalesReport.pdf';
         const pdfData = fs.readFileSync(pdfFilePath);
-
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'attachment; filename="YearlySalesReport.pdf"');
-
         res.send(pdfData);
-
     } catch (error) {
         console.log(error.message);
     }
 };
-
 
 const createYearlySalesPdf = async (html) => {
     const browser = await puppeteer.launch();
@@ -397,25 +349,18 @@ const createYearlySalesPdf = async (html) => {
     await browser.close();
 };
 
-
 const userlistload = async (req, res) => {
     try {
         const page = parseInt(req.query.page, 10) || 1;
         const search = req.query.search
-
         const limit = 3;
         const skip = (page - 1) * limit;
-
         const query = {};
-
         if (search) {
             query.name = { $regex: search, $options: "i" };
         }
-
         const totalUsers = await User.countDocuments(query)
-
         const userdata = await User.find(query).sort({ _id: -1 }).skip(skip).limit(limit);
-
         const totalPages = Math.ceil(totalUsers / limit);
         if (userdata.length !== 0) {
             res.render("adminUserList", { data: userdata, text: "", totalPages, page, search });
@@ -468,16 +413,13 @@ const userorderList = async (req, res) => {
         } else {
             res.render("adminOrderList", { orderData: orders, text: "No orders placed" });
         }
-
     } catch (err) {
         console.log(err.message);
         res.status(500).send("Error retrieving order details.");
     }
 };
 
-
 const updateStatus = async (req, res) => {
-
     try {
         const selectedStatus = req.body.statusvalue;
         const orderId = new ObjectId(req.body.id);
@@ -488,8 +430,6 @@ const updateStatus = async (req, res) => {
         console.log(error.message);
     }
 };
-
-
 
 const catlistload = async (req, res) => {
     try {
@@ -605,7 +545,6 @@ const prodlistload = async (req, res) => {
         const search = req.query.search;
         const limit = 3;
         const skip = (page - 1) * limit;
-
         let query = [
                     {
                         $lookup: {
@@ -628,10 +567,7 @@ const prodlistload = async (req, res) => {
                         $limit: limit,
                     },
                 ];
-
         const countquery = {};
-
-        
         if (search) {
             countquery.productName= { $regex: search, $options: "i" };
             query = [
@@ -668,13 +604,9 @@ const prodlistload = async (req, res) => {
                 },
             ];;
         }
-
         const totalProducts = await Product.countDocuments(countquery);
-
         const productData = await Product.aggregate(query);
-
         const totalPages = Math.ceil(totalProducts / limit);
-
         if (productData.length > 0) {
             res.render("adminProdList", { data: productData, text: "", totalPages, page, search });
         } else {
@@ -685,7 +617,6 @@ const prodlistload = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
-
 
 const createProduct = async (req, res) => {
     try {
@@ -729,7 +660,6 @@ const addNewProduct = async (req, res) => {
             res.render("adminProdCreate", {
                 category: categoryData, text: "Product with same name exist already"
             });
-
         }
     } catch (error) {
         console.log(error.message);
@@ -839,7 +769,6 @@ const unlistProduct = async (req, res) => {
         const idVal = req.params.id;
         await Product.findByIdAndUpdate(idVal, { isDeleted: true });
         res.redirect('/admin/productlist');
-
     } catch (error) {
         console.log(error.message);
     }
@@ -854,8 +783,6 @@ const listProduct = async (req, res) => {
         console.log(error.message);
     }
 };
-
-
 
 const handleLogout = async (req, res) => {
     try {

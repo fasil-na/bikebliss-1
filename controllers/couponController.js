@@ -3,7 +3,11 @@ const Coupon = require('../models/couponModel');
 const couponlistload = async (req, res) => {
   try {
     const coupondata = await Coupon.find();
-    res.render("adminCouponList", { data: coupondata });
+    if(coupondata.length>0){
+      res.render("adminCouponList", { data: coupondata,text:"" });
+    }else{
+      res.render("adminCouponList", { data: coupondata,text:"No coupons have been added" });
+    }  
   } catch (error) {
     console.log(error.message);
   }
@@ -16,7 +20,6 @@ const couponCreate = async (req, res) => {
     console.log(error.message);
   }
 };
-
 
 const addCoupon = async (req, res) => {
   try {
@@ -48,7 +51,12 @@ const addCoupon = async (req, res) => {
 const deleteCoupon = async (req, res) => {
   try {
     await Coupon.findByIdAndDelete(req.params.id);
-    res.redirect("/admin/couponlist");
+    const coupondata = await Coupon.find();
+    if(coupondata.length>0){
+      res.render("adminCouponList", { data: coupondata,text:"" });
+    }else{
+      res.render("adminCouponList", { data: coupondata,text:"All Coupons have been deleted" });
+    }
   } catch (error) {
     console.log(error.message);
   }

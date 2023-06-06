@@ -1,4 +1,3 @@
-
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const User = require("../models/userModel");
@@ -256,7 +255,7 @@ const verifyLogin = async (req, res) => {
         } else {
           req.session.user = user._id;
           const CategoryList = await Category.find({ isDeleted: false });
-          const lastAddedProducts = await Product.find({ isDeleted: false })
+          const lastAddedProducts = await Product.find({ isDeleted: false,isCategoryDeleted: false })
             .sort({ _id: -1 })
             .limit(4);
           res.render("home", { data: CategoryList, userData: user, bannerData: bannerData, lastAddedProducts });
@@ -566,10 +565,8 @@ const loadCart = async (req, res) => {
         },
       ]);
       if (cartData.length > 0) {
-        
         for(let i=0;i<cartData.length;i++)
-        {totalPrice = totalPrice+(cartData[i].item.product.price*cartData[i].item.quantity)}
-        
+        {totalPrice = totalPrice+(cartData[i].item.product.price*cartData[i].item.quantity)}  
       } else {
         totalPrice = 0
       }
@@ -790,7 +787,7 @@ const loadWishlist = async (req, res) => {
           $unwind: "$item.product.category",
         },
       ]);
-      res.render("wishlist", { userData: userData, items: wishlistData, });
+      res.render("wishlist", { userData: userData, items: wishlistData});
     }
 
   } catch (err) {
@@ -1332,7 +1329,6 @@ const createRP = async (req, res) => {
       } else {
         amount = cartData[0].totalPrice
       }
-      // let amount = 100
       let options = {
         amount: amount,
         currency: "INR",

@@ -5,7 +5,11 @@ const Product = require("../models/productModel");
 const offerlistload = async (req, res) => {
   try {
     const offerdata = await Offer.find();
-    res.render("adminOfferList", { data: offerdata });
+    if(offerdata.length>0){
+      res.render("adminOfferList", { data: offerdata ,text:""});
+    }else{
+      res.render("adminOfferList", { data: offerdata,text:"No offers have been added" });
+    } 
   } catch (error) {
     console.log(error.message);
   }
@@ -21,7 +25,6 @@ const productOfferCreate = async (req, res) => {
     console.log(error.message);
   }
 };
-
 
 const addProductOffer = async (req, res) => {
   try {
@@ -66,8 +69,12 @@ const deleteProductOffer = async (req, res) => {
     await Product.findByIdAndUpdate({ _id: offerValidProductId }, { $set: { price: newPrice } });
     await Product.findByIdAndUpdate({ _id: offerValidProductId }, { $set: { offerPercentage: newOffer } });
     await Offer.deleteOne({ _id: req.params.id });
-    const offerData = await Offer.find();
-    res.render("adminOfferList", { data: offerData });
+    const offerdata = await Offer.find();
+    if(offerdata.length>0){
+      res.render("adminOfferList", { data: offerdata ,text:""});
+    }else{
+      res.render("adminOfferList", { data: offerdata,text:"All offers have been deleted" });
+    } 
   } catch (error) {
     console.log(error.message);
   }
@@ -98,8 +105,8 @@ const addCategoryOffer = async (req, res) => {
       await Product.find({ category: category })
         .then((products) => {
           products.forEach((product) => {
-            product.offerPercentage =product.offerPercentage+ offerPercentage;
             product.price = Math.round(product.offerPrice - product.offerPrice * ((product.offerPercentage+ offerPercentage)) / 100),
+            product.offerPercentage =product.offerPercentage+ offerPercentage;
             product.save();
           });
         });
@@ -122,9 +129,7 @@ const addCategoryOffer = async (req, res) => {
 const deleteCategoryOffer = async (req, res) => {
   try {
     const offerDoc = await Offer.findById(req.params.id);
-    
     await Product.find({ category: offerDoc.category })
-
       .then((products) => {
         products.forEach((product) => {
           const newOffer=product.offerPercentage-offerDoc.percentage
@@ -136,7 +141,11 @@ const deleteCategoryOffer = async (req, res) => {
       })
     await Offer.deleteOne({ _id: req.params.id });
     const offerData = await Offer.find();
-    res.render("adminOfferList", { data: offerData });
+    if(offerData.length>0){
+      res.render("adminOfferList", { data: offerData ,text:""});
+    }else{
+      res.render("adminOfferList", { data: offerData,text:"All offers have been deleted" });
+    } 
   } catch (error) {
     console.log(error.message);
   }
