@@ -223,7 +223,10 @@ const exportPdfDailySales = async (req, res) => {
 
 
 const createDailySalesPdf = async (html) => {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox','--disable-setuid-sandbox']
+      });
     const page = await browser.newPage();
     await page.setContent(html);
     await page.pdf({ path: 'DailySalesReport.pdf' });
