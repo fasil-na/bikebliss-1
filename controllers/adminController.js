@@ -485,7 +485,7 @@ const editCategoryPageLoad = async (req, res) => {
     try {
         const categoryId = req.params.id;
         const categoryData = await Category.findById(categoryId)
-        res.render("adminCatedit", { categoryData: categoryData, message: "" });
+        res.render("adminCatEdit", { categoryData: categoryData, message: "" });
     } catch (error) {
         console.log(error.message);
     }
@@ -519,7 +519,7 @@ const editCategory = async (req, res) => {
             }
             res.redirect("/admin/categorylist");
         } else {
-            res.render("adminCatedit", { categoryData: catDoc, message: "Category with same name already exists" });
+            res.render("adminCatEdit", { categoryData: catDoc, message: "Category with same name already exists" });
         }
     } catch (error) {
         console.log(error.message);
