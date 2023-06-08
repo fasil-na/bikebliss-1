@@ -319,7 +319,7 @@
 								alert("Some Items are out of stock!")
 
 							} else if (selectedPayment == "payment-1" || selectedPayment == "payment-2") {
-								const url = `http://localhost:3000/placeOrder?addressId=${addressId}&payment=${paymentMethod}&wallet=${walletFlag}`
+								const url = `https://bikebliss.shop/placeOrder?addressId=${addressId}&payment=${paymentMethod}&wallet=${walletFlag}`
 								let options = {
 									"key": "rzp_test_Z6ogCp3lsMS6mX",
 									"amount": totalPrice * 100,
