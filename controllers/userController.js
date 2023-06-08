@@ -50,7 +50,7 @@ const signupload = async (req, res) => {
 
 const forgot_pass = async (req, res) => {
   try {
-    res.render("forgot_pass");
+    res.render("forgot_pass",{footer:""});
   } catch (error) {
     console.log(error.message);
   }
@@ -83,7 +83,7 @@ const sendOtp = async (req, res) => {
         res.render("otpEnter", { footer: "", })
       }
     } else {
-      res.render("signup", { footer: "Userdata already exists" })
+      res.render("signup", { footer: "Email already exists" })
     }
   } catch (error) {
     console.log(error.message);
@@ -1242,6 +1242,12 @@ const cancelOrder = async (req, res) => {
     let userId = new ObjectId(req.session.user);
     const user = await User.findOne({ _id: userId });
     const orderDetails = await Order.findById({ _id: orderId })
+    if(orderDetails.paymentType==='UPI'){
+      const totalPrice=orderDetails.totalPrice
+      const updatedWallet = parseInt(user.wallet,10) + parseInt(totalPrice,10);
+      await User.updateOne({ _id: userId }, { $set: { wallet: updatedWallet } });
+    }
+
     const updates = []
     for (let i = 0; i < orderDetails.item.length; i++) {
       let update = {

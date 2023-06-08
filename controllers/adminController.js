@@ -10,7 +10,7 @@ const puppeteer = require('puppeteer');
 
 const loginload = async (req, res) => {
     try {
-        res.render("adminlogin", { title: "Admin Login", footer: "" });
+        res.render("adminLogin", { title: "Admin Login", footer: "" });
     } catch (error) {
         console.log(error.message);
     }
@@ -787,7 +787,7 @@ const listProduct = async (req, res) => {
 const handleLogout = async (req, res) => {
     try {
         delete req.session.admin
-        res.render("adminlogin", { title: "Admin Login", footer: "Logged out successfully" });
+        res.render("adminLogin", { title: "Admin Login", footer: "Logged out successfully" });
     } catch (error) {
         console.log(error.message);
     }

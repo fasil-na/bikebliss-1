@@ -1,20 +1,21 @@
 <header>
 
 
-<nav class="navbar" style="background-color: #1E1F29; border-radius: 0;">
+<nav class="navbar navbar-expand-md" style="background-color: #1E1F29; border-radius: 0;">
   <div class="container-fluid">
     <a class="navbar-brand" href="/" style="color: white; margin-right: auto; margin-left: 0;">BIKEBLISS.COM</a>
     <div class="navbar-toggler" onclick="toggleNavbar()" style="color: white;">
       <span class="navbar-toggler-icon navtogglericon">&#9776;</span>
     </div>
 
-    <div class="navbar-collapse" id="navbarText">
+    <div class="navbar-collapse collapse" id="navbarText">
+
       <ul class="navbar-nav1">
         <li class="nav-item">
           <a class="" aria-current="page" href="/myAccount" style="color: white; ">My Account</a>
         </li>
         <li class="nav-item">
-          <a class="" aria-current="page" href="/wishlist" style="color: white; ">Your Wishlist</a>
+          <a class="" aria-current="page" href="/wishlist" style="color: white; ">Wishlist</a>
         </li>
         <li class="nav-item">
           <a class="" aria-current="page" href="/cart" style="color: white;">Your Cart</a>
@@ -33,19 +34,13 @@
 </nav>
  
 <script>
-  function toggleNavbar() {
-      var navbarCollapse = document.querySelector('.navbar-collapse');
-      var togglerIcon = document.querySelector('.navbar-toggler-icon');
+function toggleNavbar() {
+  $('.navbar-collapse').collapse('toggle');
+}
 
-      if (navbarCollapse.style.display === 'block') {
-        navbarCollapse.style.display = 'none';
-        togglerIcon.innerHTML = '&#9776;'; // Use your preferred icon here
-      } else {
-        navbarCollapse.style.display = 'block';
-        togglerIcon.innerHTML = '✕'; // Use your preferred icon here
-      }
-    }
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
   
   
