@@ -224,7 +224,7 @@ const exportPdfDailySales = async (req, res) => {
 
 const createDailySalesPdf = async (html) => {
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: "new",
         args: ['--no-sandbox','--disable-setuid-sandbox']
       });
     const page = await browser.newPage();
@@ -286,7 +286,10 @@ const exportPdfWeeklySales = async (req, res) => {
 };
 
 const createWeeklySalesPdf = async (html) => {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        headless: "new",
+        args: ['--no-sandbox','--disable-setuid-sandbox']
+      });
     const page = await browser.newPage();
     await page.setContent(html);
     await page.pdf({ path: 'WeeklySalesReport.pdf' });
@@ -345,7 +348,10 @@ const exportPdfYearlySales = async (req, res) => {
 };
 
 const createYearlySalesPdf = async (html) => {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        headless: "new",
+        args: ['--no-sandbox','--disable-setuid-sandbox']
+      });
     const page = await browser.newPage();
     await page.setContent(html);
     await page.pdf({ path: 'YearlySalesReport.pdf' });
